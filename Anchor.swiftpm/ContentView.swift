@@ -6,8 +6,8 @@ struct ContentView: View {
         .init(.homeCircleGradientColor2),
         .init(.homeCircleGradientColor3),
         .init(.homeCircleGradientColor4),
-        .init(.homeCircleGradientColor5),
-        .init(.homeCircleGradientColor6),
+//        .init(.homeCircleGradientColor5),
+//        .init(.homeCircleGradientColor6),
     ]
     
     let bottomAntiCircleGradientColors: [Color] = [
