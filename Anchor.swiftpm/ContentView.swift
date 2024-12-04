@@ -57,6 +57,15 @@ struct ContentView: View {
 }
 
 private struct AnchorSelectionButtonStyle: ButtonStyle {
+    @Environment(\.colorScheme) var colorScheme
+    
+    var material: Material {
+        switch colorScheme {
+        case .dark: .ultraThinMaterial
+        default: .regularMaterial
+        }
+    }
+    
     func makeBody(configuration: Configuration) -> some View {
         configuration.label
             .padding()
@@ -66,7 +75,7 @@ private struct AnchorSelectionButtonStyle: ButtonStyle {
                     .fill(Color.clear)
                     .shadow(color: .primary, radius: 3, y: 1)
             }
-            .background(.regularMaterial)
+            .background(material)
             .clipShape(RoundedRectangle(cornerRadius: 6))
     }
 }
