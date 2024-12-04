@@ -10,7 +10,7 @@ import AppleProductTypes
 let package = Package(
     name: "Anchor",
     platforms: [
-        .iOS("16.0")
+        .iOS("18.0")
     ],
     products: [
         .iOSApplication(
@@ -28,8 +28,8 @@ let package = Package(
             ],
             supportedInterfaceOrientations: [
                 .portrait,
-                .landscapeRight,
-                .landscapeLeft,
+                .landscapeRight(.when(deviceFamilies: [.pad])),
+                .landscapeLeft(.when(deviceFamilies: [.pad])),
                 .portraitUpsideDown(.when(deviceFamilies: [.pad]))
             ]
         )
