@@ -16,17 +16,6 @@ struct ContentView: View {
     ]
     
     @State var selectedAnchor: AnchorType?
-    @Namespace var namespace
-    
-    var anchorBackgroundGradientStops: [Gradient.Stop] {
-        guard bottomCircleGradientColors.count > 1 else { return [] }
-        
-        let topHalf = bottomCircleGradientColors.prefix(bottomCircleGradientColors.count/2).enumerated().map { index, color in
-            Gradient.Stop(color: color, location: (CGFloat(index)/(CGFloat(bottomCircleGradientColors.count)/2))*1.3)
-        }
-        
-        return topHalf + [Gradient.Stop(color: bottomCircleGradientColors.last!, location: 1)]
-    }
     
     var body: some View {
         GeometryReader { geo in
@@ -63,17 +52,19 @@ struct ContentView: View {
                 }
                 .frame(maxWidth: .infinity, alignment: .center)
                 .background(alignment: .top) {
-                    Circle()
-                        .fill(selectedAnchor == nil ? Gradient(colors: bottomCircleGradientColors) : Gradient(stops: anchorBackgroundGradientStops))
-                        .scaledToFill()
-                        .padding(.top, -15)
-                        .offset(y: selectedAnchor == nil ? 0 : -geo.size.height/5)
-                        .scaleEffect(x: selectedAnchor == nil ? 1.5 : 1.7)
-                        .scaleEffect(y: selectedAnchor == nil ? 1 : 1.8)
-                        .matchedGeometryEffect(id: "selector_background", in: namespace)
+                    SemiCircle()
+                        .foregroundStyle(Gradient(colors: bottomCircleGradientColors))
+                        .frame(minWidth: 600, idealWidth: geo.size.width)
+                        .frame(height: geo.size.height/1.8)
+                        .padding(.top, -20)
+                        .ignoresSafeArea()
+                        .scaleEffect(x: selectedAnchor == nil ? 1 : 3)
+                        .scaleEffect(y: selectedAnchor == nil ? 1 : 3.4)
+                        .onAppear {
+                            print(geo.size)
+                        }
                 }
                 .padding(.top)
-                //                }
             }
             .overlay {
                 if let selectedAnchor {
@@ -84,7 +75,7 @@ struct ContentView: View {
                 LinearGradient(colors: bottomAntiCircleGradientColors, startPoint: .center, endPoint: .top)
                     .ignoresSafeArea()
             }
-            .animation(.default.speed(0.6), value: self.selectedAnchor)
+            .animation(.default.speed(0.8), value: self.selectedAnchor)
         }
         .environment(\.customDismiss, dismissAction)
     }
