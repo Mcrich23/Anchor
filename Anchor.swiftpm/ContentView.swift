@@ -43,6 +43,7 @@ struct ContentView: View {
                                         selectedAnchor = anchor
                                     }
                                 }
+//                                .foregroundStyle(anchor.color)
                             }
                         }
                         .buttonStyle(AnchorSelectionButtonStyle())

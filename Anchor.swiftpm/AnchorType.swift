@@ -6,8 +6,18 @@
 //
 
 import Foundation
+import SwiftUI
 
 enum AnchorType: String, CaseIterable {
     case migraine = "Migraine"
     case panicAttack = "Panic Attack"
+    
+    var color: Color {
+        switch self {
+        case .migraine:
+            return .green
+        case .panicAttack:
+            return .indigo
+        }
+    }
 }

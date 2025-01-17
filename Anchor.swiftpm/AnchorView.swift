@@ -11,11 +11,15 @@ struct AnchorView: View {
     let anchor: AnchorType
     
     var body: some View {
-        switch anchor {
-        case .migraine:
-            MigrainesIntroductionView()
-        case .panicAttack:
-            PanicAttackView()
+        Group {
+            switch anchor {
+            case .migraine:
+                MigrainesIntroductionView()
+            case .panicAttack:
+                PanicAttackView()
+            }
         }
+        .accentColor(anchor.color)
+        .tint(anchor.color)
     }
 }
