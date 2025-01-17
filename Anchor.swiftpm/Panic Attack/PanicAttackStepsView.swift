@@ -20,6 +20,10 @@ enum PanicAttackSteps: Int, CaseIterable {
     }
 }
 
+extension EnvironmentValues {
+    @Entry var geometrySize: CGSize = .zero
+}
+
 @Observable
 final class PAStepManager {
     private(set) var step: PanicAttackSteps = .assurance
@@ -41,6 +45,7 @@ final class PAStepManager {
 
 struct PanicAttackStepsView: View {
     @State var stepManager = PAStepManager()
+    @State var geometrySize: CGSize = .zero
     
     var body: some View {
         VStack {
@@ -86,8 +91,13 @@ struct PanicAttackStepsView: View {
             }
             .padding()
         }
-        .padding()
         .environment(stepManager)
+        .onGeometryChange(for: CGSize.self, of: { proxy in
+            proxy.size
+        }, action: { newValue in
+            geometrySize = newValue
+        })
+        .environment(\.geometrySize, geometrySize)
     }
 }
 

@@ -21,7 +21,7 @@ struct PAAssuranceView: View {
                     .yellow, .purple, .purple
                 ])
                     .scaleEffect(1.2)
-                VStack(spacing: 50) {
+                VStack(spacing: 40) {
                     Text("Its alright to be in pain.\n\nIt cannot physically hurt you, and it will go away.")
                         .multilineTextAlignment(.center)
                         .font(.title)

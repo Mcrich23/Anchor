@@ -17,17 +17,36 @@ struct PABreathingView: View {
     @State private var isFlowerExpanded: Bool = false
     @State private var breathState: BreathState?
     @State private var isBreathing: Bool = false
+    @Environment(\.geometrySize) var geo
+    
+    var scaleEffect: CGFloat {
+        guard UIDevice.current.userInterfaceIdiom == .phone else { return geo.width/1344.0 }
+        
+        return geo.width/600
+    }
     
     var body: some View {
         VStack(spacing: 50) {
-            Text("Let's Take Some Deep Breaths")
-                .font(.largeTitle)
-                .bold()
+            VStack {
+                Text("Let's Take Some Deep Breaths")
+                    .font(.largeTitle)
+                    .bold()
+                Text("Taking deep breaths can slow your heart rate, alieviating anxiety and stress.")
+                    .fixedSize(horizontal: false, vertical: true)
+            }
+            .minimumScaleFactor(0.8)
+            .multilineTextAlignment(.center)
+            .padding(.horizontal)
             ZStack {
                 Circle()
-                    .fill(Color.purple)
-                    .opacity(0.6)
-                    .frame(width: 225, height: 225)
+                    .fill(.clear)
+                    .frame(width: geo.width*0.6, height: geo.height*0.6)
+                    .background {
+                        Circle()
+                            .fill(Color.purple)
+                            .opacity(0.6)
+                            .frame(width: geo.width/5.9733333333, height: geo.width/5.9733333333)
+                    }
                 //                .background {
                 //                    ZStack {
                 //                        innerPedal
@@ -43,7 +62,7 @@ struct PABreathingView: View {
                     .background {
                         Circle()
                             .fill(.mint)
-                            .frame(width: 150, height: 150)
+                            .frame(width: geo.width/8.96, height: geo.width/8.96)
                             .opacity(0.9)
                             .blur(radius: 50)
                     }
@@ -69,12 +88,15 @@ struct PABreathingView: View {
                         }
                     }
                     .scaleEffect(isFlowerExpanded ? 1.5 : 1)
-                    .rotationEffect(Angle(degrees: isFlowerExpanded ? 115 : 0))
+                    .rotationEffect(Angle(degrees: isFlowerExpanded ? 48 : 0))
                 if !isBreathing {
-                    Button("Start", action: runBreath)
-                        .font(.title)
-                        .foregroundStyle(.white)
-                        .bold()
+                    Button(action: runBreath) {
+                        Text("Start")
+                            .padding()
+                    }
+                    .font(.title)
+                    .foregroundStyle(.white)
+                    .bold()
                 } else if let breathState {
                     Text(breathState.rawValue)
                         .font(.title)
@@ -84,7 +106,8 @@ struct PABreathingView: View {
                         .transition(.opacity)
                 }
             }
-            .padding(150)
+//            .padding(geo.width/8.96)
+//            .scaleEffect(scaleEffect)
         }
     }
     
@@ -133,8 +156,8 @@ struct PABreathingView: View {
     var innerPedal: some View {
         Ellipse()
             .fill(.mint)
-            .frame(width: 60, height: 70)
-            .padding(.top, -70)
+            .frame(width: geo.width/22.4, height: geo.width/19.2)
+            .padding(.top, -geo.width/19.2)
             .opacity(0.8)
     }
     
@@ -142,8 +165,8 @@ struct PABreathingView: View {
     var outerPedal: some View {
         Ellipse()
             .fill(.indigo)
-            .frame(width: 130, height: 150)
-            .padding(.top, -200)
+            .frame(width: geo.width/10.3384615385, height: geo.width/8.96)
+            .padding(.top, -geo.width/6.72)
             .opacity(0.8)
     }
 }
