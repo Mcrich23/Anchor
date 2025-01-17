@@ -45,6 +45,7 @@ struct PABreathingView: View {
                             .fill(.mint)
                             .frame(width: 150, height: 150)
                             .opacity(0.9)
+                            .blur(radius: 50)
                     }
                     .background {
                         ZStack {
