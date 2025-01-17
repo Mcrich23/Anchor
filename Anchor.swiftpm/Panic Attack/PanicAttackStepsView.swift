@@ -67,6 +67,7 @@ struct PanicAttackStepsView: View {
                             stepManager.previous()
                         }
                     }
+                    .buttonStyle(.bordered)
                 }
                 Spacer()
                 if stepManager.step.rawValue != PanicAttackSteps.allCases.last?.rawValue && stepManager.step.rawValue != PanicAttackSteps.allCases.first?.rawValue {
@@ -76,6 +77,7 @@ struct PanicAttackStepsView: View {
                         }
                     }
                     .labelStyle(.oppositeOrderLabelStyle)
+                    .buttonStyle(.bordered)
                 }
             }
             .padding()
