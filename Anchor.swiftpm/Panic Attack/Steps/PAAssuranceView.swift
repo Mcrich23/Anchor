@@ -25,7 +25,7 @@ struct PAAssuranceView: View {
                     Text("Its alright to be in pain.\n\nIt cannot physically hurt you, and it will go away.")
                         .multilineTextAlignment(.center)
                         .font(.title)
-                        .bold()
+                        .fontWeight(.semibold)
                         .foregroundStyle(colorScheme == .light ? .white: .black)
                     Button(action: stepManager.next) {
                         Label("Next", systemImage: "chevron.right")

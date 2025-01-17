@@ -14,6 +14,7 @@ struct PanicAttackView: View {
     var body: some View {
         VStack {
             PanicAttackSplashView(isStartScreen: $isStartScreen)
+                .padding(.horizontal)
             if !isStartScreen {
                 PanicAttackStepsView()
             }

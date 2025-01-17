@@ -18,6 +18,7 @@ struct PanicAttackSplashView: View {
                 Text("Panic Attack Relief")
                     .font(.title)
                     .matchedGeometryEffect(id: "title", in: namespace)
+                    .bold()
                 Text("A panic attack can be very scary. Anchor is hear to help you through it.")
                     .multilineTextAlignment(.center)
                 HStack {
@@ -34,14 +35,18 @@ struct PanicAttackSplashView: View {
                     }
                 }
             } else {
-                VStack {
+                HStack {
                     Text("Panic Attack Relief")
                         .font(.title)
                         .matchedGeometryEffect(id: "title", in: namespace)
+                        .bold()
+                        .fontDesign(.default)
+                    Spacer()
                     Button("Close", action: dismiss)
                         .buttonStyle(.bordered)
                         .matchedGeometryEffect(id: "close", in: namespace)
                 }
+                .frame(maxWidth: .infinity, alignment: .center)
                 .padding()
                 .background(Color(uiColor: .secondarySystemFill))
                 .clipShape(RoundedRectangle(cornerRadius: 6))

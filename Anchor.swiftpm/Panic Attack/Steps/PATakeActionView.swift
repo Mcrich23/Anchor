@@ -16,7 +16,7 @@ struct PATakeActionView: View {
         VStack {
             Text("Let's Take Some Action")
                 .font(.largeTitle)
-                .bold()
+                .fontWeight(.semibold)
                 .multilineTextAlignment(.center)
             if geo.width < 500 {
                 VStack(spacing: 15) {
@@ -35,12 +35,21 @@ struct PATakeActionView: View {
     var boxes: some View {
         Group {
             box {
-                Text("Take your medication.")
+                Text("Take your medication")
+                    .font(.title2)
+                    .fontWeight(.semibold)
+                Text("Taking medication can be integral to managing panic attacks. If you have specific medication, or general anxiety medication, make sure to take it as directed.")
+                    .minimumScaleFactor(0.7)
+                Button("Take Medication") {
+                    
+                }
+                    .buttonStyle(.borderedProminent)
             }
+            .tint(Color.purple)
             box {
                 Text("Let Someone Know")
                     .font(.title2)
-                    .bold()
+                    .fontWeight(.semibold)
                 Text("Telling someone that you are experiencing a panic attack can help you keep people aware of your situation and receive immediate help if needed.")
                     .minimumScaleFactor(0.7)
                 ShareLink("Share with Someone", items: [shareText])
@@ -55,7 +64,7 @@ struct PATakeActionView: View {
         VStack(spacing: 20) {
             view()
         }
-        .frame(maxWidth: 400, minHeight: 100)
+        .frame(maxWidth: 400, minHeight: 100, maxHeight: 200)
         .padding()
         .background(Color(uiColor: .secondarySystemFill))
         .clipShape(RoundedRectangle(cornerRadius: 6))

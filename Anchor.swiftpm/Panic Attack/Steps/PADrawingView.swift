@@ -18,7 +18,7 @@ struct PADrawingView: View {
             VStack {
                 Text("Sketch Something")
                     .font(.largeTitle)
-                    .bold()
+                    .fontWeight(.semibold)
                 Text("Drawing something can help you direct your focus away from the panic attack and therefore reduce its intensity.")
                     .frame(maxWidth: .infinity, alignment: .center)
             }
@@ -40,6 +40,7 @@ struct PADrawingView: View {
                     self.isShowingPicker = newValue == .drawing
                 }
         }
+        .padding(.horizontal)
     }
 }
 

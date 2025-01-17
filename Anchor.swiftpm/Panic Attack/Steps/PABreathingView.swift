@@ -34,7 +34,7 @@ struct PABreathingView: View {
             VStack {
                 Text("Let's Take Some Deep Breaths")
                     .font(.largeTitle)
-                    .bold()
+                    .fontWeight(.semibold)
                 Text("Taking deep breaths can slow your heart rate, alieviating anxiety and stress.")
                     .fixedSize(horizontal: false, vertical: true)
             }
@@ -101,12 +101,12 @@ struct PABreathingView: View {
                     }
                     .font(.title)
                     .foregroundStyle(.white)
-                    .bold()
+                    .fontWeight(.semibold)
                 } else if let breathState {
                     Text(breathState.rawValue)
                         .font(.title)
                         .foregroundStyle(.white)
-                        .bold()
+                        .fontWeight(.semibold)
                         .contentTransition(.opacity)
                         .transition(.opacity)
                 }
