@@ -10,6 +10,38 @@ struct ContentView: View {
 //        .init(.homeCircleGradientColor6),
     ]
     
+    var semiCircleGradientColors: [Color] {
+        guard selectedAnchor != nil else {
+            return [
+                .init(.homeCircleGradientColor1),
+                .init(.homeCircleGradientColor1),
+                .init(.homeCircleGradientColor1),
+                
+                .init(.homeCircleGradientColor3),
+                .init(.homeCircleGradientColor2),
+                .init(.homeCircleGradientColor3),
+                
+                .init(.homeCircleGradientColor3),
+                .init(.homeCircleGradientColor4),
+                .init(.homeCircleGradientColor3),
+            ]
+        }
+        
+        return [
+            .init(.homeCircleGradientColor1),
+            .init(.homeCircleGradientColor2),
+            .init(.homeCircleGradientColor1),
+            
+            .init(.homeCircleGradientColor4),
+            .init(.homeCircleGradientColor3),
+            .init(.homeCircleGradientColor4),
+            
+            .init(.homeCircleGradientColor3),
+            .init(.homeCircleGradientColor4),
+            .init(.homeCircleGradientColor3),
+        ]
+    }
+    
     let bottomAntiCircleGradientColors: [Color] = [
         .init(.homeAntiCircleGradientColor1),
         .init(.homeAntiCircleGradientColor2),
@@ -53,7 +85,7 @@ struct ContentView: View {
                 }
                 .frame(maxWidth: .infinity, alignment: .center)
                 .background(alignment: .top) {
-                    SemiCircle()
+                    SemiCircle(colors: semiCircleGradientColors)
                         .foregroundStyle(Gradient(colors: bottomCircleGradientColors))
                         .frame(minWidth: 600, idealWidth: geo.size.width)
                         .frame(height: geo.size.height/1.8)

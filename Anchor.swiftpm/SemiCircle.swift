@@ -8,6 +8,7 @@
 import SwiftUI
 
 struct SemiCircle: View {
+    let colors: [Color]
     @State var size: CGSize?
     
     var body: some View {
@@ -15,10 +16,12 @@ struct SemiCircle: View {
             .fill(Color.clear)
                 .overlay(alignment: .top, content: {
                     if let size {
-                        Ellipse()
-                            .trim(from: 0.5, to: 1)
-                            .size(width: size.width, height: size.height*2)
-                            .fill(.primary)
+                        AnimatedMeshView(colors: colors, speed: 0.02)
+                            .clipShape(
+                                Ellipse()
+                                    .trim(from: 0.5, to: 1)
+                                    .size(width: size.width, height: size.height*2)
+                            )
                     }
                 })
             .onGeometryChange(for: CGSize.self) { proxy in

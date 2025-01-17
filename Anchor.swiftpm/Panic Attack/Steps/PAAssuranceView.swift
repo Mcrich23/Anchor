@@ -15,7 +15,11 @@ struct PAAssuranceView: View {
     var body: some View {
         GeometryReader { geo in
             ZStack {
-                AnimatedMeshView()
+                AnimatedMeshView(colors: [
+                    .red, .purple, .purple,
+                    .purple, .orange, .purple,
+                    .yellow, .purple, .purple
+                ])
                     .scaleEffect(1.2)
                 VStack(spacing: 50) {
                     Text("Its alright to be in pain.\n\nIt cannot physically hurt you, and it will go away.")

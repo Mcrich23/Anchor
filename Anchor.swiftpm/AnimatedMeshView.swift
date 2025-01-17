@@ -7,11 +7,18 @@
 // Source: https://designcode.io/swiftui-handbook-mesh-gradient
 
 import Foundation
+import Combine
 import SwiftUI
 
 struct AnimatedMeshView: View {
-    @State var t: Float = 0.0
-    let timer = Timer.publish(every: 0.009, on: .main, in: .common).autoconnect()
+    let colors: [Color]
+    init(colors: [Color], speed: TimeInterval = 0.009) {
+        self.colors = colors
+        self.timer = Timer.publish(every: speed, on: .main, in: .common).autoconnect()
+    }
+    
+    @State private var t: Float = 0.0
+    private let timer: Publishers.Autoconnect<Timer.TimerPublisher>
 
     var body: some View {
         MeshGradient(width: 3, height: 3, points: [
@@ -23,11 +30,7 @@ struct AnimatedMeshView: View {
             [sinInRange(-0.8...0.0, offset: 1.439, timeScale: 0.442, t: t), sinInRange(1.4...1.9, offset: 3.42, timeScale: 0.984, t: t)],
             [sinInRange(0.3...0.6, offset: 0.339, timeScale: 0.784, t: t), sinInRange(1.0...1.2, offset: 1.22, timeScale: 0.772, t: t)],
             [sinInRange(1.0...1.5, offset: 0.939, timeScale: 0.056, t: t), sinInRange(1.3...1.7, offset: 0.47, timeScale: 0.342, t: t)]
-        ], colors: [
-            .red, .purple, .purple,
-            .purple, .orange, .purple,
-            .yellow, .purple, .purple
-        ])
+        ], colors: colors)
         .onReceive(timer, perform: { _ in
             t += 0.02
         })
