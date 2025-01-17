@@ -8,7 +8,7 @@
 import SwiftUI
 
 enum PanicAttackSteps: Int, CaseIterable {
-    case assurance, takeAction
+    case assurance, takeAction, breath
     
     mutating func next() {
         guard let next = Self(rawValue: self.rawValue+1) else { return }
@@ -53,10 +53,10 @@ struct PanicAttackStepsView: View {
                 PATakeActionView()
                     .fillSpaceAvailable()
                     .backForward(isBack: stepManager.isBack)
-//            case .alertSomeone:
-//                PATakeMedicationView()
-//                    .fillSpaceAvailable()
-//                    .backForward(isBack: stepManager.isBack)
+            case .breath:
+                PABreathingView()
+                    .fillSpaceAvailable()
+                    .backForward(isBack: stepManager.isBack)
             }
         }
         .safeAreaInset(edge: .bottom) {

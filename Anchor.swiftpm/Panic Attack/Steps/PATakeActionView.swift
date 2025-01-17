@@ -9,6 +9,8 @@ import Foundation
 import SwiftUI
 
 struct PATakeActionView: View {
+    let shareText: String = "Hello, I am experiencing a panic attack. I am using the app Anchor to help me manage my symptoms. If you don't hear back from me in the next 30 minutes, please call me."
+    
     var body: some View {
         VStack {
             Text("Let's Take Some Action")
@@ -23,7 +25,7 @@ struct PATakeActionView: View {
                         .font(.title)
                         .bold()
                     Text("Telling someone that you are experiencing a panic attack can help you keep people aware of your situation and receive immediate help if needed.")
-                    ShareLink("Share with Someone", items: ["Hello, I am experiencing a panic attack!"])
+                    ShareLink("Share with Someone", items: [shareText])
                         .buttonStyle(.borderedProminent)
                 }
             }

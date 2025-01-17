@@ -11,7 +11,7 @@
 ## Action
     
 - Take Medication
-- Alert Someone
+- Alert Someone ✅
 
 ## Grounding
     
