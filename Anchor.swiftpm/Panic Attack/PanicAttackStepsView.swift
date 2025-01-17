@@ -69,7 +69,7 @@ struct PanicAttackStepsView: View {
                     }
                 }
                 Spacer()
-                if stepManager.step.rawValue != PanicAttackSteps.allCases.last?.rawValue {
+                if stepManager.step.rawValue != PanicAttackSteps.allCases.last?.rawValue && stepManager.step.rawValue != PanicAttackSteps.allCases.first?.rawValue {
                     Button("Next", systemImage: "chevron.right") {
                         withAnimation {
                             stepManager.next()
@@ -85,10 +85,33 @@ struct PanicAttackStepsView: View {
     }
 }
 
+
+//
 private struct PAAssuranceView: View {
+    @Environment(\.colorScheme) var colorScheme
+    @Environment(PAStepManager.self) var stepManager
+    
     var body: some View {
-        VStack {
-            Text("Its alright to be in pain. It cannot physically hurt you, and it will go away.")
+        GeometryReader { geo in
+            ZStack {
+                AnimatedMeshView()
+                    .scaleEffect(1.2)
+                VStack(spacing: 50) {
+                    Text("Its alright to be in pain.\n\nIt cannot physically hurt you, and it will go away.")
+                        .multilineTextAlignment(.center)
+                        .font(.title)
+                        .bold()
+                        .foregroundStyle(colorScheme == .light ? .white: .black)
+                    Button(action: stepManager.next) {
+                        Label("Next", systemImage: "chevron.right")
+                            .labelStyle(.titleOnly)
+                            .frame(maxWidth: geo.size.width/3, alignment: .center)
+                    }
+                    .buttonStyle(.borderedProminent)
+                }
+                .padding()
+            }
+            .clipShape(.circle)
         }
     }
 }
