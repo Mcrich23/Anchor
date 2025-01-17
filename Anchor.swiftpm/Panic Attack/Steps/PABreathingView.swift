@@ -18,11 +18,15 @@ struct PABreathingView: View {
     @State private var breathState: BreathState?
     @State private var isBreathing: Bool = false
     @Environment(\.geometrySize) var geo
+    @State var orientation: UIDeviceOrientation = UIDevice.current.orientation
     
-    var scaleEffect: CGFloat {
-        guard UIDevice.current.userInterfaceIdiom == .phone else { return geo.width/1344.0 }
-        
-        return geo.width/600
+    var scaleModifier: CGFloat {
+        switch orientation.isPortrait {
+        case true:
+            return geo.height*1.3
+        case false:
+            return geo.width
+        }
     }
     
     var body: some View {
@@ -40,12 +44,13 @@ struct PABreathingView: View {
             ZStack {
                 Circle()
                     .fill(.clear)
-                    .frame(width: geo.width*0.6, height: geo.height*0.6)
+                    .frame(maxWidth: .infinity)
+                    .frame(height: geo.height*0.6)
                     .background {
                         Circle()
                             .fill(Color.purple)
                             .opacity(0.6)
-                            .frame(width: geo.width/5.9733333333, height: geo.width/5.9733333333)
+                            .frame(width: scaleModifier/5.9733333333, height: scaleModifier/5.9733333333)
                     }
                 //                .background {
                 //                    ZStack {
@@ -62,7 +67,7 @@ struct PABreathingView: View {
                     .background {
                         Circle()
                             .fill(.mint)
-                            .frame(width: geo.width/8.96, height: geo.width/8.96)
+                            .frame(width: scaleModifier/8.96, height: scaleModifier/8.96)
                             .opacity(0.9)
                             .blur(radius: 50)
                     }
@@ -106,8 +111,11 @@ struct PABreathingView: View {
                         .transition(.opacity)
                 }
             }
-//            .padding(geo.width/8.96)
+//            .padding(scaleModifier/8.96)
 //            .scaleEffect(scaleEffect)
+        }
+        .onRotate { orientation in
+            self.orientation = orientation
         }
     }
     
@@ -156,8 +164,8 @@ struct PABreathingView: View {
     var innerPedal: some View {
         Ellipse()
             .fill(.mint)
-            .frame(width: geo.width/22.4, height: geo.width/19.2)
-            .padding(.top, -geo.width/19.2)
+            .frame(width: scaleModifier/22.4, height: scaleModifier/19.2)
+            .padding(.top, -scaleModifier/19.2)
             .opacity(0.8)
     }
     
@@ -165,8 +173,8 @@ struct PABreathingView: View {
     var outerPedal: some View {
         Ellipse()
             .fill(.indigo)
-            .frame(width: geo.width/10.3384615385, height: geo.width/8.96)
-            .padding(.top, -geo.width/6.72)
+            .frame(width: scaleModifier/10.3384615385, height: scaleModifier/8.96)
+            .padding(.top, -scaleModifier/6.72)
             .opacity(0.8)
     }
 }
