@@ -15,7 +15,7 @@ struct AnchorView: View {
         case .migraine:
             MigrainesIntroductionView()
         case .panicAttack:
-            PanicAttackIntroductionView()
+            PanicAttackView()
         }
     }
 }
