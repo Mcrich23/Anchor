@@ -1,6 +1,6 @@
 #  Panic Attack Flow
 
-## Assurance
+## Assurance ✅
 
 - A Panic Attack is not forever. 
 - It will go away. 
@@ -16,7 +16,7 @@
 ## Grounding
     
 - Find a calm location
-- Take Deep Breaths
+- Take Deep Breaths ✅
 - Focus on Object
 - 5-4-3-2-1 Method (maybe not possible)
     1. Look at 5 different object
