@@ -22,7 +22,7 @@ struct PADrawingView: View {
                 Text("Drawing something can help you direct your focus away from the panic attack and therefore reduce its intensity.")
                     .frame(maxWidth: .infinity, alignment: .center)
             }
-                .padding(.horizontal)
+            .padding([.horizontal, .bottom])
 //                .overlay(alignment: .trailing) {
 //                    HStack {
 //                        if canvasBackgroundColor != Color(.homeAntiCircleGradientColor1) {
