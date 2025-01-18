@@ -89,7 +89,7 @@ struct PanicAttackStepsView: View {
                     .buttonStyle(.bordered)
                 }
             }
-            .padding(.horizontal)
+            .padding()
         }
         .environment(stepManager)
         .onGeometryChange(for: CGSize.self, of: { proxy in

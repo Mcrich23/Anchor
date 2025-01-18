@@ -13,27 +13,30 @@ struct PanicAttackSplashView: View {
     @Namespace var namespace
     
     var body: some View {
-        VStack {
+        Group {
             if isStartScreen {
-                Text("Panic Attack Relief")
-                    .font(.title)
-                    .matchedGeometryEffect(id: "title", in: namespace)
-                    .bold()
-                Text("A panic attack can be very scary. Anchor is hear to help you through it.")
-                    .multilineTextAlignment(.center)
-                HStack {
-                    Button("Back", action: dismiss)
-                        .buttonStyle(.bordered)
-                        .matchedGeometryEffect(id: "close", in: namespace)
-                    if isStartScreen {
-                        Button("Start Relief") {
-                            withAnimation(.easeInOut(duration: 1.3)) {
-                                isStartScreen.toggle()
+                VStack {
+                    Text("Panic Attack Relief")
+                        .font(.title)
+                        .matchedGeometryEffect(id: "title", in: namespace)
+                        .bold()
+                    Text("A panic attack can be very scary. Anchor is hear to help you through it.")
+                        .multilineTextAlignment(.center)
+                    HStack {
+                        Button("Back", action: dismiss)
+                            .buttonStyle(.bordered)
+                            .matchedGeometryEffect(id: "close", in: namespace)
+                        if isStartScreen {
+                            Button("Start Relief") {
+                                withAnimation(.easeInOut(duration: 1.3)) {
+                                    isStartScreen.toggle()
+                                }
                             }
+                            .buttonStyle(.borderedProminent)
                         }
-                        .buttonStyle(.borderedProminent)
                     }
                 }
+                .matchedGeometryEffect(id: "container", in: namespace)
             } else {
                 HStack {
                     Text("Panic Attack Relief")
@@ -50,6 +53,7 @@ struct PanicAttackSplashView: View {
                 .padding()
                 .background(Color(uiColor: .secondarySystemFill))
                 .clipShape(RoundedRectangle(cornerRadius: 6))
+                .matchedGeometryEffect(id: "container", in: namespace)
             }
         }
         .padding()
