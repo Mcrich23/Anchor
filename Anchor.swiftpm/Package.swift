@@ -17,7 +17,7 @@ let package = Package(
             name: "Anchor",
             targets: ["AppModule"],
             bundleIdentifier: "com.Mcrich.Anchor",
-            teamIdentifier: "L7JQRVXU2V",
+            teamIdentifier: "R5Y5Q6XM6Z",
             displayVersion: "1.0",
             bundleVersion: "1",
             appIcon: .asset("AppIcon"),
