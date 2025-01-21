@@ -31,6 +31,12 @@ let package = Package(
                 .landscapeRight(.when(deviceFamilies: [.pad])),
                 .landscapeLeft(.when(deviceFamilies: [.pad])),
                 .portraitUpsideDown(.when(deviceFamilies: [.pad]))
+            ],
+            capabilities: [
+                .microphone(purposeString: "Anchor would like access to the microphone to aid in multiple relief techniques."),
+                .speechRecognition(purposeString: "Anchor would like access to speech recognition to aid in multiple relief techniques."),
+                .outgoingNetworkConnections(),
+                .incomingNetworkConnections()
             ]
         )
     ],

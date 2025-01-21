@@ -7,6 +7,7 @@
 
 import Foundation
 import SwiftUI
+import AVFoundation
 
 private enum PAAssuranceStep: Int, CaseIterable {
     case intro
@@ -27,15 +28,21 @@ struct PAAssuranceView: View {
     @Environment(PAStepManager.self) var stepManager
     @State private var step: PAAssuranceStep = .intro
     @Environment(\.geometrySize) var geo
+    @StateObject var speechRecognizer = SpeechRecognizer()
+    @State private var isRecording = false
+    
+    var animatedMeshView: some View {
+        AnimatedMeshView(colors: [
+            .red, .purple, .purple,
+            .purple, .orange, .purple,
+            .yellow, .purple, .purple
+        ])
+        .scaleEffect(1.2)
+    }
     
     var body: some View {
         ZStack {
-            AnimatedMeshView(colors: [
-                .red, .purple, .purple,
-                .purple, .orange, .purple,
-                .yellow, .purple, .purple
-            ])
-            .scaleEffect(1.2)
+            animatedMeshView
             Group {
                 switch step {
                 case .intro:
@@ -51,6 +58,15 @@ struct PAAssuranceView: View {
         }
         .frame(width: geo.height*0.8, height: geo.height*0.8)
         .clipShape(.circle)
+        .background {
+            animatedMeshView
+                .frame(width: geo.height*0.8, height: geo.height*0.8)
+                .opacity(0.7)
+                .blur(radius: 15, opaque: true)
+                .clipShape(.circle)
+            .scaleEffect(1 + speechRecognizer.inputNoiseLevel)
+        }
+        .animation(.default, value: speechRecognizer.inputNoiseLevel)
     }
     
     @ViewBuilder
@@ -94,6 +110,24 @@ struct PAAssuranceView: View {
                 .fontWeight(.semibold)
                 .foregroundStyle(colorScheme == .light ? .white: .black)
                 .lineSpacing(10)
+            
+            if !speechRecognizer.transcript.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
+                Text(speechRecognizer.transcript)
+                    .minimumScaleFactor(0.7)
+            }
+            Button {
+                switch isRecording {
+                case true:
+                    endTranscription()
+                case false:
+                    startTranscription()
+                }
+            } label: {
+                Label(isRecording ? "Stop Transcription" : "Start Transcription", systemImage: "microphone.fill")
+                    .labelStyle(.titleOnly)
+                    .frame(maxWidth: 700, alignment: .center)
+            }
+            .buttonStyle(.borderedProminent)
         }
     }
     
@@ -117,5 +151,16 @@ struct PAAssuranceView: View {
             }
             .buttonStyle(.borderedProminent)
         }
+    }
+    
+    private func startTranscription() {
+        speechRecognizer.resetTranscript()
+        speechRecognizer.startTranscribing()
+        isRecording = true
+    }
+    
+    private func endTranscription() {
+        speechRecognizer.stopTranscribing()
+        isRecording = false
     }
 }
