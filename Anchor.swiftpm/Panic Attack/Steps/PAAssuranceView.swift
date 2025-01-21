@@ -30,6 +30,24 @@ struct PAAssuranceView: View {
     @Environment(\.geometrySize) var geo
     @StateObject var speechRecognizer = SpeechRecognizer()
     @State private var isRecording = false
+    let mantra = "I am experiencing a panic attack. It is okay to feel this way. I don't need to escape it, just work with it."
+    
+    var numberOfTimesMantraSaid: Int {
+        do {
+            // Adjust regex for more flexibility with optional parts and variations
+            let mantraRegex = try Regex(#"(?i)(I\s*am|I'm)\s+experiencing\s+a\s+panic\s+attack\s+(It\s+is|It's)\s+(okay|ok)\s+(to\s+feel|that\s+I\s+feel|I\s+feel)\s+this\s+way\s+(I\s+do\s+not|I\s+don't|I\s+dont)\s+need\s+to\s+escape\s+it\s+just\s+work\s+with\s+it"#)
+            let transcript = speechRecognizer.transcript.replacingOccurrences(of: "\\", with: "").trimmingCharacters(in: .punctuationCharacters).lowercased()
+            
+            // Get count of matches
+            let count = transcript.ranges(of: mantraRegex).count
+            
+            // Return count that is >= 0
+            return max(count, 0)
+        } catch {
+            print("Regex error:", error)
+            return 0
+        }
+    }
     
     var animatedMeshView: some View {
         AnimatedMeshView(colors: [
@@ -53,6 +71,7 @@ struct PAAssuranceView: View {
                     conclusionView
                 }
             }
+            .foregroundStyle(colorScheme == .light ? .white: .black)
             .padding(.horizontal, 40)
             .padding()
         }
@@ -104,7 +123,7 @@ struct PAAssuranceView: View {
                 .fontWeight(.semibold)
                 .foregroundStyle(colorScheme == .light ? .white: .black)
             
-            Text("I am experiencing a panic attack. It is okay to feel this way. I don't need to escape it, just work with it.")
+            Text(mantra)
                 .multilineTextAlignment(.center)
                 .font(.title)
                 .fontWeight(.semibold)
@@ -115,6 +134,14 @@ struct PAAssuranceView: View {
                 Text(speechRecognizer.transcript)
                     .minimumScaleFactor(0.7)
             }
+            if numberOfTimesMantraSaid > 0 {
+                HStack {
+                    ForEach(0..<numberOfTimesMantraSaid, id: \.self) { _ in
+                        Text("✅")
+                    }
+                }
+            }
+            
             Button {
                 switch isRecording {
                 case true:
@@ -138,7 +165,6 @@ struct PAAssuranceView: View {
                 .multilineTextAlignment(.center)
                 .font(.largeTitle)
                 .fontWeight(.semibold)
-                .foregroundStyle(colorScheme == .light ? .white: .black)
             Text("Lets move on to grounding techniques.")
                 .multilineTextAlignment(.center)
                 .font(.title)
@@ -162,5 +188,24 @@ struct PAAssuranceView: View {
     private func endTranscription() {
         speechRecognizer.stopTranscribing()
         isRecording = false
+    }
+}
+
+extension StringProtocol {
+    func numberOfOccurrences(of substring: String) -> Int {
+        let array = split(separator: substring)
+        let count = array.count - 1
+        return Swift.max(count, 0) // Ensure non-negative count
+    }
+
+    func ranges<S: StringProtocol>(of string: S, options: String.CompareOptions = []) -> [Range<Index>] {
+        var result: [Range<Index>] = []
+        var startIndex = self.startIndex
+        while startIndex < endIndex,
+              let range = self[startIndex...].range(of: string, options: options) {
+            result.append(range)
+            startIndex = range.upperBound // Move to the end of the current match
+        }
+        return result
     }
 }

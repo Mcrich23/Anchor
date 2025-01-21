@@ -116,7 +116,7 @@ actor SpeechRecognizer: ObservableObject {
         
         Task { @MainActor in
             inputNoiseLevel = 0
-//            transcript = ""
+            transcript = ""
         }
     }
     
