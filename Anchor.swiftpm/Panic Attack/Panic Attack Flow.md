@@ -1,17 +1,8 @@
 #  Panic Attack Flow
 
-## Assurance ✅
+## Acknowledge ✅
 
-- A Panic Attack is not forever. 
-- It will go away. 
-- Remember: A panic attack cannot cause you physical harm.
-- Typically peaks at 10 min
-- Its alright that you are in distress
-
-## Action
-    
-- Take Medication
-- Alert Someone ✅
+- Repeat mantra (live microphone feedback)
 
 ## Grounding
     
@@ -30,6 +21,8 @@
 - Picture a Happy Place
     - Drawing?
 
-## Sources
+# Sources
 https://www.medicalnewstoday.com/articles/321510#methods
 Conversation with Dr. Matthew Hopperstad
+https://www.actmindfully.com.au/upimages/Dropping_anchor_script.pdf
+https://www.flourishmindfully.com.au/blog/dropping-anchor
