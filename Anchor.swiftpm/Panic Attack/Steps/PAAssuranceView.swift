@@ -102,6 +102,7 @@ struct PAAssuranceView: View {
                 .fontWeight(.semibold)
                 .foregroundStyle(colorScheme == .light ? .white: .black)
             Button {
+                startTranscription()
                 withAnimation {
                     step.next()
                 }
@@ -130,31 +131,26 @@ struct PAAssuranceView: View {
                 .foregroundStyle(colorScheme == .light ? .white: .black)
                 .lineSpacing(10)
             
-            if !speechRecognizer.transcript.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
-                Text(speechRecognizer.transcript)
-                    .minimumScaleFactor(0.7)
-            }
-            if numberOfTimesMantraSaid > 0 {
-                HStack {
-                    ForEach(0..<numberOfTimesMantraSaid, id: \.self) { _ in
-                        Text("✅")
+            if isRecording {
+                Label("Listening...", systemImage: "microphone.fill")
+                    .padding()
+                    .background {
+                        RoundedRectangle(cornerRadius: 6)
+                            .fill(.tint)
+//                            .fill(Color(uiColor: .secondarySystemFill))
+//                            .opacity(0.9)
                     }
-                }
-            }
-            
-            Button {
-                switch isRecording {
-                case true:
-                    endTranscription()
-                case false:
-                    startTranscription()
-                }
-            } label: {
-                Label(isRecording ? "Stop Transcription" : "Start Transcription", systemImage: "microphone.fill")
-                    .labelStyle(.titleOnly)
                     .frame(maxWidth: 700, alignment: .center)
             }
-            .buttonStyle(.borderedProminent)
+        }
+        .onChange(of: numberOfTimesMantraSaid) {
+            guard numberOfTimesMantraSaid >= 3 else { return }
+            
+            withAnimation {
+                step.next()
+            } completion: {
+                endTranscription()
+            }
         }
     }
     
