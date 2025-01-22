@@ -1,5 +1,5 @@
 //
-//  PATakeActionView.swift
+//  MTakeActionView.swift
 //  Anchor
 //
 //  Created by Morris Richman on 1/16/25.
@@ -8,8 +8,8 @@
 import Foundation
 import SwiftUI
 
-struct PATakeActionView: View {
-    let shareText: String = "Hello, I am experiencing a panic attack. I am using the app Anchor to help me manage my symptoms. If you don't hear back from me in the next 30 minutes, please call me."
+struct MTakeActionView: View {
+    let shareText: String = "Hello, I am experiencing a migraine. I am using the app Anchor to help me manage my symptoms. If you don't hear back from me in the next 30 minutes, please call me."
     @Environment(\.geometrySize) var geo
     
     var body: some View {
@@ -38,7 +38,7 @@ struct PATakeActionView: View {
                 Text("Take your medication")
                     .font(.title2)
                     .fontWeight(.semibold)
-                Text("Taking medication can be integral to managing panic attacks. If you have specific medication, or general anxiety medication, make sure to take it as directed.")
+                Text("Taking medication can be integral to managing migraines. If you have specific medication, or general pain medication, make sure to take it as directed.")
                     .minimumScaleFactor(0.7)
                 Button("Take Medication") {
                     
@@ -50,7 +50,7 @@ struct PATakeActionView: View {
                 Text("Let Someone Know")
                     .font(.title2)
                     .fontWeight(.semibold)
-                Text("Telling someone that you are experiencing a panic attack can help you keep people aware of your situation and receive immediate help if needed.")
+                Text("Telling someone that you are experiencing a migraine can help you keep people aware of your situation and receive immediate help if needed.")
                     .minimumScaleFactor(0.7)
                 ShareLink("Share with Someone", items: [shareText])
                     .buttonStyle(.borderedProminent)
