@@ -121,21 +121,24 @@ struct PABreathingView: View {
     
     func runBreath() {
         Task {
-            isBreathing = true
-            for _ in 0..<4 {
-                await breath()
-                try? await Task.sleep(for: .seconds(4))
+            withAnimation {
+                isBreathing = true
             }
-            isBreathing = false
+            for i in 0..<4 {
+                await breath(holdAtEnd: i < 3)
+            }
+            withAnimation {
+                isBreathing = false
+            }
         }
     }
     
-    func breath() async {
+    func breath(holdAtEnd: Bool = true) async {
         withAnimation {
             breathState = .breathIn
         }
         await withCheckedContinuation { continuation in
-            withAnimation(.easeInOut(duration: 5)) {
+            withAnimation(.easeInOut(duration: 4)) {
                 isFlowerExpanded = true
             } completion: {
                 continuation.resume()
@@ -149,14 +152,17 @@ struct PABreathingView: View {
             breathState = .breathOut
         }
         await withCheckedContinuation { continuation in
-            withAnimation(.easeInOut(duration: 5)) {
+            withAnimation(.easeInOut(duration: 4)) {
                 isFlowerExpanded = false
             } completion: {
                 continuation.resume()
             }
         }
-        withAnimation {
-            breathState = .hold
+        if holdAtEnd {
+            withAnimation {
+                breathState = .hold
+            }
+            try? await Task.sleep(for: .seconds(4))
         }
     }
     
