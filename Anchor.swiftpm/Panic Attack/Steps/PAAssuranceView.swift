@@ -35,7 +35,7 @@ struct PAAssuranceView: View {
     var numberOfTimesMantraSaid: Int {
         do {
             // Adjust regex for more flexibility with optional parts and variations
-            let mantraRegex = try Regex(#"(?i)(I\s*am|I'm)\s+experiencing\s+a\s+panic\s+attack\s+(It\s+is|It's)\s+(okay|ok)\s+(to\s+feel|that\s+I\s+feel|I\s+feel)\s+this\s+way\s+(I\s+do\s+not|I\s+don't|I\s+dont)\s+need\s+to\s+escape\s+it\s+just\s+work\s+with\s+it"#)
+            let mantraRegex = try Regex(#"(?i)(I\s*am|I'm)\s+experiencing\s+(a\s+)?panic\s+attack\s+(It\s+is|It's)\s+(okay|ok)\s+(to\s+feel|that\s+I\s+feel|I\s+feel)\s+this\s+way\s+(I\s+do\s+not|I\s+don't|I\s+dont)\s+need\s+to\s+escape\s+it\s+just\s+work\s+with\s+it"#)
             let transcript = speechRecognizer.transcript.replacingOccurrences(of: "\\", with: "").trimmingCharacters(in: .punctuationCharacters).lowercased()
             
             // Get count of matches
@@ -109,7 +109,7 @@ struct PAAssuranceView: View {
             } label: {
                 Label("Get Started", systemImage: "chevron.right")
                     .labelStyle(.titleOnly)
-                    .frame(maxWidth: 700, alignment: .center)
+                    .frame(maxWidth: 200, alignment: .center)
             }
             .buttonStyle(.borderedProminent)
         }
@@ -117,46 +117,83 @@ struct PAAssuranceView: View {
     
     @ViewBuilder
     var mantraView: some View {
-        VStack(spacing: 60) {
-            Text("Repeat The Following Mantra:")
-                .multilineTextAlignment(.center)
-                .font(.largeTitle)
-                .fontWeight(.semibold)
-                .foregroundStyle(colorScheme == .light ? .white: .black)
+        VStack(spacing: 30) {
+                Text("Repeat The Following Mantra:")
+                    .multilineTextAlignment(.center)
+                    .font(.largeTitle)
+                    .fontWeight(.semibold)
+                    .foregroundStyle(colorScheme == .light ? .white: .black)
+                
+                Text(mantra)
+                    .multilineTextAlignment(.center)
+                    .font(.title)
+                    .fontWeight(.semibold)
+                    .foregroundStyle(colorScheme == .light ? .white: .black)
+                    .lineSpacing(10)
             
-            Text(mantra)
-                .multilineTextAlignment(.center)
-                .font(.title)
-                .fontWeight(.semibold)
-                .foregroundStyle(colorScheme == .light ? .white: .black)
-                .lineSpacing(10)
+            HStack(spacing: 20) {
+                ForEach(1..<4, id: \.self) { i in
+                    Image(systemName: "checkmark.circle.fill")
+                        .resizable()
+                        .aspectRatio(contentMode: .fit)
+                        .foregroundColor(numberOfTimesMantraSaid >= i ? Color.green : Color.secondary)
+                        .frame(maxHeight: 40)
+                }
+            }
             
             if isRecording {
-                Label("Listening...", systemImage: "microphone.fill")
-                    .padding()
-                    .background {
-                        RoundedRectangle(cornerRadius: 6)
-                            .fill(.tint)
-//                            .fill(Color(uiColor: .secondarySystemFill))
-//                            .opacity(0.9)
+                VStack(spacing: 15) {
+                    Label("Listening...", systemImage: "microphone.fill")
+                        .padding()
+                        .frame(maxWidth: 200, alignment: .center)
+                        .background {
+                            RoundedRectangle(cornerRadius: 12)
+                                .fill(.tint)
+                            //                            .fill(Color(uiColor: .secondarySystemFill))
+                            //                            .opacity(0.9)
+                        }
+                    
+                    Button {
+                        withAnimation {
+                            step.next()
+                        } completion: {
+                            endTranscription()
+                        }
+                    } label: {
+                        Label("Skip", systemImage: "chevron.forward")
+                            .labelStyle(.titleOnly)
+                            .foregroundStyle(.tint)
+                            .padding()
+                            .frame(maxWidth: 200, alignment: .center)
+                            .background {
+                                RoundedRectangle(cornerRadius: 12)
+                                    .fill(.ultraThinMaterial)
+                            }
+//                            .background {
+//                                RoundedRectangle(cornerRadius: 12)
+//                                    .fill(Color(uiColor: .systemFill))
+//                                    .opacity(0.2)
+//                            }
                     }
-                    .frame(maxWidth: 700, alignment: .center)
+                }
             }
         }
         .onChange(of: numberOfTimesMantraSaid) {
             guard numberOfTimesMantraSaid >= 3 else { return }
-            
-            withAnimation {
-                step.next()
-            } completion: {
-                endTranscription()
+            Task {
+                try? await Task.sleep(for: .seconds(1))
+                withAnimation {
+                    step.next()
+                } completion: {
+                    endTranscription()
+                }
             }
         }
     }
     
     @ViewBuilder
     var conclusionView: some View {
-        VStack(spacing: 40) {
+        VStack(spacing: 30) {
             Text("Good Job!")
                 .multilineTextAlignment(.center)
                 .font(.largeTitle)
@@ -169,7 +206,7 @@ struct PAAssuranceView: View {
             Button(action: stepManager.next) {
                 Label("Continue", systemImage: "chevron.right")
                     .labelStyle(.titleOnly)
-                    .frame(maxWidth: 700, alignment: .center)
+                    .frame(maxWidth: 200, alignment: .center)
             }
             .buttonStyle(.borderedProminent)
         }
