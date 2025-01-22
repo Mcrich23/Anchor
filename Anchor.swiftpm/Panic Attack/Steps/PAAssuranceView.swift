@@ -169,11 +169,6 @@ struct PAAssuranceView: View {
                                 RoundedRectangle(cornerRadius: 12)
                                     .fill(.ultraThinMaterial)
                             }
-//                            .background {
-//                                RoundedRectangle(cornerRadius: 12)
-//                                    .fill(Color(uiColor: .systemFill))
-//                                    .opacity(0.2)
-//                            }
                     }
                 }
             }
