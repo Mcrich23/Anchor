@@ -30,7 +30,6 @@ struct PAAssuranceView: View {
     @Environment(\.geometrySize) var geo
     @StateObject var speechRecognizer = SpeechRecognizer()
     @State private var isRecording = false
-    @State private var recordingShapeRotation: CGFloat = 0
     let mantra = "I am experiencing a panic attack. It is okay to feel this way. I don't need to escape it, just work with it."
     
     var numberOfTimesMantraSaid: Int {
@@ -81,23 +80,12 @@ struct PAAssuranceView: View {
         .background {
             animatedMeshView
                 .frame(width: geo.height*0.8, height: geo.height*0.8)
-                .opacity(0.9)
+                .opacity(0.7)
                 .blur(radius: 15, opaque: true)
-                .rotation3DEffect(.degrees(180), axis: (x: 0, y: 1, z: 0))
-                .clipShape(SplashShape())
-                .rotationEffect(.degrees(recordingShapeRotation))
-                .scaleEffect(1.1 + speechRecognizer.inputNoiseLevel)
-                .animation(.default, value: recordingShapeRotation)
+                .clipShape(.circle)
+            .scaleEffect(1 + speechRecognizer.inputNoiseLevel)
         }
         .animation(.default, value: speechRecognizer.inputNoiseLevel)
-        .task {
-            while true {
-                if speechRecognizer.inputNoiseLevel < 0.14 {
-                    recordingShapeRotation += 0.1
-                }
-                try? await Task.sleep(for: .milliseconds(50))
-            }
-        }
     }
     
     @ViewBuilder
@@ -107,10 +95,12 @@ struct PAAssuranceView: View {
                 .multilineTextAlignment(.center)
                 .font(.largeTitle)
                 .fontWeight(.semibold)
+                .foregroundStyle(colorScheme == .light ? .white: .black)
             Text("Before we continue, we need to create acknowledge your anxiety.")
                 .multilineTextAlignment(.center)
                 .font(.title)
                 .fontWeight(.semibold)
+                .foregroundStyle(colorScheme == .light ? .white: .black)
             Button {
                 withAnimation {
                     step.next()
@@ -131,17 +121,19 @@ struct PAAssuranceView: View {
                 .multilineTextAlignment(.center)
                 .font(.largeTitle)
                 .fontWeight(.semibold)
+                .foregroundStyle(colorScheme == .light ? .white: .black)
             
             Text(mantra)
                 .multilineTextAlignment(.center)
                 .font(.title)
                 .fontWeight(.semibold)
+                .foregroundStyle(colorScheme == .light ? .white: .black)
                 .lineSpacing(10)
             
-//            if !speechRecognizer.transcript.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
-//                Text(speechRecognizer.transcript)
-//                    .minimumScaleFactor(0.7)
-//            }
+            if !speechRecognizer.transcript.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
+                Text(speechRecognizer.transcript)
+                    .minimumScaleFactor(0.7)
+            }
             if numberOfTimesMantraSaid > 0 {
                 HStack {
                     ForEach(0..<numberOfTimesMantraSaid, id: \.self) { _ in
