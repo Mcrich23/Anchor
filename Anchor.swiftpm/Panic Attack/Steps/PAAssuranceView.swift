@@ -32,6 +32,10 @@ struct PAAssuranceView: View {
     @State private var isRecording = false
     let mantra = "I am experiencing a panic attack. It is okay to feel this way. I don't need to escape it, just work with it."
     
+    var height: CGFloat {
+        min(geo.width, geo.height)
+    }
+    
     var numberOfTimesMantraSaid: Int {
         do {
             // Adjust regex for more flexibility with optional parts and variations
@@ -72,20 +76,21 @@ struct PAAssuranceView: View {
                 }
             }
             .foregroundStyle(colorScheme == .light ? .white: .black)
-            .padding(.horizontal, 40)
-            .padding()
+            .frame(maxWidth: height*0.6, maxHeight: height*0.7)
+            .minimumScaleFactor(0.7)
         }
-        .frame(width: geo.height*0.8, height: geo.height*0.8)
+        .frame(maxWidth: height*0.8, maxHeight: height*0.8)
         .clipShape(.circle)
         .background {
             animatedMeshView
-                .frame(width: geo.height*0.8, height: geo.height*0.8)
+                .frame(maxWidth: height*0.8, maxHeight: height*0.8)
                 .opacity(0.7)
                 .blur(radius: 15, opaque: true)
                 .clipShape(.circle)
             .scaleEffect(1 + speechRecognizer.inputNoiseLevel)
         }
         .animation(.default, value: speechRecognizer.inputNoiseLevel)
+        .padding()
     }
     
     @ViewBuilder
@@ -123,6 +128,7 @@ struct PAAssuranceView: View {
                     .font(.largeTitle)
                     .fontWeight(.semibold)
                     .foregroundStyle(colorScheme == .light ? .white: .black)
+                    .minimumScaleFactor(0.8)
                 
                 Text(mantra)
                     .multilineTextAlignment(.center)
@@ -130,6 +136,7 @@ struct PAAssuranceView: View {
                     .fontWeight(.semibold)
                     .foregroundStyle(colorScheme == .light ? .white: .black)
                     .lineSpacing(10)
+                    .minimumScaleFactor(0.6)
             
             HStack(spacing: 20) {
                 ForEach(1..<4, id: \.self) { i in
@@ -142,34 +149,14 @@ struct PAAssuranceView: View {
             }
             
             if isRecording {
-                VStack(spacing: 15) {
-                    Label("Listening...", systemImage: "microphone.fill")
-                        .padding()
-                        .frame(maxWidth: 200, alignment: .center)
-                        .background {
-                            RoundedRectangle(cornerRadius: 12)
-                                .fill(.tint)
-                            //                            .fill(Color(uiColor: .secondarySystemFill))
-                            //                            .opacity(0.9)
-                        }
-                    
-                    Button {
-                        withAnimation {
-                            step.next()
-                        } completion: {
-                            endTranscription()
-                        }
-                    } label: {
-                        Label("Skip", systemImage: "chevron.forward")
-                            .labelStyle(.titleOnly)
-                            .foregroundStyle(.tint)
-                            .padding()
-                            .frame(maxWidth: 200, alignment: .center)
-                            .background {
-                                RoundedRectangle(cornerRadius: 12)
-                                    .fill(.ultraThinMaterial)
-                            }
+                ViewThatFits {
+                    VStack(spacing: 15) {
+                        mantraViewButtons(collapsed: false)
                     }
+                    HStack(alignment: .center, spacing: 15) {
+                        mantraViewButtons(collapsed: true)
+                    }
+                    .padding(.bottom)
                 }
             }
         }
@@ -183,6 +170,47 @@ struct PAAssuranceView: View {
                     endTranscription()
                 }
             }
+        }
+    }
+    
+    @ViewBuilder
+    func mantraViewButtons(collapsed: Bool) -> some View {
+        Label("Listening...", systemImage: "microphone.fill")
+            .padding()
+            .frame(maxWidth: collapsed ? 175 : 200, maxHeight: 50, alignment: .center)
+            .background {
+                RoundedRectangle(cornerRadius: 12)
+                    .fill(.tint)
+                //                            .fill(Color(uiColor: .secondarySystemFill))
+                //                            .opacity(0.9)
+            }
+        
+        Button {
+            withAnimation {
+                step.next()
+            } completion: {
+                endTranscription()
+            }
+        } label: {
+            Group {
+                switch collapsed {
+                case true:
+                    Label("Skip", systemImage: "chevron.forward")
+                        .labelStyle(.iconOnly)
+                case false:
+                    Label("Skip", systemImage: "chevron.forward")
+                        .labelStyle(.titleOnly)
+                }
+            }
+                .foregroundStyle(.tint)
+                .font(.body)
+                .fixedSize()
+                .padding()
+                .frame(maxWidth: collapsed ? 50 : 200, maxHeight: 50, alignment: .center)
+                .background {
+                    RoundedRectangle(cornerRadius: 12)
+                        .fill(.ultraThinMaterial)
+                }
         }
     }
     
