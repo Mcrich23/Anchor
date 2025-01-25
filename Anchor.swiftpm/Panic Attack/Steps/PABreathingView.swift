@@ -19,8 +19,11 @@ struct PABreathingView: View {
     @State private var isBreathing: Bool = false
     @Environment(\.geometrySize) var geo
     @State var orientation: UIDeviceOrientation = UIDevice.current.orientation
+    @State var previousOrientation: UIDeviceOrientation = UIDevice.current.orientation
     
     var scaleModifier: CGFloat {
+        let orientation = self.orientation.isFlat ? self.previousOrientation : self.orientation
+        
         switch orientation.isPortrait {
         case true:
             return geo.height*1.3
@@ -115,6 +118,7 @@ struct PABreathingView: View {
 //            .scaleEffect(scaleEffect)
         }
         .onRotate { orientation in
+            self.previousOrientation = self.orientation
             self.orientation = orientation
         }
     }
