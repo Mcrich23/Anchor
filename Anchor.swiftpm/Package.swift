@@ -37,7 +37,8 @@ let package = Package(
                 .speechRecognition(purposeString: "Anchor would like access to speech recognition to aid in multiple relief techniques."),
                 .outgoingNetworkConnections(),
                 .incomingNetworkConnections()
-            ]
+            ],
+            appCategory: .medical
         )
     ],
     targets: [
