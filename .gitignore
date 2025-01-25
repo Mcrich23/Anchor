@@ -1,3 +1,4 @@
 
 .DS_Store
-Anchor.swiftpm/.swiftpm/xcode/package.xcworkspace/xcuserdata/mcrich.xcuserdatad/UserInterfaceState.xcuserstate
+Anchor.swiftpm/.swiftpm
+Anchor.swiftpm/.build
