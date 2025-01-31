@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import CoreHaptics
 
 enum BreathState: String, CaseIterable {
     case breathIn = "Breathe In"
@@ -22,6 +23,8 @@ struct BreathFlowerView: View {
     @Environment(\.geometrySize) private var geo
     @State private var orientation: UIDeviceOrientation = UIDevice.current.orientation
     @State private var previousOrientation: UIDeviceOrientation = UIDevice.current.orientation
+    @State private var hapticEngine: CHHapticEngine?
+    let stepDuration = 4.0 // Keep at whole seconds
     
     var scaleModifier: CGFloat {
         let orientation = self.orientation.isFlat ? self.previousOrientation : self.orientation
@@ -114,6 +117,9 @@ struct BreathFlowerView: View {
             self.previousOrientation = self.orientation
             self.orientation = orientation
         }
+        .onAppear {
+            prepareHaptics()
+        }
     }
     
     @ViewBuilder
@@ -148,11 +154,31 @@ struct BreathFlowerView: View {
         }
     }
     
+    private func playHaptics(_ events: [CHHapticEvent]) {
+        do {
+            let pattern = try CHHapticPattern(events: events, parameters: [])
+            let player = try hapticEngine?.makePlayer(with: pattern)
+            try player?.start(atTime: 0)
+        } catch {
+            print("Failed to play pattern: \(error.localizedDescription).")
+        }
+    }
+    
     private func countdown(from: Int) {
         Task {
+            // Reset Countdown
             withAnimation {
                 self.countdown = from
             }
+            // Add Haptics
+            let intensity = CHHapticEventParameter(parameterID: .hapticIntensity, value: 1)
+            let sharpness = CHHapticEventParameter(parameterID: .hapticSharpness, value: 1)
+            let events: [CHHapticEvent] = [
+                CHHapticEvent(eventType: .hapticTransient, parameters: [intensity, sharpness], relativeTime: 0)
+            ]
+            playHaptics(events)
+            
+            // Run Countdown
             for _ in 1..<from {
                 try? await Task.sleep(for: .seconds(1))
                 withAnimation {
@@ -163,8 +189,6 @@ struct BreathFlowerView: View {
     }
     
     func breath(holdAtEnd: Bool = true) async {
-        let stepDuration = 4.0 // Keep at whole seconds
-        
         withAnimation {
             self.countdown = Int(stepDuration.rounded(.up))
             breathState = .breathIn
@@ -202,6 +226,17 @@ struct BreathFlowerView: View {
             }
             countdown(from: Int(stepDuration.rounded(.up)))
             try? await Task.sleep(for: .seconds(stepDuration))
+        }
+    }
+    
+    private func prepareHaptics() {
+        guard CHHapticEngine.capabilitiesForHardware().supportsHaptics else { return }
+
+        do {
+            hapticEngine = try CHHapticEngine()
+            try hapticEngine?.start()
+        } catch {
+            print("There was an error creating the engine: \(error.localizedDescription)")
         }
     }
 }

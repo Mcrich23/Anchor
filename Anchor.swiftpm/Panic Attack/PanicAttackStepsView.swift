@@ -88,6 +88,7 @@ struct PanicAttackStepsView: View {
             .padding()
         }
         .environment(stepManager)
+        .sensoryFeedback(.success, trigger: stepManager.step)
         .onGeometryChange(for: CGSize.self, of: { proxy in
             proxy.size
         }, action: { newValue in

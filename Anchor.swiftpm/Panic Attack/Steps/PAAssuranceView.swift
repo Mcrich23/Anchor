@@ -76,6 +76,7 @@ struct PAAssuranceView: View {
                     conclusionView
                 }
             }
+            .sensoryFeedback(.success, trigger: step)
             .foregroundStyle(colorScheme == .light ? .white: .black)
             .frame(maxWidth: height*0.65, maxHeight: height*0.7)
             .minimumScaleFactor(0.7)
