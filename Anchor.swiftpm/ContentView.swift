@@ -83,6 +83,7 @@ struct ContentView: View {
                     }
                     Spacer()
                 }
+                .allowsHitTesting(selectedAnchor == nil)
                 .frame(maxWidth: .infinity, alignment: .center)
                 .background(alignment: .top) {
                     SemiCircle(colors: semiCircleGradientColors)
