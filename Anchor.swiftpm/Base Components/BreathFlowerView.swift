@@ -242,10 +242,10 @@ struct BreathFlowerView: View {
 }
 
 #Preview {
-    @Previewable @State var stepManager = PAStepManager()
+    @Previewable @State var stepManager = MStepManager()
     
     GeometryReader { geo in
-        PABreathingView()
+        MBreathingView()
             .environment(\.geometrySize, geo.size)
             .environment(stepManager)
     }

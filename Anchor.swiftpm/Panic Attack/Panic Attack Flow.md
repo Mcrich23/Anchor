@@ -19,7 +19,7 @@
 - Walk around
 - Muscle Relaxation
 - Picture a Happy Place
-    - Drawing?
+    - Drawing? ✅
 
 # Sources
 https://www.medicalnewstoday.com/articles/321510#methods

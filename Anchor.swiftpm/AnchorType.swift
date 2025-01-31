@@ -15,9 +15,15 @@ enum AnchorType: String, CaseIterable {
     var color: Color {
         switch self {
         case .migraine:
-            return .green
+            return .init(.migraineTint)
         case .panicAttack:
             return .indigo
         }
+    }
+}
+
+extension Color {
+    init(_ colorResource: ColorResource) {
+        self.init(uiColor: .init(resource: colorResource))
     }
 }

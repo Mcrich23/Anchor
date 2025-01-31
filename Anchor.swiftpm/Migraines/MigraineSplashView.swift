@@ -7,11 +7,11 @@
 
 import SwiftUI
 
-struct PanicAttackSplashView: View {
+struct MigraineSplashView: View {
     @Environment(\.customDismiss) var dismiss
     @Binding var isStartScreen: Bool
     @Namespace var namespace
-    @Environment(PAStepManager.self) var stepManager
+    @Environment(MStepManager.self) var stepManager
     @Environment(\.navigationNamespace) var navigationNamespace
     @Environment(\.userInterfaceIdiom) var userInterfaceIdiom
     
@@ -19,11 +19,11 @@ struct PanicAttackSplashView: View {
         Group {
             if isStartScreen {
                 VStack {
-                    Text("Panic Attack Relief")
+                    Text("Migraine Relief")
                         .font(.title)
                         .matchedGeometryEffect(id: "title", in: namespace)
                         .bold()
-                    Text("A panic attack can be very scary. Anchor is hear to help you through it.")
+                    Text("A migraine can be very scary. Anchor is hear to help you through it.")
                         .multilineTextAlignment(.center)
                     HStack {
                         Button("Back", action: dismiss)
@@ -43,7 +43,7 @@ struct PanicAttackSplashView: View {
             } else {
                 VStack {
                     HStack {
-                        Text("Panic Attack Relief")
+                        Text("Migraine Relief")
                             .font(.title)
                             .matchedGeometryEffect(id: "title", in: namespace)
                             .bold()

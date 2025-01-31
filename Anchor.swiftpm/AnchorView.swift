@@ -14,7 +14,7 @@ struct AnchorView: View {
         Group {
             switch anchor {
             case .migraine:
-                MigrainesIntroductionView()
+                MigraineView()
             case .panicAttack:
                 PanicAttackView()
             }
