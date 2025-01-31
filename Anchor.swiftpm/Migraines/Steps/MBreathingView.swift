@@ -14,7 +14,7 @@ struct MBreathingView: View {
                 Text("Let's Take Some Deep Breaths")
                     .font(.largeTitle)
                     .fontWeight(.semibold)
-                Text("Taking deep breaths can slow your heart rate, alieviating anxiety and stress.")
+                Text("Taking deep breaths can slow your heart rate, alieviating anxiety and stress, both of which can be factors in migraines.")
                     .fixedSize(horizontal: false, vertical: true)
             }
             .minimumScaleFactor(0.8)
