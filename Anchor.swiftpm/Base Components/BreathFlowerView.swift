@@ -15,12 +15,21 @@ enum BreathState: String, CaseIterable {
 }
 
 struct BreathFlowerView: View {
+    let pistilColor: Color
+    let petalColor: Color
+    
+    init(pistilColor: Color = .purple, petalColor: Color = .indigo) {
+        self.pistilColor = pistilColor
+        self.petalColor = petalColor
+    }
+    
     @State private var isFlowerExpanded: Bool = false
     @State private var breathState: BreathState?
     @State private var isBreathing: Bool = false
     @State private var countdown: Int = 4
     
     @Environment(\.geometrySize) private var geo
+    @Environment(\.colorScheme) private var colorScheme
     @State private var orientation: UIDeviceOrientation = UIDevice.current.orientation
     @State private var previousOrientation: UIDeviceOrientation = UIDevice.current.orientation
     @State private var hapticEngine: CHHapticEngine?
@@ -45,47 +54,35 @@ struct BreathFlowerView: View {
                 .frame(height: geo.height*0.6)
                 .background {
                     Circle()
-                        .fill(Color.purple)
-                        .opacity(0.6)
+                        .fill(pistilColor)
+                        .opacity(colorScheme == .light ? 0.6 : 0.3)
                         .frame(width: scaleModifier/5.9733333333, height: scaleModifier/5.9733333333)
                 }
-            //                .background {
-            //                    ZStack {
-            //                        innerPedal
-            //                            .rotationEffect(Angle(degrees: 45))
-            //                        innerPedal
-            //                            .rotationEffect(Angle(degrees: 135))
-            //                        innerPedal
-            //                            .rotationEffect(Angle(degrees: 225))
-            //                        innerPedal
-            //                            .rotationEffect(Angle(degrees: 315))
-            //                    }
-            //                }
                 .background {
                     Circle()
                         .fill(.mint)
                         .frame(width: scaleModifier/8.96, height: scaleModifier/8.96)
-                        .opacity(0.9)
+                        .opacity(colorScheme == .light ? 0.9 : 0.6)
                         .blur(radius: 50)
                 }
                 .background {
                     ZStack {
-                        outerPedal
-                        outerPedal
+                        outerPetal
+                        outerPetal
                             .rotationEffect(Angle(degrees: 40))
-                        outerPedal
+                        outerPetal
                             .rotationEffect(Angle(degrees: 80))
-                        outerPedal
+                        outerPetal
                             .rotationEffect(Angle(degrees: 120))
-                        outerPedal
+                        outerPetal
                             .rotationEffect(Angle(degrees: 160))
-                        outerPedal
+                        outerPetal
                             .rotationEffect(Angle(degrees: 200))
-                        outerPedal
+                        outerPetal
                             .rotationEffect(Angle(degrees: 240))
-                        outerPedal
+                        outerPetal
                             .rotationEffect(Angle(degrees: 280))
-                        outerPedal
+                        outerPetal
                             .rotationEffect(Angle(degrees: 320))
                     }
 
@@ -123,18 +120,9 @@ struct BreathFlowerView: View {
     }
     
     @ViewBuilder
-    var innerPedal: some View {
+    var outerPetal: some View {
         Ellipse()
-            .fill(.mint)
-            .frame(width: scaleModifier/22.4, height: scaleModifier/19.2)
-            .padding(.top, -scaleModifier/19.2)
-            .opacity(0.8)
-    }
-    
-    @ViewBuilder
-    var outerPedal: some View {
-        Ellipse()
-            .fill(.indigo)
+            .fill(petalColor)
             .frame(width: scaleModifier/10.3384615385, height: scaleModifier/8.96)
             .padding(.top, -scaleModifier/6.72)
             .opacity(0.8)
