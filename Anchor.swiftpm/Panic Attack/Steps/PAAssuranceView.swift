@@ -60,6 +60,7 @@ struct PAAssuranceView: View {
             .yellow, .purple, .purple
         ])
         .scaleEffect(1.2)
+        .opacity(0.7)
     }
     
     var body: some View {
@@ -101,7 +102,7 @@ struct PAAssuranceView: View {
                 .font(.largeTitle)
                 .fontWeight(.semibold)
                 .foregroundStyle(colorScheme == .light ? .white: .black)
-            Text("Before we continue, we need to create acknowledge your anxiety.")
+            Text("Before we continue, we need to acknowledge your anxiety.")
                 .multilineTextAlignment(.center)
                 .font(.title)
                 .fontWeight(.semibold)
@@ -123,7 +124,7 @@ struct PAAssuranceView: View {
     @ViewBuilder
     var mantraView: some View {
         VStack(spacing: 30) {
-                Text("Repeat The Following Mantra:")
+                Text("Say The Following Mantra:")
                     .multilineTextAlignment(.center)
                     .font(.largeTitle)
                     .fontWeight(.semibold)
