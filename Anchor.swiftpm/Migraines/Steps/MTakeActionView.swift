@@ -44,6 +44,7 @@ struct MTakeActionView: View {
                     
                 }
                     .buttonStyle(.borderedProminent)
+                    .disabled(true)
             }
             .tint(Color.purple)
             box {
