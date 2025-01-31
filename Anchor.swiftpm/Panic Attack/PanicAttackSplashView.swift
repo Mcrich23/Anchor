@@ -11,6 +11,9 @@ struct PanicAttackSplashView: View {
     @Environment(\.customDismiss) var dismiss
     @Binding var isStartScreen: Bool
     @Namespace var namespace
+    @Environment(PAStepManager.self) var stepManager
+    @Environment(\.navigationNamespace) var navigationNamespace
+    @Environment(\.userInterfaceIdiom) var userInterfaceIdiom
     
     var body: some View {
         Group {
@@ -38,16 +41,35 @@ struct PanicAttackSplashView: View {
                 }
                 .matchedGeometryEffect(id: "container", in: namespace)
             } else {
-                HStack {
-                    Text("Panic Attack Relief")
-                        .font(.title)
-                        .matchedGeometryEffect(id: "title", in: namespace)
-                        .bold()
-                        .fontDesign(.default)
-                    Spacer()
-                    Button("Close", action: dismiss)
-                        .buttonStyle(.bordered)
-                        .matchedGeometryEffect(id: "close", in: namespace)
+                VStack {
+                    HStack {
+                        Text("Panic Attack Relief")
+                            .font(.title)
+                            .matchedGeometryEffect(id: "title", in: namespace)
+                            .bold()
+                            .fontDesign(.default)
+                        if !(navigationNamespace != nil && userInterfaceIdiom == .phone && stepManager.step == .drawing) {
+                            Spacer()
+                            Button("Close", action: dismiss)
+                                .buttonStyle(.bordered)
+                                .matchedGeometryEffect(id: "close", in: namespace)
+                        }
+                    }
+                    if let navigationNamespace, userInterfaceIdiom == .phone, stepManager.step == .drawing {
+                        HStack {
+                            Button("Back", systemImage: "chevron.left") {
+                                withAnimation {
+                                    stepManager.previous()
+                                }
+                            }
+                            .buttonStyle(.bordered)
+                            .matchedGeometryEffect(id: "backButton", in: navigationNamespace)
+                            Spacer()
+                            Button("Close", action: dismiss)
+                                .buttonStyle(.bordered)
+                                .matchedGeometryEffect(id: "close", in: namespace)
+                        }
+                    }
                 }
                 .frame(maxWidth: .infinity, alignment: .center)
                 .padding()

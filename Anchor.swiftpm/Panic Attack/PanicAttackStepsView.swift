@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import CoreHaptics
 
 enum PanicAttackSteps: Int, CaseIterable {
     case assurance, breath, drawing
@@ -22,6 +23,7 @@ enum PanicAttackSteps: Int, CaseIterable {
 
 extension EnvironmentValues {
     @Entry var geometrySize: CGSize = .zero
+    @Entry var navigationNamespace: Namespace.ID?
 }
 
 @Observable
@@ -44,8 +46,10 @@ final class PAStepManager {
 }
 
 struct PanicAttackStepsView: View {
-    @State var stepManager = PAStepManager()
     @State var geometrySize: CGSize = .zero
+    @Environment(PAStepManager.self) var stepManager
+    @Environment(\.userInterfaceIdiom) var userInterfaceIdiom
+    @Environment(\.navigationNamespace) var navigationNamespace
     
     var body: some View {
         VStack {
@@ -65,29 +69,31 @@ struct PanicAttackStepsView: View {
             }
         }
         .safeAreaInset(edge: .bottom) {
-            HStack {
-                if stepManager.step.rawValue != PanicAttackSteps.allCases.first?.rawValue {
-                    Button("Back", systemImage: "chevron.left") {
-                        withAnimation {
-                            stepManager.previous()
+            if stepManager.step != .drawing || userInterfaceIdiom != .phone {
+                HStack {
+                    if stepManager.step.rawValue != PanicAttackSteps.allCases.first?.rawValue {
+                        Button("Back", systemImage: "chevron.left") {
+                            withAnimation {
+                                stepManager.previous()
+                            }
                         }
+                        .buttonStyle(.bordered)
+                        .matchedGeometryEffect(id: "backButton", in: navigationNamespace)
                     }
-                    .buttonStyle(.bordered)
-                }
-                Spacer()
-                if stepManager.step.rawValue != PanicAttackSteps.allCases.last?.rawValue && stepManager.step.rawValue != PanicAttackSteps.allCases.first?.rawValue {
-                    Button("Next", systemImage: "chevron.right") {
-                        withAnimation {
-                            stepManager.next()
+                    Spacer()
+                    if stepManager.step.rawValue != PanicAttackSteps.allCases.last?.rawValue && stepManager.step.rawValue != PanicAttackSteps.allCases.first?.rawValue {
+                        Button("Next", systemImage: "chevron.right") {
+                            withAnimation {
+                                stepManager.next()
+                            }
                         }
+                        .labelStyle(.oppositeOrderLabelStyle)
+                        .buttonStyle(.bordered)
                     }
-                    .labelStyle(.oppositeOrderLabelStyle)
-                    .buttonStyle(.bordered)
                 }
+                .padding()
             }
-            .padding()
         }
-        .environment(stepManager)
         .sensoryFeedback(.success, trigger: stepManager.step)
         .onGeometryChange(for: CGSize.self, of: { proxy in
             proxy.size

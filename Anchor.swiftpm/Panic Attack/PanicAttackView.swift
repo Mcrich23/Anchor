@@ -10,6 +10,8 @@ import SwiftUI
 struct PanicAttackView: View {
     @Environment(\.customDismiss) var dismiss
     @State var isStartScreen = true
+    @State var stepManager = PAStepManager()
+    @Namespace var navigationNamespace
     
     var body: some View {
         VStack {
@@ -20,6 +22,8 @@ struct PanicAttackView: View {
             }
         }
         .padding()
+        .environment(\.navigationNamespace, navigationNamespace)
+        .environment(stepManager)
     }
 }
 

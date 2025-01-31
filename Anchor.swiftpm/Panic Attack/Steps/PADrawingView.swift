@@ -16,9 +16,11 @@ struct PADrawingView: View {
     var body: some View {
         VStack {
             VStack {
-                Text("Sketch Something")
-                    .font(.largeTitle)
-                    .fontWeight(.semibold)
+                HStack {
+                    Text("Sketch Something")
+                        .font(.largeTitle)
+                        .fontWeight(.semibold)
+                }
                 Text("Drawing something can help you direct your focus away from the panic attack and therefore reduce its intensity.")
                     .frame(maxWidth: .infinity, alignment: .center)
             }
