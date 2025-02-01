@@ -20,7 +20,7 @@ struct MBreathingView: View {
             .minimumScaleFactor(0.8)
             .multilineTextAlignment(.center)
             .padding(.horizontal)
-            BreathFlowerView(pistilColor: .init(.migraineTint))
+            BreathFlowerView(pistilColor: .migraineTint)
 //            .padding(scaleModifier/8.96)
 //            .scaleEffect(scaleEffect)
         }

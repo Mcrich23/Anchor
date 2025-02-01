@@ -2,10 +2,10 @@ import SwiftUI
 
 struct ContentView: View {
     let bottomCircleGradientColors: [Color] = [
-        .init(.homeCircleGradientColor1),
-        .init(.homeCircleGradientColor2),
-        .init(.homeCircleGradientColor3),
-        .init(.homeCircleGradientColor4),
+        .homeCircleGradientColor1,
+        .homeCircleGradientColor2,
+        .homeCircleGradientColor3,
+        .homeCircleGradientColor4,
 //        .init(.homeCircleGradientColor5),
 //        .init(.homeCircleGradientColor6),
     ]
@@ -13,38 +13,38 @@ struct ContentView: View {
     var semiCircleGradientColors: [Color] {
         guard selectedAnchor != nil else {
             return [
-                .init(.homeCircleGradientColor1),
-                .init(.homeCircleGradientColor1),
-                .init(.homeCircleGradientColor1),
+                .homeCircleGradientColor1,
+                .homeCircleGradientColor1,
+                .homeCircleGradientColor1,
                 
-                .init(.homeCircleGradientColor3),
-                .init(.homeCircleGradientColor2),
-                .init(.homeCircleGradientColor3),
+                .homeCircleGradientColor3,
+                .homeCircleGradientColor2,
+                .homeCircleGradientColor3,
                 
-                .init(.homeCircleGradientColor3),
-                .init(.homeCircleGradientColor4),
-                .init(.homeCircleGradientColor3),
+                .homeCircleGradientColor3,
+                .homeCircleGradientColor4,
+                .homeCircleGradientColor3,
             ]
         }
         
         return [
-            .init(.homeCircleGradientColor1),
-            .init(.homeCircleGradientColor2),
-            .init(.homeCircleGradientColor1),
+            .homeCircleGradientColor1,
+            .homeCircleGradientColor2,
+            .homeCircleGradientColor1,
             
-            .init(.homeCircleGradientColor4),
-            .init(.homeCircleGradientColor3),
-            .init(.homeCircleGradientColor4),
+            .homeCircleGradientColor4,
+            .homeCircleGradientColor3,
+            .homeCircleGradientColor4,
             
-            .init(.homeCircleGradientColor3),
-            .init(.homeCircleGradientColor4),
-            .init(.homeCircleGradientColor3),
+            .homeCircleGradientColor3,
+            .homeCircleGradientColor4,
+            .homeCircleGradientColor3,
         ]
     }
     
     let bottomAntiCircleGradientColors: [Color] = [
-        .init(.homeAntiCircleGradientColor1),
-        .init(.homeAntiCircleGradientColor2),
+        .homeAntiCircleGradientColor1,
+        .homeAntiCircleGradientColor2,
     ]
     
     @State var selectedAnchor: AnchorType?
