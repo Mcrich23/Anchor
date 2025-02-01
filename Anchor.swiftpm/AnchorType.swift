@@ -42,11 +42,11 @@ extension Color {
     }
     
     static var homeCircleGradientColor1: Self {
-        dynamicColor(light: #colorLiteral(red: 0.771538496, green: 0.731972754, blue: 0.654540062, alpha: 1), dark: #colorLiteral(red: 0.7647058824, green: 0.7333333333, blue: 0.662745098, alpha: 1))
+        dynamicColor(light: #colorLiteral(red: 0.9488822818, green: 0.9043547511, blue: 0.7965047956, alpha: 1), dark: #colorLiteral(red: 0.7647058824, green: 0.7333333333, blue: 0.662745098, alpha: 1))
     }
     
     static var homeCircleGradientColor2: Self {
-        dynamicColor(light: #colorLiteral(red: 0.7500734925, green: 0.5939528346, blue: 0.5971903801, alpha: 1), dark: #colorLiteral(red: 0.7254901961, green: 0.6, blue: 0.6, alpha: 1))
+        dynamicColor(light: #colorLiteral(red: 0.9654352069, green: 0.7606447935, blue: 0.756244719, alpha: 1), dark: #colorLiteral(red: 0.7254901961, green: 0.6, blue: 0.6, alpha: 1))
     }
     
     static var homeCircleGradientColor3: Self {
@@ -54,14 +54,14 @@ extension Color {
     }
     
     static var homeCircleGradientColor4: Self {
-        dynamicColor(light: #colorLiteral(red: 0.5211637616, green: 0.452409029, blue: 0.5901052356, alpha: 1), dark: #colorLiteral(red: 0.7559938431, green: 0.8822496533, blue: 0.9571806788, alpha: 1))
+        dynamicColor(light: #colorLiteral(red: 0.6709461808, green: 0.5728670955, blue: 0.7410820127, alpha: 1), dark: #colorLiteral(red: 0.5098039216, green: 0.4549019608, blue: 0.5803921569, alpha: 1))
     }
     
     static var homeAntiCircleGradientColor1: Self {
-        dynamicColor(light: #colorLiteral(red: 0.5657837391, green: 0.6617270112, blue: 0.7242951989, alpha: 1), dark: #colorLiteral(red: 0.7339206934, green: 0.8142710924, blue: 0.9451389909, alpha: 1))
+        dynamicColor(light: #colorLiteral(red: 0.7559938431, green: 0.8822496533, blue: 0.9571807981, alpha: 1), dark: #colorLiteral(red: 0.5657837391, green: 0.6617270112, blue: 0.7242951989, alpha: 1))
     }
     
     static var homeAntiCircleGradientColor2: Self {
-        dynamicColor(light: #colorLiteral(red: 0.5455493331, green: 0.6058027148, blue: 0.7071407437, alpha: 1), dark: #colorLiteral(red: 0.5568627451, green: 0.6039215686, blue: 0.6980392157, alpha: 1))
+        dynamicColor(light: #colorLiteral(red: 0.7289828658, green: 0.8144184947, blue: 0.9409591556, alpha: 1), dark: #colorLiteral(red: 0.5455492139, green: 0.605802834, blue: 0.7113747001, alpha: 1))
     }
 }
