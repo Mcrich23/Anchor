@@ -30,6 +30,7 @@ extension Color {
         return Color(uiColor: uiColor)
     }
     
+    /// A function that dynamically updates the color based on `userInterfaceStyle`
     static func dynamicColor(light: Color, dark: Color) -> Color {
         dynamicColor(light: UIColor(light), dark: UIColor(dark))
     }
