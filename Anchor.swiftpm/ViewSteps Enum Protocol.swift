@@ -7,6 +7,8 @@
 
 import Foundation
 
+/// Implements next and previous mutating functions for an `enum`
+/// Note: Requires conformance to `Int` before `ViewSteps` can function
 protocol ViewSteps: CaseIterable, RawRepresentable where RawValue == Int {
     mutating func next()
     mutating func previous()
