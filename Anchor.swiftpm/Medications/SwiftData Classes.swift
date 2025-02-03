@@ -12,10 +12,12 @@ import SwiftData
 class Medication {
     var name: String
     var dosage: String
+    var notes: String
     
-    init(name: String, dosage: String) {
+    init(name: String, dosage: String, notes: String) {
         self.name = name
         self.dosage = dosage
+        self.notes = notes
     }
 }
 

@@ -20,7 +20,7 @@ struct MedicationManagementView: View {
         }
         .toolbar {
             Button {
-                let medication = Medication(name: "", dosage: "")
+                let medication = Medication(name: "", dosage: "", notes: "")
                 modelContext.insert(medication)
             } label: {
                 Image(systemName: "plus.circle")
