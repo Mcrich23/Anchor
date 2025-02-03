@@ -8,17 +8,8 @@
 import SwiftUI
 import CoreHaptics
 
-enum MigraineSteps: Int, CaseIterable {
+enum MigraineSteps: Int, ViewSteps {
     case takeAction, breath, drawing
-    
-    mutating func next() {
-        guard let next = Self(rawValue: self.rawValue+1) else { return }
-        self = next
-    }
-    mutating func previous() {
-        guard let next = Self(rawValue: self.rawValue-1) else { return }
-        self = next
-    }
 }
 
 @Observable

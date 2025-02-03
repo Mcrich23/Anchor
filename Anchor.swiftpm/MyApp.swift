@@ -1,4 +1,5 @@
 import SwiftUI
+import SwiftData
 
 @main
 struct MyApp: App {
@@ -7,6 +8,7 @@ struct MyApp: App {
             ContentView()
                 .fontDesign(.rounded)
                 .environment(\.userInterfaceIdiom, UIDevice.current.userInterfaceIdiom)
+                .modelContainer(for: MedicationLog.self, isAutosaveEnabled: true)
         }
     }
 }
