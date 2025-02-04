@@ -16,7 +16,7 @@ struct ReliefNavigationButtonStyle: PrimitiveButtonStyle {
         }
         .buttonStyle(.bordered)
         .buttonBorderShape(.roundedRectangle(radius: 6))
-        .background(Color(uiColor: .systemBackground))
+        .background(Color(uiColor: .systemBackground).opacity(0.7))
         .clipShape(RoundedRectangle(cornerRadius: 6))
     }
 }
