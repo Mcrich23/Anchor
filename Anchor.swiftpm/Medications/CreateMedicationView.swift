@@ -71,7 +71,15 @@ struct CreateMedicationView: View {
             NavigationLink {
                 CreateMedicationDosageView(dismissSheet: dismiss, medication: medication)
             } label: {
-                Text("Continue")
+                Group {
+                    if medication.name.isEmpty {
+                        Text("Continue")
+                    } else {
+                        Text("Continue")
+                            .foregroundStyle(Color.primary)
+                            .colorInvert()
+                    }
+                }
                     .frame(maxWidth: .infinity)
             }
             .buttonStyle(.borderedProminent)
@@ -161,7 +169,15 @@ private struct CreateMedicationDosageView: View {
                     try? modelContext.save()
                     dismissSheet()
                 } label: {
-                    Text("Done")
+                    Group {
+                        if medication.name.isEmpty {
+                            Text("Done")
+                        } else {
+                            Text("Done")
+                                .foregroundStyle(Color.primary)
+                                .colorInvert()
+                        }
+                    }
                         .frame(maxWidth: .infinity)
                 }
                 .buttonStyle(.borderedProminent)
