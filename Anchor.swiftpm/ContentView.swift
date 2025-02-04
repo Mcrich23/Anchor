@@ -117,7 +117,9 @@ struct ContentView: View {
                 isShowingMedManager.toggle()
             } label: {
                 Label("Manage Medications", systemImage: "gear")
+                    .labelStyle(.iconOnly)
             }
+            .padding(.leading)
         })
         .sheet(isPresented: $isShowingMedManager, content: {
             NavigationStack {
