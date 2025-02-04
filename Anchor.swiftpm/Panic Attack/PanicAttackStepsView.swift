@@ -77,7 +77,7 @@ struct PanicAttackStepsView: View {
                                 stepManager.previous()
                             }
                         }
-                        .buttonStyle(.bordered)
+                        .buttonStyle(.reliefNavigation)
                         .matchedGeometryEffect(id: "backButton", in: navigationNamespace)
                     }
                     Spacer()
@@ -88,7 +88,7 @@ struct PanicAttackStepsView: View {
                             }
                         }
                         .labelStyle(.oppositeOrderLabelStyle)
-                        .buttonStyle(.bordered)
+                        .buttonStyle(.reliefNavigation)
                     }
                 }
                 .padding()

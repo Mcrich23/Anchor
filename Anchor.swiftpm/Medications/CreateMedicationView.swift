@@ -163,14 +163,14 @@ private struct CreateMedicationDosageView: View {
                 
                 Button {
                     if !medicationLogs.contains(where: { $0.persistentModelID == medication.persistentModelID }) {
-                        guard !medication.name.isEmpty else { return }
+                        guard !medication.dosage.isEmpty else { return }
                         modelContext.insert(medication)
                     }
                     try? modelContext.save()
                     dismissSheet()
                 } label: {
                     Group {
-                        if medication.name.isEmpty {
+                        if dosage.isEmpty {
                             Text("Done")
                         } else {
                             Text("Done")
@@ -181,7 +181,7 @@ private struct CreateMedicationDosageView: View {
                         .frame(maxWidth: .infinity)
                 }
                 .buttonStyle(.borderedProminent)
-                .disabled(medication.name.isEmpty)
+                .disabled(dosage.isEmpty)
             }
         }
         .toolbar(content: {

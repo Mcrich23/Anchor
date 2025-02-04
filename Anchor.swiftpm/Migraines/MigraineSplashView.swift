@@ -27,7 +27,7 @@ struct MigraineSplashView: View {
                         .multilineTextAlignment(.center)
                     HStack {
                         Button("Back", action: dismiss)
-                            .buttonStyle(.bordered)
+                            .buttonStyle(.reliefNavigation)
                             .matchedGeometryEffect(id: "close", in: namespace)
                         if isStartScreen {
                             Button("Start Relief") {
@@ -51,7 +51,7 @@ struct MigraineSplashView: View {
                         if !(navigationNamespace != nil && userInterfaceIdiom == .phone && stepManager.step == .drawing) {
                             Spacer()
                             Button("Close", action: dismiss)
-                                .buttonStyle(.bordered)
+                                .buttonStyle(.reliefNavigation)
                                 .matchedGeometryEffect(id: "close", in: namespace)
                         }
                     }
@@ -62,11 +62,11 @@ struct MigraineSplashView: View {
                                     stepManager.previous()
                                 }
                             }
-                            .buttonStyle(.bordered)
+                            .buttonStyle(.reliefNavigation)
                             .matchedGeometryEffect(id: "backButton", in: navigationNamespace)
                             Spacer()
                             Button("Close", action: dismiss)
-                                .buttonStyle(.bordered)
+                                .buttonStyle(.reliefNavigation)
                                 .matchedGeometryEffect(id: "close", in: namespace)
                         }
                     }
