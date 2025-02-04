@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import SwiftData
 
 private enum CreateMedicationViewSteps: Int, ViewSteps {
     case name
@@ -99,6 +100,7 @@ private struct CreateMedicationDosageView: View {
     @State private var unit = CreateMedicationDosageUnit.mg
     @State private var dosage = ""
     @Environment(\.modelContext) private var modelContext
+    @Query var medicationLogs: [MedicationLog] = []
     
     var body: some View {
         VStack {
@@ -152,8 +154,11 @@ private struct CreateMedicationDosageView: View {
                 }
                 
                 Button {
-                    guard !medication.name.isEmpty else { return }
-                    modelContext.insert(medication)
+                    if !medicationLogs.contains(where: { $0.persistentModelID == medication.persistentModelID }) {
+                        guard !medication.name.isEmpty else { return }
+                        modelContext.insert(medication)
+                    }
+                    try? modelContext.save()
                     dismissSheet()
                 } label: {
                     Text("Done")
