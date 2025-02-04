@@ -81,10 +81,21 @@ private struct MedicationEditorView: View {
     
     var body: some View {
         Section {
-            VStack {
-                Text(medication.name)
-                Divider()
-                Text(medication.dosage)
+            VStack(alignment: .leading) {
+                HStack {
+                    Text(medication.name)
+                    Spacer()
+                    Text(medication.dosage)
+                        .padding(.vertical, 3)
+                        .padding(.horizontal)
+                        .background(Color(uiColor: .secondarySystemBackground), in: RoundedRectangle(cornerRadius: 6))
+                }
+                if !medication.notes.isEmpty {
+                    Divider()
+                    Text(medication.notes)
+                        .textSelection(.enabled)
+                        .foregroundStyle(.secondary)
+                }
             }
         }
     }

@@ -180,6 +180,18 @@ private struct CreateMedicationDosageView: View {
         .onChange(of: unit) { _, newValue in
             self.medication.dosage = dosage + newValue.rawValue
         }
+        .onAppear(perform: {
+            var dosage = medication.dosage
+            
+            for unit in CreateMedicationDosageUnit.allCases {
+                if dosage.hasSuffix(unit.rawValue) {
+                    self.unit = unit
+                    dosage = dosage.replacingOccurrences(of: unit.rawValue, with: "")
+                }
+            }
+            
+            self.dosage = dosage
+        })
         .padding()
     }
 }
