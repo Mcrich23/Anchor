@@ -88,7 +88,7 @@ private struct MedicationEditorView: View {
                     Text(medication.dosage)
                         .padding(.vertical, 3)
                         .padding(.horizontal)
-                        .background(Color(uiColor: .secondarySystemBackground), in: RoundedRectangle(cornerRadius: 6))
+                        .background(Color.dynamicColor(light: .secondarySystemBackground, dark: .tertiarySystemBackground), in: RoundedRectangle(cornerRadius: 6))
                 }
                 if !medication.notes.isEmpty {
                     Divider()
