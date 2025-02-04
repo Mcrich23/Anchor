@@ -51,4 +51,12 @@ extension Color {
     static var homeAntiCircleGradientColor2: Self {
         dynamicColor(light: #colorLiteral(red: 0.7289828658, green: 0.8144184947, blue: 0.9409591556, alpha: 1), dark: #colorLiteral(red: 0.5455492139, green: 0.605802834, blue: 0.7113747001, alpha: 1))
     }
+    
+    static var medPillBlue: Self {
+        dynamicColor(light: #colorLiteral(red: 0.4142034352, green: 0.7693068385, blue: 0.862582624, alpha: 1), dark: #colorLiteral(red: 0.4142034352, green: 0.7693068385, blue: 0.862582624, alpha: 1))
+    }
+    
+    static var medPillGreen: Self {
+        dynamicColor(light: #colorLiteral(red: 0.5762488246, green: 0.9746149182, blue: 0.6760464311, alpha: 1), dark: #colorLiteral(red: 0.5762488246, green: 0.9746149182, blue: 0.6760464311, alpha: 1))
+    }
 }

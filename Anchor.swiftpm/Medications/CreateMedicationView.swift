@@ -38,12 +38,12 @@ struct CreateMedicationView: View {
     
     var body: some View {
         VStack {
-            Image(systemName: "pill.circle.fill")
+            Image("custom.pill.fill")
                 .resizable()
                 .aspectRatio(contentMode: .fit)
-                .frame(maxWidth: 150, maxHeight: 150)
+                .frame(maxWidth: 100, maxHeight: 100)
                 .symbolRenderingMode(.multicolor)
-                .foregroundStyle(.pink)
+                .foregroundStyle(Color.medPillBlue, Color.medPillGreen)
             
             Text("Add Medication")
                 .font(.largeTitle)
@@ -101,9 +101,8 @@ private struct CreateMedicationDosageView: View {
     var body: some View {
         VStack {
             DosageMedicationIcon()
-                .scaledToFit()
-                .frame(maxWidth: 300, maxHeight: 300)
-//                .rotationEffect(.degrees(90))
+                .frame(maxWidth: 100, maxHeight: 100)
+                .rotationEffect(.degrees(45))
 //                .scaleEffect(2)
             
             VStack(spacing: 30) {

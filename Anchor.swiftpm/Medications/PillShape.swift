@@ -176,9 +176,9 @@ struct DosageMedicationIcon: View {
         GeometryReader { proxy in
             ZStack(alignment: .topLeading) {
                 PathShape1() // Top Capsule Half
-                    .fill(.green)
+                    .fill(Color.medPillGreen)
                 PathShape2() // Bottom Capsule Half
-                    .fill(.blue)
+                    .fill(Color.medPillBlue)
                 
                 // Pills
                 PathShape3()
