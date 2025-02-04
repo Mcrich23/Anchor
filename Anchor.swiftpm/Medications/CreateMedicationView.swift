@@ -56,7 +56,7 @@ struct CreateMedicationView: View {
                     .scrollContentBackground(.hidden)
                     .overlay(alignment: .topLeading) {
                         if medication.notes.isEmpty {
-                            Text("Notes")
+                            Text("Notes (Optional)")
                                 .foregroundStyle(.tertiary)
                                 .padding(.leading, 5)
                                 .padding(.top, 8.5)
@@ -74,6 +74,7 @@ struct CreateMedicationView: View {
                     .frame(maxWidth: .infinity)
             }
             .buttonStyle(.borderedProminent)
+            .disabled(medication.name.isEmpty)
         }
         .padding()
         .toolbar(content: {
@@ -97,6 +98,7 @@ private struct CreateMedicationDosageView: View {
     @Bindable var medication: Medication
     @State private var unit = CreateMedicationDosageUnit.mg
     @State private var dosage = ""
+    @Environment(\.modelContext) private var modelContext
     
     var body: some View {
         VStack {
@@ -150,12 +152,15 @@ private struct CreateMedicationDosageView: View {
                 }
                 
                 Button {
+                    guard !medication.name.isEmpty else { return }
+                    modelContext.insert(medication)
                     dismissSheet()
                 } label: {
                     Text("Done")
                         .frame(maxWidth: .infinity)
                 }
                 .buttonStyle(.borderedProminent)
+                .disabled(medication.name.isEmpty)
             }
         }
         .toolbar(content: {

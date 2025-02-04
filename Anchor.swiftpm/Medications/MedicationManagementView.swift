@@ -27,11 +27,7 @@ struct MedicationManagementView: View {
                 Image(systemName: "plus.circle")
             }
         }
-        .sheet(item: $creatingMedication) {
-            guard let creatingMedication, !creatingMedication.name.isEmpty else { return }
-            modelContext.insert(creatingMedication)
-            self.creatingMedication = nil
-        } content: { item in
+        .sheet(item: $creatingMedication) { item in
             NavigationStack {
                 CreateMedicationView(medication: item)
             }
