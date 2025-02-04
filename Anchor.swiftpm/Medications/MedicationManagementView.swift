@@ -11,6 +11,7 @@ import SwiftData
 struct MedicationManagementView: View {
     @Query var medications: [Medication] = []
     @Environment(\.modelContext) var modelContext
+    @State var creatingMedication: Medication?
     
     var body: some View {
         List {
@@ -21,11 +22,21 @@ struct MedicationManagementView: View {
         .toolbar {
             Button {
                 let medication = Medication(name: "", dosage: "", notes: "")
-                modelContext.insert(medication)
+                self.creatingMedication = medication
             } label: {
                 Image(systemName: "plus.circle")
             }
         }
+        .sheet(item: $creatingMedication) {
+            guard let creatingMedication, !creatingMedication.name.isEmpty else { return }
+            modelContext.insert(creatingMedication)
+            self.creatingMedication = nil
+        } content: { item in
+            NavigationStack {
+                CreateMedicationView(medication: item)
+            }
+        }
+
     }
 }
 

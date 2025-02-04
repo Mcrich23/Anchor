@@ -86,11 +86,14 @@ private enum CreateMedicationDosageUnit: String, CaseIterable {
 
 private struct CreateMedicationDosageView: View {
     @Bindable var medication: Medication
-    @State var unit = CreateMedicationDosageUnit.mg
-    @State var dosage = ""
+    @State private var unit = CreateMedicationDosageUnit.mg
+    @State private var dosage = ""
+    @Environment(\.dismiss) private var dismiss
     
     var body: some View {
         VStack(spacing: 30) {
+            DosageMedicationIcon()
+                .frame(maxWidth: 300, maxHeight: 300)
             VStack {
                 Text("Add Dosage")
                     .font(.title2)
@@ -133,6 +136,14 @@ private struct CreateMedicationDosageView: View {
                     }
                 }
             }
+            
+            Button {
+                dismiss()
+            } label: {
+                Text("Done")
+                    .frame(maxWidth: .infinity)
+            }
+            .buttonStyle(.borderedProminent)
         }
         .onChange(of: dosage) { _, newValue in
             self.medication.dosage = newValue + unit.rawValue

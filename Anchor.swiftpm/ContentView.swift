@@ -48,6 +48,7 @@ struct ContentView: View {
     ]
     
     @State var selectedAnchor: AnchorType?
+    @State var isShowingMedManager = false
     
     var body: some View {
         GeometryReader { geo in
@@ -111,6 +112,18 @@ struct ContentView: View {
             }
             .animation(.default.speed(0.8), value: self.selectedAnchor)
         }
+        .overlay(alignment: .topLeading, content: {
+            Button {
+                isShowingMedManager.toggle()
+            } label: {
+                Label("Manage Medications", systemImage: "gear")
+            }
+        })
+        .sheet(isPresented: $isShowingMedManager, content: {
+            NavigationStack {
+                MedicationManagementView()
+            }
+        })
         .environment(\.customDismiss, dismissAction)
     }
     
