@@ -166,6 +166,12 @@ struct DosageMedicationIcon: View {
         }
     }
     
+    func scaleEffect(for size: CGSize) -> CGSize {
+        let value = (size.width / Self.viewBox.width)
+        
+        return CGSize(width: value, height: value)
+    }
+    
     var body: some View {
         GeometryReader { proxy in
             ZStack(alignment: .topLeading) {
@@ -184,8 +190,7 @@ struct DosageMedicationIcon: View {
             }
             .frame(width: Self.viewBox.width, height: Self.viewBox.height,
                    alignment: .topLeading)
-            .scaleEffect(x: proxy.size.width / Self.viewBox.width,
-                         y: proxy.size.width / Self.viewBox.width)
+            .scaleEffect(scaleEffect(for: proxy.size))
             .frame(width: proxy.size.width, height: proxy.size.height)
         }
     }
