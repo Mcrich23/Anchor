@@ -110,16 +110,17 @@ struct ContentView: View {
                 LinearGradient(colors: bottomAntiCircleGradientColors, startPoint: .center, endPoint: .top)
                     .ignoresSafeArea()
             }
-            .animation(.default.speed(0.8), value: self.selectedAnchor)
         }
         .overlay(alignment: .topLeading, content: {
-            Button {
-                isShowingMedManager.toggle()
-            } label: {
-                Label("Manage Medications", systemImage: "gear")
-                    .labelStyle(.iconOnly)
+            if selectedAnchor == nil {
+                Button {
+                    isShowingMedManager.toggle()
+                } label: {
+                    Label("Manage Medications", systemImage: "gear")
+                        .labelStyle(.iconOnly)
+                }
+                .padding(.leading)
             }
-            .padding(.leading)
         })
         .sheet(isPresented: $isShowingMedManager, content: {
             NavigationStack {
@@ -127,6 +128,7 @@ struct ContentView: View {
             }
         })
         .environment(\.customDismiss, dismissAction)
+        .animation(.default.speed(0.8), value: self.selectedAnchor)
     }
     
     func dismissAction() {
