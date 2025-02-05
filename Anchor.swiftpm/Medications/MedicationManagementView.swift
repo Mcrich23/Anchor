@@ -17,7 +17,7 @@ struct MedicationManagementView: View {
     var body: some View {
         List {
             ForEach(medications) { medication in
-                MedicationEditorView(medication: medication)
+                MedicationCellView(medication: medication)
                     .onTapGesture {
                         creatingMedication = medication
                     }
@@ -72,11 +72,10 @@ struct MedicationManagementView: View {
                 CreateMedicationView(medication: item)
             }
         }
-
     }
 }
 
-private struct MedicationEditorView: View {
+struct MedicationCellView: View {
     @Bindable var medication: Medication
     
     var body: some View {

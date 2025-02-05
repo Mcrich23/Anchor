@@ -11,6 +11,7 @@ import SwiftData
 struct MedicationLogsView: View {
     @Query var medicationLogs: [MedicationLog] = []
     @Environment(\.modelContext) var modelContext
+    @State var isShowingAddMedicationLogView: Bool = false
     
     var body: some View {
         List {
@@ -20,6 +21,18 @@ struct MedicationLogsView: View {
                         MedicationView(medication: medication)
                     }
                 }
+            }
+        }
+        .toolbar {
+            Button {
+                isShowingAddMedicationLogView.toggle()
+            } label: {
+                Label("Create Entry", systemImage: "plus.circle")
+            }
+        }
+        .sheet(isPresented: $isShowingAddMedicationLogView) {
+            NavigationStack {
+                AddMedicationLogView()
             }
         }
     }
@@ -42,10 +55,7 @@ private struct MedicationView: View {
     
     @ViewBuilder
     var internals: some View {
-        Text(medication.name)
-        Text(medication.dosage)
-            .font(.callout)
-            .foregroundStyle(.secondary)
+        MedicationCellView(medication: medication)
     }
 }
 

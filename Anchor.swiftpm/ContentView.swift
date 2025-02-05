@@ -49,6 +49,7 @@ struct ContentView: View {
     
     @State var selectedAnchor: AnchorType?
     @State var isShowingMedManager = false
+    @State var isShowingMedLog = false
     
     var body: some View {
         GeometryReader { geo in
@@ -113,13 +114,26 @@ struct ContentView: View {
         }
         .overlay(alignment: .topLeading, content: {
             if selectedAnchor == nil {
-                Button {
-                    isShowingMedManager.toggle()
-                } label: {
-                    Label("Manage Medications", systemImage: "gear")
-                        .labelStyle(.iconOnly)
+                HStack {
+                    Button {
+                        isShowingMedManager.toggle()
+                    } label: {
+                        Label("Manage Medications", systemImage: "gear")
+                            .labelStyle(.iconOnly)
+                    }
+                    Button {
+                        isShowingMedLog.toggle()
+                    } label: {
+                        Label("Medication Log", systemImage: "calendar.day.timeline.left")
+                            .labelStyle(.iconOnly)
+                    }
                 }
                 .padding(.leading)
+            }
+        })
+        .sheet(isPresented: $isShowingMedLog, content: {
+            NavigationStack {
+                MedicationLogsView()
             }
         })
         .sheet(isPresented: $isShowingMedManager, content: {
