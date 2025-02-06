@@ -35,7 +35,10 @@ struct AddMedicationLogView: View {
                 medicationLog.medications.removeAll(where: { $0.persistentModelID == medication.persistentModelID })
             }
         }
-
+    }
+    
+    var halfMedicationsCount: Int {
+        Int((Double(medications.count)/2).rounded(.up))
     }
     
     var body: some View {
@@ -45,9 +48,13 @@ struct AddMedicationLogView: View {
                     .font(.largeTitle)
                     .bold()
                     .frame(maxWidth: .infinity, alignment: .leading)
-                LazyVGrid(columns: .init(repeating: .init(.flexible()), count: 2), alignment: .center) {
-                    ForEach(medications) { medication in
-                        MedicationTakingCellView(medication: medication, isTakingMedication: isTakingMedicationBinding(for: medication))
+                LazyVStack {
+                    ForEach(0..<halfMedicationsCount, id: \.self) { i in
+                        if i < medications.count-1 {
+                            MedicationTakingDualCellLayout(medication1: medications[i], medication2: medications[i+1], isTakingMedicationBinding: isTakingMedicationBinding)
+                        } else {
+                            MedicationTakingDualCellLayout(medication1: medications[i], medication2: nil, isTakingMedicationBinding: isTakingMedicationBinding)
+                        }
                     }
                 }
             }
@@ -105,8 +112,33 @@ struct AddMedicationLogView: View {
     }
 }
 
+private struct MedicationTakingDualCellLayout: View {
+    let medication1: Medication
+    let medication2: Medication?
+    let isTakingMedicationBinding: (_ for: Medication) -> Binding<Bool>
+    
+    var body: some View {
+        ViewThatFits {
+            VStack {
+                internalContent
+            }
+            HStack(alignment: .top) {
+                internalContent
+            }
+        }
+    }
+    
+    @ViewBuilder
+    var internalContent: some View {
+        MedicationTakingCellView(medication: medication1, isTakingMedication: isTakingMedicationBinding(medication1))
+        if let medication2 {
+            MedicationTakingCellView(medication: medication2, isTakingMedication: isTakingMedicationBinding(medication2))
+        }
+    }
+}
+
 private struct MedicationTakingCellView: View {
-    @Bindable var medication: Medication
+    let medication: Medication
     @Binding var isTakingMedication: Bool
     
     @ViewBuilder
