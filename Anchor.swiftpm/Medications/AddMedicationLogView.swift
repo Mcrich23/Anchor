@@ -12,7 +12,7 @@ struct AddMedicationLogView: View {
     @Bindable var medicationLog: MedicationLog
     let initialMedicationLog: MedicationLog
     
-    init(medicationLog: MedicationLog = .blank) {
+    init(medicationLog: MedicationLog) {
         guard medicationLog != .blank else {
             self.medicationLog = medicationLog
             self.initialMedicationLog = medicationLog

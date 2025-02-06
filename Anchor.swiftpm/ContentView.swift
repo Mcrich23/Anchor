@@ -48,7 +48,6 @@ struct ContentView: View {
     ]
     
     @State var selectedAnchor: AnchorType?
-    @State var isShowingMedManager = false
     @State var isShowingMedLog = false
     
     var body: some View {
@@ -116,12 +115,6 @@ struct ContentView: View {
             if selectedAnchor == nil {
                 HStack {
                     Button {
-                        isShowingMedManager.toggle()
-                    } label: {
-                        Label("Manage Medications", systemImage: "gear")
-                            .labelStyle(.iconOnly)
-                    }
-                    Button {
                         isShowingMedLog.toggle()
                     } label: {
                         Label("Medication Log", systemImage: "calendar.day.timeline.left")
@@ -134,11 +127,6 @@ struct ContentView: View {
         .sheet(isPresented: $isShowingMedLog, content: {
             NavigationStack {
                 MedicationLogsView()
-            }
-        })
-        .sheet(isPresented: $isShowingMedManager, content: {
-            NavigationStack {
-                MedicationManagementView()
             }
         })
         .environment(\.customDismiss, dismissAction)

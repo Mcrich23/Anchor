@@ -9,9 +9,10 @@ import SwiftUI
 import SwiftData
 
 struct MedicationLogsView: View {
-    @Query/*(filter: #Predicate<MedicationLog> { !$0.medications.isEmpty })*/ var medicationLogs: [MedicationLog] = []
+    @Query(filter: #Predicate<MedicationLog> { !$0.medications.isEmpty }, sort: \.date) var medicationLogs: [MedicationLog] = []
     @Environment(\.modelContext) var modelContext
     @State var isShowingAddMedicationLogView: MedicationLog? = nil
+    @State var isShowingMedManager = false
     
     var body: some View {
         List {
@@ -37,6 +38,12 @@ struct MedicationLogsView: View {
         .toolbar {
             ToolbarItemGroup(placement: .topBarLeading) {
                 EditButton()
+                Button {
+                    isShowingMedManager.toggle()
+                } label: {
+                    Label("Manage Medications", systemImage: "gear")
+                        .labelStyle(.iconOnly)
+                }
             }
             
             ToolbarItemGroup(placement: .topBarTrailing) {
@@ -48,6 +55,11 @@ struct MedicationLogsView: View {
                 }
             }
         }
+        .sheet(isPresented: $isShowingMedManager, content: {
+            NavigationStack {
+                MedicationManagementView()
+            }
+        })
         .sheet(item: $isShowingAddMedicationLogView) { item in
             NavigationStack {
                 AddMedicationLogView(medicationLog: item)
