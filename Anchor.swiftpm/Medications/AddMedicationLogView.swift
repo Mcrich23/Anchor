@@ -47,8 +47,14 @@ struct AddMedicationLogView: View {
 
     }
     
-    var halfMedicationsCount: Int {
-        Int((Double(medications.count)/2).rounded(.up))
+    var halfMedicationsCount: [Int] {
+        let upperBound = (Double(medications.count)/2).rounded(.up)
+        
+        let array = (0..<Int(upperBound)).map { i in
+            i*2
+        }
+        
+        return array
     }
     
     @ViewBuilder
@@ -75,7 +81,7 @@ struct AddMedicationLogView: View {
                         }
                     } else {
                         VStack {
-                            ForEach(0..<halfMedicationsCount, id: \.self) { i in
+                            ForEach(halfMedicationsCount, id: \.self) { i in
                                 if i < medications.count-1 {
                                     MedicationTakingDualCellLayout(medication1: medications[i], medication2: medications[i+1], medicationQuantityBinding: medicationQuantityBinding, isTakingMedicationBinding: isTakingMedicationBinding)
                                 } else {
@@ -163,9 +169,9 @@ private struct MedicationTakingDualCellLayout: View {
     
     var body: some View {
         ViewThatFits(in: .horizontal) {
-            VStack {
-                internalContent
-            }
+//            VStack {
+//                internalContent
+//            }
             
             HStack(alignment: .top) {
                 internalContent
