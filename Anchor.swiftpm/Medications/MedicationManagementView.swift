@@ -17,10 +17,14 @@ struct MedicationManagementView: View {
     var body: some View {
         List {
             ForEach(medications) { medication in
-                MedicationCellView(medication: medication)
-                    .onTapGesture {
+                Section {
+                    Button {
                         creatingMedication = medication
+                    } label: {
+                        MedicationCellView(medication: medication)
                     }
+                    .foregroundStyle(.primary, .secondary, .tertiary)
+                }
             }
             .onDelete { indexSet in
                 for index in indexSet {
