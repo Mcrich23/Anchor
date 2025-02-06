@@ -91,19 +91,36 @@ struct AddMedicationLogView: View {
                         .bold()
                         .frame(maxWidth: .infinity, alignment: .leading)
                     
-                    if geo.size.width < 500 {
+                    if medications.isEmpty {
                         VStack {
-                            ForEach(medications) { medication in
-                                MedicationTakingCellView(medication: medication, medicationQuantity: medicationQuantityBinding(for: medication), isTakingMedication: isTakingMedicationBinding(for: medication))
+                            ContentUnavailableView {
+                                Text("No Medications")
+                            } description: {
+                                Text("You haven't added any medications yet.")
+                            } actions: {
+                                Button("Get Started") {
+                                    let medication = Medication.blank
+                                    self.creatingMedication = medication
+                                }
+                                .buttonBorderShape(.roundedRectangle)
+                                .buttonStyle(.borderedProminent)
                             }
                         }
                     } else {
-                        VStack {
-                            ForEach(halfMedicationsCount, id: \.self) { i in
-                                if i < medications.count-1 {
-                                    MedicationTakingDualCellLayout(medication1: medications[i], medication2: medications[i+1], medicationQuantityBinding: medicationQuantityBinding, isTakingMedicationBinding: isTakingMedicationBinding)
-                                } else {
-                                    MedicationTakingDualCellLayout(medication1: medications[i], medication2: nil, medicationQuantityBinding: medicationQuantityBinding, isTakingMedicationBinding: isTakingMedicationBinding)
+                        if geo.size.width < 500 {
+                            VStack {
+                                ForEach(medications) { medication in
+                                    MedicationTakingCellView(medication: medication, medicationQuantity: medicationQuantityBinding(for: medication), isTakingMedication: isTakingMedicationBinding(for: medication))
+                                }
+                            }
+                        } else {
+                            VStack {
+                                ForEach(halfMedicationsCount, id: \.self) { i in
+                                    if i < medications.count-1 {
+                                        MedicationTakingDualCellLayout(medication1: medications[i], medication2: medications[i+1], medicationQuantityBinding: medicationQuantityBinding, isTakingMedicationBinding: isTakingMedicationBinding)
+                                    } else {
+                                        MedicationTakingDualCellLayout(medication1: medications[i], medication2: nil, medicationQuantityBinding: medicationQuantityBinding, isTakingMedicationBinding: isTakingMedicationBinding)
+                                    }
                                 }
                             }
                         }

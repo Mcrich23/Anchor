@@ -35,6 +35,24 @@ struct MedicationLogsView: View {
                 try? modelContext.save()
             }
         }
+        .navigationTitle("Medication Log")
+        .overlay(content: {
+            if medicationLogs.isEmpty {
+                VStack {
+                    ContentUnavailableView {
+                        Text("No Entries")
+                    } description: {
+                        Text("You haven't added any entries yet.")
+                    } actions: {
+                        Button("Get Started") {
+                            isShowingMedManager.toggle()
+                        }
+                        .buttonBorderShape(.roundedRectangle)
+                        .buttonStyle(.borderedProminent)
+                    }
+                }
+            }
+        })
         .toolbar {
             ToolbarItemGroup(placement: .topBarLeading) {
                 EditButton()
