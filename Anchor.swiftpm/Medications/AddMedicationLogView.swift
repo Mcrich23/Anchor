@@ -13,6 +13,7 @@ struct AddMedicationLogView: View {
     @Query var medications: [Medication] = []
     @Environment(\.modelContext) var modelContext
     @Environment(\.dismiss) var dismiss
+    @Environment(\.colorScheme) var colorScheme
     @State var creatingMedication: Medication?
     @State var scrollOffset: CGPoint = .zero
     var toolbarOpacity: CGFloat {
@@ -84,13 +85,21 @@ struct AddMedicationLogView: View {
                         modelContext.insert(medicationLog)
                         dismiss()
                     } label: {
-                        Text("Done")
-                            .frame(maxWidth: .infinity)
+                        Group {
+                            if colorScheme == .dark && !medicationLog.medications.isEmpty {
+                                Text("Done")
+                                    .colorInvert()
+                            } else {
+                                Text("Done")
+                            }
+                        }
+                        .frame(maxWidth: .infinity)
                     }
                     .buttonStyle(.borderedProminent)
+                    .disabled(medicationLog.medications.isEmpty)
                 }
                 .padding()
-                .background(.regularMaterial)
+                .background(.ultraThinMaterial)
             })
             .toolbar {
                 ToolbarItemGroup(placement: .topBarLeading) {
@@ -166,6 +175,19 @@ private struct MedicationTakingDualCellLayout: View {
 private struct MedicationTakingCellView: View {
     let medication: Medication
     @Binding var isTakingMedication: Bool
+    @Environment(\.colorScheme) var colorScheme
+    
+    @ViewBuilder
+    var buttonLabel: some View {
+        switch isTakingMedication {
+        case true:
+            Label("Taken", systemImage: "checkmark.circle")
+                .labelStyle(.titleAndIcon)
+        case false:
+            Label("Taken", systemImage: "checkmark.circle")
+                .labelStyle(.titleOnly)
+        }
+    }
     
     @ViewBuilder
     var button: some View {
@@ -173,13 +195,11 @@ private struct MedicationTakingCellView: View {
             isTakingMedication.toggle()
         } label: {
             Group {
-                switch isTakingMedication {
-                case true:
-                    Label("Taken", systemImage: "checkmark.circle")
-                        .labelStyle(.titleAndIcon)
-                case false:
-                    Label("Taken", systemImage: "checkmark.circle")
-                        .labelStyle(.titleOnly)
+                if colorScheme == .dark && isTakingMedication {
+                    buttonLabel
+                        .colorInvert()
+                } else {
+                    buttonLabel
                 }
             }
             .frame(maxWidth: .infinity)
@@ -195,7 +215,7 @@ private struct MedicationTakingCellView: View {
                     Text(medication.dosage)
                         .padding(.vertical, 3)
                         .padding(.horizontal)
-                        .background(Color.dynamicColor(light: .secondarySystemBackground, dark: .tertiarySystemBackground), in: RoundedRectangle(cornerRadius: 6))
+                        .background(Color.dynamicColor(light: .tertiarySystemBackground, dark: .tertiarySystemBackground), in: RoundedRectangle(cornerRadius: 6))
                 }
                 if !medication.notes.isEmpty {
                     Divider()

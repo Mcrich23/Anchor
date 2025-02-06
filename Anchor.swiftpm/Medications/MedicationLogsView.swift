@@ -9,7 +9,7 @@ import SwiftUI
 import SwiftData
 
 struct MedicationLogsView: View {
-    @Query var medicationLogs: [MedicationLog] = []
+    @Query(filter: #Predicate<MedicationLog> { !$0.medications.isEmpty }) var medicationLogs: [MedicationLog] = []
     @Environment(\.modelContext) var modelContext
     @State var isShowingAddMedicationLogView: Bool = false
     
@@ -22,12 +22,26 @@ struct MedicationLogsView: View {
                     }
                 }
             }
+            .onDelete { indexSet in
+                for index in indexSet {
+                    let log = medicationLogs[index]
+                    modelContext.delete(log)
+                    
+                    try? modelContext.save()
+                }
+            }
         }
         .toolbar {
-            Button {
-                isShowingAddMedicationLogView.toggle()
-            } label: {
-                Label("Create Entry", systemImage: "plus.circle")
+            ToolbarItemGroup(placement: .topBarLeading) {
+                EditButton()
+            }
+            
+            ToolbarItemGroup(placement: .topBarTrailing) {
+                Button {
+                    isShowingAddMedicationLogView.toggle()
+                } label: {
+                    Label("Create Entry", systemImage: "plus.circle")
+                }
             }
         }
         .sheet(isPresented: $isShowingAddMedicationLogView) {
