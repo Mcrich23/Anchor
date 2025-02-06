@@ -110,6 +110,15 @@ private struct CreateMedicationDosageView: View {
     @Environment(\.modelContext) private var modelContext
     @Query var medicationLogs: [MedicationLog] = []
     
+    var medicationQuantity: Binding<Int> {
+        Binding {
+            medication.quantity ?? 1
+        } set: { newValue in
+            medication.quantity = newValue
+        }
+
+    }
+    
     var body: some View {
         VStack {
             DosageMedicationIcon()
@@ -124,8 +133,17 @@ private struct CreateMedicationDosageView: View {
                         .bold()
                         .frame(maxWidth: .infinity, alignment: .leading)
                     GroupBox {
-                        TextField("Dosage", text: $dosage)
-                            .keyboardType(.numbersAndPunctuation)
+                        HStack {
+                            TextField("Dosage", text: $dosage)
+                                .keyboardType(.numbersAndPunctuation)
+                            
+                            Picker("Quantity", selection: medicationQuantity) {
+                                ForEach(1..<100) { i in
+                                    Text("\(i)")
+                                        .tag(i)
+                                }
+                            }
+                        }
                     }
                 }
                 VStack {
@@ -213,7 +231,7 @@ private struct CreateMedicationDosageView: View {
 }
 
 #Preview {
-    @Previewable @State var medication = Medication(name: "", dosage: "", notes: "")
+    @Previewable @State var medication = Medication(name: "", dosage: "", quantity: 1, notes: "")
     
     NavigationStack {
         CreateMedicationView(medication: medication)

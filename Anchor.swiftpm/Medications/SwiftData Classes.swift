@@ -12,11 +12,13 @@ import SwiftData
 class Medication {
     var name: String
     var dosage: String
+    var quantity: Int?
     var notes: String
     
-    init(name: String, dosage: String, notes: String) {
+    init(name: String, dosage: String, quantity: Int?, notes: String) {
         self.name = name
         self.dosage = dosage
+        self.quantity = quantity
         self.notes = notes
     }
 }
@@ -26,9 +28,11 @@ class MedicationLog: Identifiable {
     var id: UUID = UUID()
     var date: Date
     var medications: [Medication]
+    var medicationQuantities: [PersistentIdentifier : Int]?
     
-    init(date: Date, medications: [Medication]) {
+    init(date: Date, medications: [Medication], medicationQuantities: [PersistentIdentifier : Int]) {
         self.date = date
         self.medications = medications
+        self.medicationQuantities = medicationQuantities
     }
 }

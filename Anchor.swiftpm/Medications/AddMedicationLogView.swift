@@ -9,7 +9,7 @@ import SwiftUI
 import SwiftData
 
 struct AddMedicationLogView: View {
-    @State var medicationLog: MedicationLog = .init(date: .now, medications: [])
+    @State var medicationLog: MedicationLog = .init(date: .now, medications: [], medicationQuantities: [:])
     @Query var medications: [Medication] = []
     @Environment(\.modelContext) var modelContext
     @Environment(\.dismiss) var dismiss
@@ -38,6 +38,15 @@ struct AddMedicationLogView: View {
         }
     }
     
+    func medicationQuantityBinding(for medication: Medication) -> Binding<Int> {
+        Binding {
+            medicationLog.medicationQuantities?[medication.persistentModelID] ?? medication.quantity ?? 1
+        } set: { newValue in
+            medicationLog.medicationQuantities?[medication.persistentModelID] = newValue
+        }
+
+    }
+    
     var halfMedicationsCount: Int {
         Int((Double(medications.count)/2).rounded(.up))
     }
@@ -61,16 +70,16 @@ struct AddMedicationLogView: View {
                     if geo.size.width < 500 {
                         VStack {
                             ForEach(medications) { medication in
-                                MedicationTakingCellView(medication: medication, isTakingMedication: isTakingMedicationBinding(for: medication))
+                                MedicationTakingCellView(medication: medication, medicationQuantity: medicationQuantityBinding(for: medication), isTakingMedication: isTakingMedicationBinding(for: medication))
                             }
                         }
                     } else {
                         VStack {
                             ForEach(0..<halfMedicationsCount, id: \.self) { i in
                                 if i < medications.count-1 {
-                                    MedicationTakingDualCellLayout(medication1: medications[i], medication2: medications[i+1], isTakingMedicationBinding: isTakingMedicationBinding)
+                                    MedicationTakingDualCellLayout(medication1: medications[i], medication2: medications[i+1], medicationQuantityBinding: medicationQuantityBinding, isTakingMedicationBinding: isTakingMedicationBinding)
                                 } else {
-                                    MedicationTakingDualCellLayout(medication1: medications[i], medication2: nil, isTakingMedicationBinding: isTakingMedicationBinding)
+                                    MedicationTakingDualCellLayout(medication1: medications[i], medication2: nil, medicationQuantityBinding: medicationQuantityBinding, isTakingMedicationBinding: isTakingMedicationBinding)
                                 }
                             }
                         }
@@ -125,7 +134,7 @@ struct AddMedicationLogView: View {
                 
                 ToolbarItemGroup(placement: .topBarTrailing) {
                     Button {
-                        let medication = Medication(name: "", dosage: "", notes: "")
+                        let medication = Medication(name: "", dosage: "", quantity: 1, notes: "")
                         self.creatingMedication = medication
                     } label: {
                         Label("Create Medication", systemImage: "plus.circle")
@@ -149,6 +158,7 @@ struct AddMedicationLogView: View {
 private struct MedicationTakingDualCellLayout: View {
     let medication1: Medication
     let medication2: Medication?
+    let medicationQuantityBinding: (_ for: Medication) -> Binding<Int>
     let isTakingMedicationBinding: (_ for: Medication) -> Binding<Bool>
     
     var body: some View {
@@ -165,15 +175,16 @@ private struct MedicationTakingDualCellLayout: View {
     
     @ViewBuilder
     var internalContent: some View {
-        MedicationTakingCellView(medication: medication1, isTakingMedication: isTakingMedicationBinding(medication1))
+        MedicationTakingCellView(medication: medication1, medicationQuantity: medicationQuantityBinding(medication1), isTakingMedication: isTakingMedicationBinding(medication1))
         if let medication2 {
-            MedicationTakingCellView(medication: medication2, isTakingMedication: isTakingMedicationBinding(medication2))
+            MedicationTakingCellView(medication: medication2, medicationQuantity: medicationQuantityBinding(medication2), isTakingMedication: isTakingMedicationBinding(medication2))
         }
     }
 }
 
 private struct MedicationTakingCellView: View {
     let medication: Medication
+    @Binding var medicationQuantity: Int
     @Binding var isTakingMedication: Bool
     @Environment(\.colorScheme) var colorScheme
     
@@ -212,10 +223,13 @@ private struct MedicationTakingCellView: View {
                 HStack {
                     Text(medication.name)
                     Spacer()
-                    Text(medication.dosage)
-                        .padding(.vertical, 3)
-                        .padding(.horizontal)
-                        .background(Color.dynamicColor(light: .tertiarySystemBackground, dark: .tertiarySystemBackground), in: RoundedRectangle(cornerRadius: 6))
+                    
+                    Picker("Quantity", selection: $medicationQuantity) {
+                        ForEach(1..<100) { i in
+                            Text("\(i)")
+                                .tag(i)
+                        }
+                    }
                 }
                 if !medication.notes.isEmpty {
                     Divider()

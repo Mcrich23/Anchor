@@ -39,7 +39,7 @@ struct MedicationManagementView: View {
                         Text("You haven't added any medications yet.")
                     } actions: {
                         Button("Get Started") {
-                            let medication = Medication(name: "", dosage: "", notes: "")
+                            let medication = Medication(name: "", dosage: "", quantity: 1, notes: "")
                             self.creatingMedication = medication
                         }
                         .buttonBorderShape(.roundedRectangle)
@@ -55,7 +55,7 @@ struct MedicationManagementView: View {
             
             ToolbarItemGroup(placement: .topBarTrailing) {
                 Button {
-                    let medication = Medication(name: "", dosage: "", notes: "")
+                    let medication = Medication(name: "", dosage: "", quantity: 1, notes: "")
                     self.creatingMedication = medication
                 } label: {
                     Label("Create Medication", systemImage: "plus.circle")

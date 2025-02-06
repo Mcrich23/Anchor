@@ -16,9 +16,28 @@ struct MedicationLogsView: View {
     var body: some View {
         List {
             ForEach(medicationLogs) { log in
-                Section(log.date.formatted(date: .abbreviated, time: .standard)) {
-                    ForEach(log.medications) { medication in
-                        MedicationCellView(medication: medication)
+                Section {
+                    VStack(alignment: .leading) {
+                        Text(log.date.formatted(date: .abbreviated, time: .standard))
+                            .font(.headline)
+                            .fontDesign(.default)
+                        Divider()
+                        ForEach(log.medications) { medication in
+                            HStack {
+                                Image(systemName: "pill.circle.fill")
+                                    .resizable()
+                                    .aspectRatio(contentMode: .fit)
+                                    .frame(width: 25, height: 25)
+                                    .symbolRenderingMode(.multicolor)
+                                    .foregroundStyle(.pink)
+                                Text("\(medication.name)")
+                                
+                                Text("\(log.medicationQuantities?[medication.persistentModelID] ?? 1)")
+                                    .padding(.vertical, 3)
+                                    .padding(.horizontal)
+                                    .background(Color.dynamicColor(light: .tertiarySystemBackground, dark: .tertiarySystemBackground), in: RoundedRectangle(cornerRadius: 6))
+                            }
+                        }
                     }
                 }
             }
@@ -26,8 +45,6 @@ struct MedicationLogsView: View {
                 for index in indexSet {
                     let log = medicationLogs[index]
                     modelContext.delete(log)
-                    
-                    try? modelContext.save()
                 }
             }
         }
