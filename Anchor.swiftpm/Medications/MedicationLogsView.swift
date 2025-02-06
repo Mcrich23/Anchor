@@ -18,7 +18,7 @@ struct MedicationLogsView: View {
             ForEach(medicationLogs) { log in
                 Section(log.date.formatted(date: .abbreviated, time: .standard)) {
                     ForEach(log.medications) { medication in
-                        MedicationView(medication: medication)
+                        MedicationCellView(medication: medication)
                     }
                 }
             }
@@ -35,27 +35,6 @@ struct MedicationLogsView: View {
                 AddMedicationLogView()
             }
         }
-    }
-}
-
-private struct MedicationView: View {
-    @Bindable var medication: Medication
-    
-    var body: some View {
-        ViewThatFits {
-            VStack {
-                internals
-            }
-            
-            HStack {
-                internals
-            }
-        }
-    }
-    
-    @ViewBuilder
-    var internals: some View {
-        MedicationCellView(medication: medication)
     }
 }
 

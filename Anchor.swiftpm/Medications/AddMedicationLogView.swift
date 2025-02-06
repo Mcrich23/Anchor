@@ -41,72 +41,97 @@ struct AddMedicationLogView: View {
         Int((Double(medications.count)/2).rounded(.up))
     }
     
+    @ViewBuilder
+    var toolbarTitle: some View {
+        Text("Create Entry")
+            .bold()
+            .opacity(toolbarOpacity)
+    }
+    
     var body: some View {
-        OffsetObservingScrollView(offset: $scrollOffset) {
-            VStack {
-                Text("Create Entry")
-                    .font(.largeTitle)
-                    .bold()
-                    .frame(maxWidth: .infinity, alignment: .leading)
-                LazyVStack {
-                    ForEach(0..<halfMedicationsCount, id: \.self) { i in
-                        if i < medications.count-1 {
-                            MedicationTakingDualCellLayout(medication1: medications[i], medication2: medications[i+1], isTakingMedicationBinding: isTakingMedicationBinding)
-                        } else {
-                            MedicationTakingDualCellLayout(medication1: medications[i], medication2: nil, isTakingMedicationBinding: isTakingMedicationBinding)
+        GeometryReader { geo in
+            OffsetObservingScrollView(offset: $scrollOffset) {
+                VStack {
+                    Text("Create Entry")
+                        .font(.largeTitle)
+                        .bold()
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                    
+                    if geo.size.width < 500 {
+                        VStack {
+                            ForEach(medications) { medication in
+                                MedicationTakingCellView(medication: medication, isTakingMedication: isTakingMedicationBinding(for: medication))
+                            }
+                        }
+                    } else {
+                        VStack {
+                            ForEach(0..<halfMedicationsCount, id: \.self) { i in
+                                if i < medications.count-1 {
+                                    MedicationTakingDualCellLayout(medication1: medications[i], medication2: medications[i+1], isTakingMedicationBinding: isTakingMedicationBinding)
+                                } else {
+                                    MedicationTakingDualCellLayout(medication1: medications[i], medication2: nil, isTakingMedicationBinding: isTakingMedicationBinding)
+                                }
+                            }
                         }
                     }
                 }
+                .padding()
             }
-            .padding()
-        }
-        .navigationBarTitleDisplayMode(.inline)
-        .safeAreaInset(edge: .bottom, content: {
-            HStack {
-                Button {
-                    modelContext.insert(medicationLog)
-                    dismiss()
-                } label: {
-                    Text("Done")
-                        .frame(maxWidth: .infinity)
+            .navigationBarTitleDisplayMode(.inline)
+            .safeAreaInset(edge: .bottom, content: {
+                HStack {
+                    Button {
+                        modelContext.insert(medicationLog)
+                        dismiss()
+                    } label: {
+                        Text("Done")
+                            .frame(maxWidth: .infinity)
+                    }
+                    .buttonStyle(.borderedProminent)
                 }
-                .buttonStyle(.borderedProminent)
-            }
-            .padding()
-            .background(.regularMaterial)
-        })
-        .toolbar {
-            ToolbarItemGroup(placement: .topBarLeading) {
-                DatePicker("", selection: $medicationLog.date)
-                    .accessibilityLabel(Text("Entry Date"))
-                    .padding(.bottom, min(scrollOffset.y*1.5, 40)-40)
-                    .padding(.leading, -12)
-                    .opacity(1-toolbarOpacity)
-            }
-            
-            ToolbarItemGroup(placement: .principal) {
-                Text("Create Entry")
-                    .bold()
-                    .opacity(toolbarOpacity)
-            }
-            
-            ToolbarItemGroup(placement: .topBarTrailing) {
-                Button {
-                    let medication = Medication(name: "", dosage: "", notes: "")
-                    self.creatingMedication = medication
-                } label: {
-                    Label("Create Medication", systemImage: "plus.circle")
+                .padding()
+                .background(.regularMaterial)
+            })
+            .toolbar {
+                ToolbarItemGroup(placement: .topBarLeading) {
+                    ZStack {
+                        DatePicker("", selection: $medicationLog.date)
+                            .accessibilityLabel(Text("Entry Date"))
+                            .offset(y: 20-min(scrollOffset.y, 20))
+                            .padding(.leading, -12)
+                            .opacity(1-toolbarOpacity)
+                        
+                        if geo.size.width < 500 {
+                            toolbarTitle
+                                .frame(maxWidth: .infinity, alignment: .leading)
+                        }
+                    }
                 }
-                Button {
-                    dismiss()
-                } label: {
-                    Label("Close", systemImage: "xmark.circle")
+                
+                if geo.size.width > 500 {
+                    ToolbarItemGroup(placement: .principal) {
+                        toolbarTitle
+                    }
+                }
+                
+                ToolbarItemGroup(placement: .topBarTrailing) {
+                    Button {
+                        let medication = Medication(name: "", dosage: "", notes: "")
+                        self.creatingMedication = medication
+                    } label: {
+                        Label("Create Medication", systemImage: "plus.circle")
+                    }
+                    Button {
+                        dismiss()
+                    } label: {
+                        Label("Close", systemImage: "xmark.circle")
+                    }
                 }
             }
-        }
-        .sheet(item: $creatingMedication) { item in
-            NavigationStack {
-                CreateMedicationView(medication: item)
+            .sheet(item: $creatingMedication) { item in
+                NavigationStack {
+                    CreateMedicationView(medication: item)
+                }
             }
         }
     }
@@ -118,10 +143,11 @@ private struct MedicationTakingDualCellLayout: View {
     let isTakingMedicationBinding: (_ for: Medication) -> Binding<Bool>
     
     var body: some View {
-        ViewThatFits {
+        ViewThatFits(in: .horizontal) {
             VStack {
                 internalContent
             }
+            
             HStack(alignment: .top) {
                 internalContent
             }
@@ -187,6 +213,7 @@ private struct MedicationTakingCellView: View {
                         .buttonStyle(.bordered)
                 }
             }
+            .frame(maxHeight: .infinity, alignment: .top)
         }
     }
 }
