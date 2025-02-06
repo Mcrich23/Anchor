@@ -14,7 +14,14 @@ struct AddMedicationLogView: View {
     @Environment(\.modelContext) var modelContext
     @Environment(\.dismiss) var dismiss
     @State var creatingMedication: Medication?
-    @State var isLargeTitleVisible = true
+    @State var scrollOffset: CGPoint = .zero
+    var toolbarOpacity: CGFloat {
+        let threshold: CGFloat = 30
+        
+        guard scrollOffset.y > threshold else { return 0 }
+        
+        return min(((scrollOffset.y-threshold)/30), 1)
+    }
     
     func isTakingMedicationBinding(for medication: Medication) -> Binding<Bool> {
         Binding {
@@ -32,20 +39,12 @@ struct AddMedicationLogView: View {
     }
     
     var body: some View {
-        ScrollView {
+        OffsetObservingScrollView(offset: $scrollOffset) {
             VStack {
-                VStack(alignment: .leading) {
-                    DatePicker("", selection: $medicationLog.date)
-                        .accessibilityLabel(Text("Entry Date"))
-                        .frame(maxWidth: 50, alignment: .leading)
-                    Text("Create Entry")
-                        .font(.largeTitle)
-                        .bold()
-                        .frame(maxWidth: .infinity, alignment: .leading)
-                        .onScrollVisibilityChange { isVisible in
-                            self.isLargeTitleVisible = isVisible
-                        }
-                }
+                Text("Create Entry")
+                    .font(.largeTitle)
+                    .bold()
+                    .frame(maxWidth: .infinity, alignment: .leading)
                 LazyVGrid(columns: .init(repeating: .init(.flexible()), count: 2), alignment: .center) {
                     ForEach(medications) { medication in
                         MedicationTakingCellView(medication: medication, isTakingMedication: isTakingMedicationBinding(for: medication))
@@ -54,7 +53,6 @@ struct AddMedicationLogView: View {
             }
             .padding()
         }
-        .navigationTitle(isLargeTitleVisible ? "" : "Create Entry")
         .navigationBarTitleDisplayMode(.inline)
         .safeAreaInset(edge: .bottom, content: {
             HStack {
@@ -71,6 +69,20 @@ struct AddMedicationLogView: View {
             .background(.regularMaterial)
         })
         .toolbar {
+            ToolbarItemGroup(placement: .topBarLeading) {
+                DatePicker("", selection: $medicationLog.date)
+                    .accessibilityLabel(Text("Entry Date"))
+                    .padding(.bottom, min(scrollOffset.y*1.5, 40)-40)
+                    .padding(.leading, -12)
+                    .opacity(1-toolbarOpacity)
+            }
+            
+            ToolbarItemGroup(placement: .principal) {
+                Text("Create Entry")
+                    .bold()
+                    .opacity(toolbarOpacity)
+            }
+            
             ToolbarItemGroup(placement: .topBarTrailing) {
                 Button {
                     let medication = Medication(name: "", dosage: "", notes: "")
