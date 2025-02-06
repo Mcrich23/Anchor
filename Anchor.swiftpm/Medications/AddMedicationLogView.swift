@@ -10,7 +10,7 @@ import SwiftData
 
 struct AddMedicationLogView: View {
     @Bindable var medicationLog: MedicationLog
-    @Bindable var initialMedicationLog: MedicationLog
+    let initialMedicationLog: MedicationLog
     
     init(medicationLog: MedicationLog = .blank) {
         guard medicationLog != .blank else {
@@ -19,11 +19,11 @@ struct AddMedicationLogView: View {
             return
         }
         
-        self.medicationLog = medicationLog.copy()
-        self.initialMedicationLog = medicationLog
+        self.medicationLog = medicationLog
+        self.initialMedicationLog = medicationLog.copy()
     }
     
-    @Query var medications: [Medication] = []
+    @Query var queriedMedications: [Medication] = []
     @Query var medicationLogs: [MedicationLog] = []
     @Environment(\.modelContext) var modelContext
     @Environment(\.dismiss) var dismiss
@@ -38,27 +38,27 @@ struct AddMedicationLogView: View {
         return min(((scrollOffset.y-threshold)/30), 1)
     }
     
-    func isTakingMedicationBinding(for medication: Medication) -> Binding<Bool> {
+    func isTakingMedicationBinding(for medication: MedicationLogMed) -> Binding<Bool> {
         Binding {
-            medicationLog.medications.contains(where: { $0.persistentModelID == medication.persistentModelID })
+            guard let index = medicationLog.medications.firstIndex(where: { $0.medication == medication }) else { return false }
+            
+            return medicationLog.medications[index].isTaken
         } set: { isTaking in
-            switch isTaking {
-            case true:
-                guard !medicationLog.medications.contains(where: { $0.persistentModelID == medication.persistentModelID }) else { return }
-                medicationLog.medications.append(medication)
-            case false:
-                medicationLog.medications.removeAll(where: { $0.persistentModelID == medication.persistentModelID })
+            if !medicationLog.medications.contains(where: { $0.medication == medication }) {
+                medicationLog.medications.append(.init(isTaken: isTaking, medication: medication))
             }
+            
+            guard let index = medicationLog.medications.firstIndex(where: { $0.medication == medication }) else { return }
+            medicationLog.medications[index].isTaken = isTaking
         }
     }
     
-    func medicationQuantityBinding(for medication: Medication) -> Binding<Int> {
+    func medicationQuantityBinding(for medication: MedicationLogMed) -> Binding<Int> {
         Binding {
-            medicationLog.medicationQuantities?[medication.persistentModelID] ?? medication.quantity ?? 1
+            medication.quantity
         } set: { newValue in
-            medicationLog.medicationQuantities?[medication.persistentModelID] = newValue
+            medication.quantity = newValue
         }
-
     }
     
     var halfMedicationsCount: [Int] {
@@ -69,6 +69,10 @@ struct AddMedicationLogView: View {
         }
         
         return array
+    }
+    
+    var medications: [MedicationLogMed] {
+        medicationLog.medications.compactMap(\.medication)
     }
     
     @ViewBuilder
@@ -114,7 +118,7 @@ struct AddMedicationLogView: View {
                         done()
                     } label: {
                         Group {
-                            if colorScheme == .dark && !medicationLog.medications.isEmpty {
+                            if colorScheme == .dark && !medicationLog.takenMedications.isEmpty {
                                 Text("Done")
                                     .colorInvert()
                             } else {
@@ -124,7 +128,7 @@ struct AddMedicationLogView: View {
                         .frame(maxWidth: .infinity)
                     }
                     .buttonStyle(.borderedProminent)
-                    .disabled(medicationLog.medications.isEmpty)
+                    .disabled(medicationLog.takenMedications.isEmpty)
                 }
                 .padding()
                 .background(.ultraThinMaterial)
@@ -171,31 +175,35 @@ struct AddMedicationLogView: View {
                 }
             }
         }
+        .onChange(of: queriedMedications, initial: true, { _, newValue in
+            for medication in newValue where !medicationLog.medications.contains(where: { $0.medication.underlyingMedication?.id == medication.id }) {
+                let med = MedicationLogMed(from: medication)
+                medicationLog.medications.append(MedicationLogMedArrayElement(isTaken: false, medication: med))
+            }
+        })
     }
     
     func done() {
-        self.initialMedicationLog.date = medicationLog.date
-        self.initialMedicationLog.medications = medicationLog.medications
-        self.initialMedicationLog.medicationQuantities = medicationLog.medicationQuantities
-        
-        if !medicationLogs.contains(where: { $0.persistentModelID == initialMedicationLog.persistentModelID }) {
-            modelContext.insert(initialMedicationLog)
+        if !medicationLogs.contains(where: { $0.persistentModelID == medicationLog.persistentModelID }) {
+            modelContext.insert(medicationLog)
         }
         try? modelContext.save()
         dismiss()
     }
     
     func cancel() {
+        self.medicationLog.date = initialMedicationLog.date
+        self.medicationLog.medications = initialMedicationLog.medications
         
         dismiss()
     }
 }
 
 private struct MedicationTakingDualCellLayout: View {
-    let medication1: Medication
-    let medication2: Medication?
-    let medicationQuantityBinding: (_ for: Medication) -> Binding<Int>
-    let isTakingMedicationBinding: (_ for: Medication) -> Binding<Bool>
+    let medication1: MedicationLogMed
+    let medication2: MedicationLogMed?
+    let medicationQuantityBinding: (_ for: MedicationLogMed) -> Binding<Int>
+    let isTakingMedicationBinding: (_ for: MedicationLogMed) -> Binding<Bool>
     
     var body: some View {
         ViewThatFits(in: .horizontal) {
@@ -219,7 +227,7 @@ private struct MedicationTakingDualCellLayout: View {
 }
 
 private struct MedicationTakingCellView: View {
-    let medication: Medication
+    let medication: MedicationLogMed
     @Binding var medicationQuantity: Int
     @Binding var isTakingMedication: Bool
     @Environment(\.colorScheme) var colorScheme
@@ -257,7 +265,7 @@ private struct MedicationTakingCellView: View {
         GroupBox {
             VStack(alignment: .leading) {
                 HStack {
-                    Text(medication.name)
+                    Text(medication.underlyingMedication?.name ?? medication.name)
                     Spacer()
                     
                     Picker("Quantity", selection: $medicationQuantity) {
@@ -267,7 +275,7 @@ private struct MedicationTakingCellView: View {
                         }
                     }
                     .onChange(of: medicationQuantity) { _, _ in
-//                        isTakingMedication = true
+                        isTakingMedication = true
                     }
                 }
                 if !medication.notes.isEmpty {

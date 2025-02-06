@@ -65,16 +65,15 @@ private struct LogEntryView: View {
                 .font(.headline)
                 .fontDesign(.default)
             Divider()
-            ForEach(entry.medications) { medication in
-                EntryLogMedicationView(medication: medication, quantity: entry.medicationQuantities?[medication.persistentModelID] ?? 1)
+            ForEach(entry.takenMedications) { medication in
+                EntryLogMedicationView(medication: medication)
             }
         }
     }
 }
 
 private struct EntryLogMedicationView: View {
-    let medication: Medication
-    let quantity: Int
+    let medication: MedicationLogMed
     
     var body: some View {
         HStack {
@@ -84,9 +83,9 @@ private struct EntryLogMedicationView: View {
                 .frame(width: 25, height: 25)
                 .symbolRenderingMode(.multicolor)
                 .foregroundStyle(.pink)
-            Text("\(medication.name)")
+            Text(medication.underlyingMedication?.name ?? medication.name)
             
-            Text("\(quantity)")
+            Text("\(medication.quantity)")
                 .padding(.vertical, 3)
                 .padding(.horizontal)
                 .background(Color.dynamicColor(light: .tertiarySystemBackground, dark: .tertiarySystemBackground), in: RoundedRectangle(cornerRadius: 6))

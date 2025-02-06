@@ -8,7 +8,7 @@ struct MyApp: App {
             ContentView()
                 .fontDesign(.rounded)
                 .environment(\.userInterfaceIdiom, UIDevice.current.userInterfaceIdiom)
-                .modelContainer(for: [MedicationLog.self, Medication.self], isAutosaveEnabled: false)
+                .modelContainer(for: [MedicationLog.self, MedicationLogMed.self, Medication.self], isAutosaveEnabled: true)
         }
     }
 }
