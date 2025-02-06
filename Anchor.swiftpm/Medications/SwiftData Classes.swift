@@ -21,6 +21,8 @@ class Medication {
         self.quantity = quantity
         self.notes = notes
     }
+    
+    @MainActor static var blank: Medication { .init(name: "", dosage: "", quantity: 1, notes: "") }
 }
 
 @Model
@@ -35,4 +37,16 @@ class MedicationLog: Identifiable {
         self.medications = medications
         self.medicationQuantities = medicationQuantities
     }
+    
+    private init(date: Date, medications: [Medication], medicationQuantities: [PersistentIdentifier : Int]?) {
+        self.date = date
+        self.medications = medications
+        self.medicationQuantities = medicationQuantities
+    }
+    
+    func copy() -> MedicationLog {
+        .init(date: date, medications: medications, medicationQuantities: medicationQuantities)
+    }
+    
+    @MainActor static var blank: MedicationLog { .init(date: .now, medications: [], medicationQuantities: [:]) }
 }

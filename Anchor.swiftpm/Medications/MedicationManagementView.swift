@@ -30,8 +30,9 @@ struct MedicationManagementView: View {
                 for index in indexSet {
                     let medication = medications[index]
                     modelContext.delete(medication)
-                    try? modelContext.save()
                 }
+                
+                try? modelContext.save()
             }
         }
         .overlay(content: {
@@ -43,7 +44,7 @@ struct MedicationManagementView: View {
                         Text("You haven't added any medications yet.")
                     } actions: {
                         Button("Get Started") {
-                            let medication = Medication(name: "", dosage: "", quantity: 1, notes: "")
+                            let medication = Medication.blank
                             self.creatingMedication = medication
                         }
                         .buttonBorderShape(.roundedRectangle)
@@ -59,7 +60,7 @@ struct MedicationManagementView: View {
             
             ToolbarItemGroup(placement: .topBarTrailing) {
                 Button {
-                    let medication = Medication(name: "", dosage: "", quantity: 1, notes: "")
+                    let medication = Medication.blank
                     self.creatingMedication = medication
                 } label: {
                     Label("Create Medication", systemImage: "plus.circle")

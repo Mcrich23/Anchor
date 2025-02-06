@@ -9,8 +9,22 @@ import SwiftUI
 import SwiftData
 
 struct AddMedicationLogView: View {
-    @State var medicationLog: MedicationLog = .init(date: .now, medications: [], medicationQuantities: [:])
+    @Bindable var medicationLog: MedicationLog
+    @Bindable var initialMedicationLog: MedicationLog
+    
+    init(medicationLog: MedicationLog = .blank) {
+        guard medicationLog != .blank else {
+            self.medicationLog = medicationLog
+            self.initialMedicationLog = medicationLog
+            return
+        }
+        
+        self.medicationLog = medicationLog.copy()
+        self.initialMedicationLog = medicationLog
+    }
+    
     @Query var medications: [Medication] = []
+    @Query var medicationLogs: [MedicationLog] = []
     @Environment(\.modelContext) var modelContext
     @Environment(\.dismiss) var dismiss
     @Environment(\.colorScheme) var colorScheme
@@ -97,8 +111,7 @@ struct AddMedicationLogView: View {
             .safeAreaInset(edge: .bottom, content: {
                 HStack {
                     Button {
-                        modelContext.insert(medicationLog)
-                        dismiss()
+                        done()
                     } label: {
                         Group {
                             if colorScheme == .dark && !medicationLog.medications.isEmpty {
@@ -140,15 +153,15 @@ struct AddMedicationLogView: View {
                 
                 ToolbarItemGroup(placement: .topBarTrailing) {
                     Button {
-                        let medication = Medication(name: "", dosage: "", quantity: 1, notes: "")
+                        let medication = Medication.blank
                         self.creatingMedication = medication
                     } label: {
                         Label("Create Medication", systemImage: "plus.circle")
                     }
                     Button {
-                        dismiss()
+                        cancel()
                     } label: {
-                        Label("Close", systemImage: "xmark.circle")
+                        Label("Cancel", systemImage: "xmark.circle")
                     }
                 }
             }
@@ -158,6 +171,23 @@ struct AddMedicationLogView: View {
                 }
             }
         }
+    }
+    
+    func done() {
+        self.initialMedicationLog.date = medicationLog.date
+        self.initialMedicationLog.medications = medicationLog.medications
+        self.initialMedicationLog.medicationQuantities = medicationLog.medicationQuantities
+        
+        if !medicationLogs.contains(where: { $0.persistentModelID == initialMedicationLog.persistentModelID }) {
+            modelContext.insert(initialMedicationLog)
+        }
+        try? modelContext.save()
+        dismiss()
+    }
+    
+    func cancel() {
+        
+        dismiss()
     }
 }
 
@@ -235,6 +265,9 @@ private struct MedicationTakingCellView: View {
                             Text("\(i)")
                                 .tag(i)
                         }
+                    }
+                    .onChange(of: medicationQuantity) { _, _ in
+//                        isTakingMedication = true
                     }
                 }
                 if !medication.notes.isEmpty {

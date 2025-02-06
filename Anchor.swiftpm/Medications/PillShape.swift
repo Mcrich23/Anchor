@@ -201,7 +201,7 @@ struct DosageMedicationIcon: View {
 }
 
 #Preview {
-    @Previewable @State var medication = Medication(name: "", dosage: "", quantity: 1, notes: "")
+    @Previewable @State var medication = Medication.blank
     
     NavigationStack {
         CreateMedicationView(medication: medication)
