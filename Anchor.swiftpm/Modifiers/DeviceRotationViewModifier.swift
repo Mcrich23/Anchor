@@ -4,13 +4,14 @@
 //
 //  Created by Morris Richman on 1/17/25.
 //
+// From: https://www.hackingwithswift.com/quick-start/swiftui/how-to-detect-device-rotation
 
 import Foundation
 import SwiftUI
 
 // Our custom view modifier to track rotation and
 // call our action
-struct DeviceRotationViewModifier: ViewModifier {
+private struct DeviceRotationViewModifier: ViewModifier {
     let action: (UIDeviceOrientation) -> Void
 
     func body(content: Content) -> some View {
@@ -27,4 +28,9 @@ extension View {
     func onRotate(perform action: @escaping (UIDeviceOrientation) -> Void) -> some View {
         self.modifier(DeviceRotationViewModifier(action: action))
     }
+}
+
+extension EnvironmentValues {
+    // Cannot set dynamic default because `UIDevice.current` is MainActor only
+    @Entry var orientation: UIDeviceOrientation = .unknown
 }

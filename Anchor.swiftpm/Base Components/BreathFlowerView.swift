@@ -30,7 +30,7 @@ struct BreathFlowerView: View {
     
     @Environment(\.geometrySize) private var geo
     @Environment(\.colorScheme) private var colorScheme
-    @State private var orientation: UIDeviceOrientation = UIDevice.current.orientation
+    @Environment(\.orientation) private var orientation
     @State private var previousOrientation: UIDeviceOrientation = UIDevice.current.orientation
     @State private var hapticEngine: CHHapticEngine?
     let stepDuration = 4.0 // Keep at whole seconds
@@ -110,10 +110,9 @@ struct BreathFlowerView: View {
                     .multilineTextAlignment(.center)
             }
         }
-        .onRotate { orientation in
-            self.previousOrientation = self.orientation
-            self.orientation = orientation
-        }
+        .onChange(of: orientation, initial: true, { oldValue, newValue in
+            self.previousOrientation = oldValue
+        })
         .onAppear {
             prepareHaptics()
         }

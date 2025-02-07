@@ -3,12 +3,18 @@ import SwiftData
 
 @main
 struct MyApp: App {
+    @State var orientation = UIDevice.current.orientation
+    
     var body: some Scene {
         WindowGroup {
             ContentView()
                 .fontDesign(.rounded)
                 .environment(\.userInterfaceIdiom, UIDevice.current.userInterfaceIdiom)
+                .environment(\.orientation, orientation)
                 .modelContainer(for: [MedicationLog.self, MedicationLogMed.self, Medication.self], isAutosaveEnabled: true)
+                .onRotate { orientation in
+                    self.orientation = orientation
+                }
         }
     }
 }
