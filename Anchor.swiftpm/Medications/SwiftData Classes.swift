@@ -7,6 +7,13 @@
 
 import Foundation
 import SwiftData
+import Combine
+
+extension NotificationCenter {
+    var modelContextDidSavePublisher: Publishers.ReceiveOn<NotificationCenter.Publisher, DispatchQueue> {
+        return publisher(for: ModelContext.didSave, object: nil).receive(on: DispatchQueue.main)
+    }
+}
 
 @Model
 class Medication {
@@ -36,10 +43,6 @@ class MedicationLogMedArrayElement {
         self.isTaken = isTaken
         self.medication = medication
     }
-    
-    func copy() -> MedicationLogMedArrayElement {
-        return .init(isTaken: isTaken, medication: medication.copy())
-    }
 }
 
 @Model
@@ -57,10 +60,6 @@ class MedicationLog: Identifiable {
     init(date: Date, medications: [MedicationLogMedArrayElement]) {
         self.date = date
         self.medications = medications
-    }
-    
-    func copy() -> MedicationLog {
-        return .init(date: date, medications: self.medications.map { $0.copy() })
     }
     
     @MainActor static var blank: MedicationLog { .init(date: .now, medications: []) }
@@ -88,15 +87,5 @@ class MedicationLogMed: Identifiable {
         self.quantity = medication.quantity ?? 1
         self.notes = medication.notes
         self.underlyingMedication = medication
-    }
-    
-    func copy() -> MedicationLogMed {
-        return MedicationLogMed(
-            name: self.name,
-            dosage: self.dosage,
-            quantity: self.quantity,
-            notes: self.notes,
-            underlyingMedication: self.underlyingMedication
-        )
     }
 }

@@ -202,8 +202,9 @@ struct DosageMedicationIcon: View {
 
 #Preview {
     @Previewable @State var medication = Medication.blank
+    @Previewable @Environment(\.modelContext) var modelContext
     
     NavigationStack {
-        CreateMedicationView(medication: medication)
+        CreateMedicationView(medication: medication, in: modelContext)
     }
 }

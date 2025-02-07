@@ -8,7 +8,20 @@
 import SwiftUI
 import SwiftData
 
+// Exists to Refresh Data when SwiftData is updated by subviews
 struct MedicationLogsView: View {
+    @State private var contextDidSaveDate = Date()
+    var body: some View {
+        MedicationLogsViewInternal()
+            .id(contextDidSaveDate)
+            .onReceive(NotificationCenter.default.modelContextDidSavePublisher) { _ in
+                contextDidSaveDate = .now
+            }
+    }
+}
+
+// Actual View
+private struct MedicationLogsViewInternal: View {
     @Query(filter: #Predicate<MedicationLog> { !$0.medications.isEmpty }, sort: \.date) var medicationLogs: [MedicationLog] = []
     @Environment(\.modelContext) var modelContext
     @State var isShowingAddMedicationLogView: MedicationLog? = nil
@@ -45,7 +58,8 @@ struct MedicationLogsView: View {
                         Text("You haven't added any entries yet.")
                     } actions: {
                         Button("Get Started") {
-                            isShowingMedManager.toggle()
+                            let medicationLog = MedicationLog.blank
+                            self.isShowingAddMedicationLogView = medicationLog
                         }
                         .buttonBorderShape(.roundedRectangle)
                         .buttonStyle(.borderedProminent)
@@ -80,7 +94,7 @@ struct MedicationLogsView: View {
         })
         .sheet(item: $isShowingAddMedicationLogView) { item in
             NavigationStack {
-                AddMedicationLogView(medicationLog: item)
+                AddMedicationLogView(medicationLog: item, in: modelContext)
             }
         }
     }

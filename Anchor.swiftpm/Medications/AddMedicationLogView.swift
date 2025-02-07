@@ -10,22 +10,25 @@ import SwiftData
 
 struct AddMedicationLogView: View {
     @Bindable var medicationLog: MedicationLog
-    let initialMedicationLog: MedicationLog
+    var modelContext: ModelContext
     
-    init(medicationLog: MedicationLog) {
-        guard medicationLog != .blank else {
+    init(medicationLog: MedicationLog, in context: ModelContext) {
+        let registeredModel: MedicationLog? = context.registeredModel(for: medicationLog.id)
+        
+        guard registeredModel != nil else {
             self.medicationLog = medicationLog
-            self.initialMedicationLog = medicationLog
+            self.modelContext = context
             return
         }
         
-        self.medicationLog = medicationLog
-        self.initialMedicationLog = medicationLog.copy()
+        modelContext = ModelContext(context.container)
+        modelContext.autosaveEnabled = false
+        
+        self.medicationLog = modelContext.model(for: medicationLog.id) as? MedicationLog ?? medicationLog
     }
     
-    @Query var queriedMedications: [Medication] = []
+    @Query(sort: \Medication.name) var queriedMedications: [Medication] = []
     @Query var medicationLogs: [MedicationLog] = []
-    @Environment(\.modelContext) var modelContext
     @Environment(\.dismiss) var dismiss
     @Environment(\.colorScheme) var colorScheme
     @State var creatingMedication: Medication?
@@ -188,7 +191,7 @@ struct AddMedicationLogView: View {
             }
             .sheet(item: $creatingMedication) { item in
                 NavigationStack {
-                    CreateMedicationView(medication: item)
+                    CreateMedicationView(medication: item, in: modelContext)
                 }
             }
         }
@@ -205,13 +208,11 @@ struct AddMedicationLogView: View {
             modelContext.insert(medicationLog)
         }
         try? modelContext.save()
+        
         dismiss()
     }
     
     func cancel() {
-        self.medicationLog.date = initialMedicationLog.date
-        self.medicationLog.medications = initialMedicationLog.medications
-        
         dismiss()
     }
 }

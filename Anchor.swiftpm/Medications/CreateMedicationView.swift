@@ -36,6 +36,22 @@ struct CreateMedicationView: View {
     @State private var stepManager = CreateMedStepManager()
     @Bindable var medication: Medication
     @Environment(\.dismiss) private var dismiss
+    var modelContext: ModelContext
+    
+    init(medication: Medication, in context: ModelContext) {
+        let registeredModel: Medication? = context.registeredModel(for: medication.id)
+        
+        guard registeredModel != nil else {
+            self.medication = medication
+            self.modelContext = context
+            return
+        }
+        
+        modelContext = ModelContext(context.container)
+        modelContext.autosaveEnabled = false
+        
+        self.medication = modelContext.model(for: medication.id) as? Medication ?? medication
+    }
     
     var body: some View {
         VStack {
@@ -85,6 +101,7 @@ struct CreateMedicationView: View {
             .buttonStyle(.borderedProminent)
             .disabled(medication.name.isEmpty)
         }
+        .environment(\.modelContext, modelContext)
         .padding()
         .toolbar(content: {
             Button("Cancel") {
@@ -232,8 +249,9 @@ private struct CreateMedicationDosageView: View {
 
 #Preview {
     @Previewable @State var medication = Medication.blank
+    @Previewable @Environment(\.modelContext) var modelContext
     
     NavigationStack {
-        CreateMedicationView(medication: medication)
+        CreateMedicationView(medication: medication, in: modelContext)
     }
 }

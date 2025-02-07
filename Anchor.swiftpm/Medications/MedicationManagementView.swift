@@ -74,7 +74,7 @@ struct MedicationManagementView: View {
         }
         .sheet(item: $creatingMedication) { item in
             NavigationStack {
-                CreateMedicationView(medication: item)
+                CreateMedicationView(medication: item, in: modelContext)
             }
         }
     }

@@ -13,6 +13,7 @@ struct MTakeActionView: View {
     @Environment(\.geometrySize) var geo
     @State var isShowingAddMedicationLogEntry: MedicationLog?
     @State var isShowingMedicationLog = false
+    @Environment(\.modelContext) var modelContext
     
     var body: some View {
         VStack {
@@ -38,7 +39,7 @@ struct MTakeActionView: View {
         })
         .sheet(item: $isShowingAddMedicationLogEntry, content: { item in
             NavigationStack {
-                AddMedicationLogView(medicationLog: item)
+                AddMedicationLogView(medicationLog: item, in: modelContext)
             }
         })
     }
