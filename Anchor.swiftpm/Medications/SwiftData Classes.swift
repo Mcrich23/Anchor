@@ -28,6 +28,8 @@ class Medication {
 @Model
 class MedicationLogMedArrayElement {
     var isTaken: Bool
+    
+    @Relationship(deleteRule: .cascade)
     var medication: MedicationLogMed
     
     init(isTaken: Bool, medication: MedicationLogMed) {
@@ -44,6 +46,8 @@ class MedicationLogMedArrayElement {
 class MedicationLog: Identifiable {
     var id: UUID = UUID()
     var date: Date
+    
+    @Relationship(deleteRule: .cascade)
     var medications: [MedicationLogMedArrayElement]
     
     var takenMedications: [MedicationLogMed] {
