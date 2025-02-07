@@ -78,7 +78,7 @@ struct PAAssuranceView: View {
             }
             .sensoryFeedback(.success, trigger: step)
             .foregroundStyle(colorScheme == .light ? .white: .black)
-            .frame(maxWidth: height*0.6, maxHeight: height*0.6)
+            .frame(maxWidth: height*0.6, maxHeight: height == geo.height ? height*0.65 : height*0.6)
             .minimumScaleFactor(0.7)
         }
         .frame(maxWidth: height*0.8, maxHeight: height*0.8)
@@ -146,7 +146,7 @@ struct PAAssuranceView: View {
                         .resizable()
                         .aspectRatio(contentMode: .fit)
                         .foregroundColor(numberOfTimesMantraSaid >= i ? Color.green : Color.secondary)
-                        .frame(maxHeight: 40)
+                        .frame(minHeight: 15, maxHeight: 40)
                 }
             }
             
