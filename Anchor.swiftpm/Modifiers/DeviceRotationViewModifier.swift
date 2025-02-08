@@ -4,7 +4,6 @@
 //
 //  Created by Morris Richman on 1/17/25.
 //
-// From: https://www.hackingwithswift.com/quick-start/swiftui/how-to-detect-device-rotation
 
 import Foundation
 import SwiftUI

@@ -4,7 +4,6 @@
 //
 //  Created by Morris Richman on 2/5/25.
 //
-// From: https://www.swiftbysundell.com/articles/observing-swiftui-scrollview-content-offset/
 
 import SwiftUI
 

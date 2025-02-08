@@ -4,7 +4,6 @@
 //
 //  Created by Morris Richman on 1/20/25.
 //
-//  From: https://developer.apple.com/tutorials/app-dev-training/transcribing-speech-to-text
 
 import Foundation
 import AVFoundation

@@ -15,7 +15,6 @@
     3. Touch 3 objects
     4. Identify 2 smells
     5. Name 1 thing you can taste
-- Repeat mantra
 - Walk around
 - Muscle Relaxation
 - Picture a Happy Place
