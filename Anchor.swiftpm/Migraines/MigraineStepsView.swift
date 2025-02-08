@@ -32,61 +32,57 @@ final class MStepManager {
 }
 
 struct MigraineStepsView: View {
-    @State var geometrySize: CGSize = .zero
     @Environment(MStepManager.self) var stepManager
     @Environment(\.userInterfaceIdiom) var userInterfaceIdiom
     @Environment(\.navigationNamespace) var navigationNamespace
     
     var body: some View {
-        VStack {
-            switch stepManager.step {
-            case .takeAction:
-                MTakeActionView()
-                    .fillSpaceAvailable()
-                    .backForward(isBack: stepManager.isBack)
-            case .breath:
-                MBreathingView()
-                    .fillSpaceAvailable()
-                    .backForward(isBack: stepManager.isBack)
-            case .drawing:
-                MDrawingView()
-                    .fillSpaceAvailable()
-                    .backForward(isBack: stepManager.isBack)
-            }
-        }
-        .safeAreaInset(edge: .bottom) {
-            if stepManager.step != .drawing || userInterfaceIdiom != .phone {
-                HStack {
-                    if stepManager.step.rawValue != MigraineSteps.allCases.first?.rawValue {
-                        Button("Back", systemImage: "chevron.left") {
-                            withAnimation {
-                                stepManager.previous()
-                            }
-                        }
-                        .buttonStyle(.reliefNavigation)
-                        .matchedGeometryEffect(id: "backButton", in: navigationNamespace)
-                    }
-                    Spacer()
-                    if stepManager.step.rawValue != MigraineSteps.allCases.last?.rawValue {
-                        Button("Next", systemImage: "chevron.right") {
-                            withAnimation {
-                                stepManager.next()
-                            }
-                        }
-                        .labelStyle(.oppositeOrderLabelStyle)
-                        .buttonStyle(.reliefNavigation)
-                    }
+        GeometryReader { geo in
+            VStack {
+                switch stepManager.step {
+                case .takeAction:
+                    MTakeActionView()
+                        .fillSpaceAvailable()
+                        .backForward(isBack: stepManager.isBack)
+                case .breath:
+                    MBreathingView()
+                        .fillSpaceAvailable()
+                        .backForward(isBack: stepManager.isBack)
+                case .drawing:
+                    MDrawingView()
+                        .fillSpaceAvailable()
+                        .backForward(isBack: stepManager.isBack)
                 }
-                .padding()
             }
+            .safeAreaInset(edge: .bottom) {
+                if stepManager.step != .drawing || userInterfaceIdiom != .phone {
+                    HStack {
+                        if stepManager.step.rawValue != MigraineSteps.allCases.first?.rawValue {
+                            Button("Back", systemImage: "chevron.left") {
+                                withAnimation {
+                                    stepManager.previous()
+                                }
+                            }
+                            .buttonStyle(.reliefNavigation)
+                            .matchedGeometryEffect(id: "backButton", in: navigationNamespace)
+                        }
+                        Spacer()
+                        if stepManager.step.rawValue != MigraineSteps.allCases.last?.rawValue {
+                            Button("Next", systemImage: "chevron.right") {
+                                withAnimation {
+                                    stepManager.next()
+                                }
+                            }
+                            .labelStyle(.oppositeOrderLabelStyle)
+                            .buttonStyle(.reliefNavigation)
+                        }
+                    }
+                    .padding()
+                }
+            }
+            .sensoryFeedback(.success, trigger: stepManager.step)
+            .environment(\.geometrySize, geo.size)
         }
-        .sensoryFeedback(.success, trigger: stepManager.step)
-        .onGeometryChange(for: CGSize.self, of: { proxy in
-            proxy.size
-        }, action: { newValue in
-            geometrySize = newValue
-        })
-        .environment(\.geometrySize, geometrySize)
     }
 }
 

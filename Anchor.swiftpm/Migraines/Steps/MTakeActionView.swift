@@ -11,9 +11,37 @@ import SwiftUI
 struct MTakeActionView: View {
     let shareText: String = "Hello, I am experiencing a migraine. I am using the app Anchor to help me manage my symptoms. If you don't hear back from me in the next 30 minutes, please call me."
     @Environment(\.geometrySize) var geo
-    @State var isShowingAddMedicationLogEntry: MedicationLog? = .blank
+    @Environment(\.meshCircleSize) var meshCircleSize
+    @EnvironmentObject var meshBackgroundCircleViewModel: AnimatedMeshViewModel
+    @State var isShowingAddMedicationLogEntry: MedicationLog? = nil//.blank
     @State var isShowingMedicationLog = false
     @Environment(\.modelContext) var modelContext
+    
+    let gradientColors: [Color] = [
+        .homeCircleGradientColor1,
+        .homeCircleGradientColor2,
+        .homeCircleGradientColor1,
+        
+        .homeCircleGradientColor4,
+        .homeCircleGradientColor3,
+        .homeCircleGradientColor4,
+        
+        .homeCircleGradientColor3,
+        .homeCircleGradientColor4,
+        .homeCircleGradientColor3,
+    ]
+    
+    @ViewBuilder
+    var meshGradientBackground: some View {
+        SemiCircle(colors: gradientColors, animatedMeshViewModel: meshBackgroundCircleViewModel)
+            .foregroundStyle(Gradient(colors: gradientColors))
+            .frame(minWidth: 600, idealWidth: meshCircleSize.width)
+            .frame(height: meshCircleSize.height/1.8)
+            .ignoresSafeArea()
+            .scaleEffect(x: 3)
+            .scaleEffect(y:  3.4)
+            .position(x: meshCircleSize.width/2, y: meshCircleSize.height/2)
+    }
     
     var body: some View {
         VStack {
@@ -40,13 +68,24 @@ struct MTakeActionView: View {
                     if let isShowingAddMedicationLogEntry {
                         AddMedicationLogView(medicationLog: isShowingAddMedicationLogEntry, in: modelContext)
                             .environment(\.customDismiss, { self.isShowingAddMedicationLogEntry = nil })
+                            .background(.ultraThinMaterial)
+                            .background {
+                                meshGradientBackground
+                            }
+                            .scrollContentBackground(.hidden)
                     } else {
                         MedicationLogsView()
+                            .background(.regularMaterial)
+                            .background {
+                                meshGradientBackground
+                            }
+                            .scrollContentBackground(.hidden)
                     }
                 }
                 .clipShape(RoundedRectangle(cornerRadius: 6))
 //                .background(Color(uiColor: .secondarySystemBackground), in: RoundedRectangle(cornerRadius: 6))
                 .animation(.default, value: isShowingAddMedicationLogEntry)
+//                .clipped()
 //            }
         }
         .padding(.horizontal)

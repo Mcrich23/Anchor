@@ -49,6 +49,7 @@ struct ContentView: View {
     
     @State var selectedAnchor: AnchorType?
     @State var isShowingMedLog = false
+    @StateObject var meshBackgroundCircleViewModel = AnimatedMeshViewModel()
     
     var body: some View {
         GeometryReader { geo in
@@ -87,7 +88,7 @@ struct ContentView: View {
                 .allowsHitTesting(selectedAnchor == nil)
                 .frame(maxWidth: .infinity, alignment: .center)
                 .background(alignment: .top) {
-                    SemiCircle(colors: semiCircleGradientColors)
+                    SemiCircle(colors: semiCircleGradientColors, animatedMeshViewModel: meshBackgroundCircleViewModel)
                         .foregroundStyle(Gradient(colors: bottomCircleGradientColors))
                         .frame(minWidth: 600, idealWidth: geo.size.width)
                         .frame(height: geo.size.height/1.8)
@@ -104,6 +105,8 @@ struct ContentView: View {
             .overlay {
                 if let selectedAnchor {
                     AnchorView(anchor: selectedAnchor)
+                        .environment(\.meshCircleSize, geo.size)
+                        .environmentObject(meshBackgroundCircleViewModel)
                 }
             }
             .background {
@@ -142,6 +145,8 @@ extension EnvironmentValues {
     
     /// Dismisses to select anchor view
     @Entry var customDismiss: () -> Void = {}
+    
+    @Entry var meshCircleSize: CGSize = .zero
 }
 
 private struct AnchorSelectionButtonStyle: ButtonStyle {
