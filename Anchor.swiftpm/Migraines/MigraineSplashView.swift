@@ -10,7 +10,6 @@ import SwiftUI
 struct MigraineSplashView: View {
     @Environment(\.customDismiss) var dismiss
     @Binding var isStartScreen: Bool
-    @Namespace var namespace
     @Environment(MStepManager.self) var stepManager
     @Environment(\.navigationNamespace) var navigationNamespace
     @Environment(\.userInterfaceIdiom) var userInterfaceIdiom
@@ -21,14 +20,14 @@ struct MigraineSplashView: View {
                 VStack {
                     Text("Migraine Relief")
                         .font(.title)
-                        .matchedGeometryEffect(id: "title", in: namespace)
+                        .matchedGeometryEffect(id: "title", in: navigationNamespace)
                         .bold()
                     Text("A migraine can be very scary. Anchor is hear to help you through it.")
                         .multilineTextAlignment(.center)
                     HStack {
                         Button("Back", action: dismiss)
                             .buttonStyle(.reliefNavigation)
-                            .matchedGeometryEffect(id: "close", in: namespace)
+                            .matchedGeometryEffect(id: "close", in: navigationNamespace)
                         if isStartScreen {
                             Button("Start Relief") {
                                 withAnimation(.easeInOut(duration: 1.2)) {
@@ -39,20 +38,20 @@ struct MigraineSplashView: View {
                         }
                     }
                 }
-                .matchedGeometryEffect(id: "container", in: namespace)
+                .matchedGeometryEffect(id: "container", in: navigationNamespace)
             } else {
                 VStack {
                     HStack {
                         Text("Migraine Relief")
                             .font(.title)
-                            .matchedGeometryEffect(id: "title", in: namespace)
+                            .matchedGeometryEffect(id: "title", in: navigationNamespace)
                             .bold()
                             .fontDesign(.default)
                         if !(navigationNamespace != nil && userInterfaceIdiom == .phone && stepManager.step == .drawing) {
                             Spacer()
                             Button("Close", action: dismiss)
                                 .buttonStyle(.reliefNavigation)
-                                .matchedGeometryEffect(id: "close", in: namespace)
+                                .matchedGeometryEffect(id: "close", in: navigationNamespace)
                         }
                     }
                     if let navigationNamespace, userInterfaceIdiom == .phone, stepManager.step == .drawing {
@@ -67,7 +66,7 @@ struct MigraineSplashView: View {
                             Spacer()
                             Button("Close", action: dismiss)
                                 .buttonStyle(.reliefNavigation)
-                                .matchedGeometryEffect(id: "close", in: namespace)
+                                .matchedGeometryEffect(id: "close", in: navigationNamespace)
                         }
                     }
                 }
@@ -75,7 +74,7 @@ struct MigraineSplashView: View {
                 .padding()
                 .background(Color(uiColor: .secondarySystemFill))
                 .clipShape(RoundedRectangle(cornerRadius: 6))
-                .matchedGeometryEffect(id: "container", in: namespace)
+                .matchedGeometryEffect(id: "container", in: navigationNamespace)
             }
         }
         .padding()

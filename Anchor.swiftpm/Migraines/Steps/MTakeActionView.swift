@@ -50,9 +50,11 @@ struct MTakeActionView: View {
                 .fontWeight(.semibold)
             Text("Taking medication can be integral to managing migraines. If you have specific medication, or general pain medication, make sure to take it as directed.")
                 .minimumScaleFactor(0.7)
-                NavigationStack {
+            NavigationStack {
                     if let isShowingAddMedicationLogEntry {
+//                        Text("Hi")
                         AddMedicationLogView(medicationLog: isShowingAddMedicationLogEntry, in: modelContext)
+                            .frame(maxWidth: .infinity, maxHeight: .infinity)
                             .environment(\.customDismiss, { self.isShowingAddMedicationLogEntry = nil })
                             .background(.ultraThinMaterial)
                             .background {
