@@ -10,8 +10,8 @@ import SwiftData
 import Combine
 
 extension NotificationCenter {
-    var modelContextDidSavePublisher: Publishers.ReceiveOn<NotificationCenter.Publisher, DispatchQueue> {
-        return publisher(for: ModelContext.didSave, object: nil).receive(on: DispatchQueue.main)
+    var managedObjectContextDidSavePublisher: Publishers.ReceiveOn<NotificationCenter.Publisher, DispatchQueue> {
+        return publisher(for: .NSManagedObjectContextDidSave).receive(on: DispatchQueue.main)
     }
 }
 

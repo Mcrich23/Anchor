@@ -13,7 +13,7 @@ struct MTakeActionView: View {
     @Environment(\.geometrySize) var geo
     @Environment(\.meshCircleSize) var meshCircleSize
     @EnvironmentObject var meshBackgroundCircleViewModel: AnimatedMeshViewModel
-    @State var isShowingAddMedicationLogEntry: MedicationLog? = .blank
+    @State var isShowingAddMedicationLogEntry: MedicationLog? = nil//.blank
     @State var isShowingMedicationLog = false
     @Environment(\.modelContext) var modelContext
     

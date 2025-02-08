@@ -10,32 +10,38 @@ import Foundation
 import Combine
 import SwiftUI
 
-final class AnimatedMeshViewModel: ObservableObject, @unchecked Sendable {
-    @Published fileprivate(set) var time: Float = 0.0
-    @Published var speed: TimeInterval = 0.009
+actor AnimatedMeshViewModel: ObservableObject {
+    @Published @MainActor fileprivate(set) var time: Float = 0.0
+    @Published @MainActor var speed: TimeInterval = 0.009
+    
+    @MainActor
     var task: Task<Void, Error>?
     
-    init() {
-        runTimer()
-    }
+//    init() {
+//        runTimer()
+//    }
     
     private func runTimer() {
-        task?.cancel()
-        
-        self.task = Task { @MainActor [self] in
-            while true {
-                try? await Task.sleep(for: .seconds(speed*10))
-                time += 0.2
+        Task { @MainActor in
+            self.task?.cancel()
+            self.task = Task { @MainActor [self] in
+                while true {
+                    try? await Task.sleep(for: .seconds(speed*10))
+                    time += 0.2
+                }
             }
         }
+        
     }
     
+    @MainActor
     func sinInRange(_ range: ClosedRange<Float>, offset: Float, timeScale: Float, t: Float) -> Float {
         let amplitude = (range.upperBound - range.lowerBound) / 2
         let midPoint = (range.upperBound + range.lowerBound) / 2
         return midPoint + amplitude * sin(timeScale * t + offset)
     }
     
+    @MainActor
     var points: [SIMD2<Float>] {
         [
             .init(0, 0), .init(0.5, 0), .init(1, 0),

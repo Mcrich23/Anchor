@@ -11,10 +11,13 @@ import SwiftData
 // Exists to Refresh Data when SwiftData is updated by subviews
 struct MedicationLogsView: View {
     @State private var contextDidSaveDate = Date()
+    @State var isShowingAddMedicationLogView: MedicationLog? = nil
+    @State var isShowingMedManager = false
+    
     var body: some View {
-        MedicationLogsViewInternal()
+        MedicationLogsViewInternal(isShowingAddMedicationLogView: $isShowingAddMedicationLogView, isShowingMedManager: $isShowingMedManager)
             .id(contextDidSaveDate)
-            .onReceive(NotificationCenter.default.modelContextDidSavePublisher) { _ in
+            .onReceive(NotificationCenter.default.managedObjectContextDidSavePublisher) { _ in
                 contextDidSaveDate = .now
             }
     }
@@ -24,8 +27,8 @@ struct MedicationLogsView: View {
 private struct MedicationLogsViewInternal: View {
     @Query(filter: #Predicate<MedicationLog> { !$0.medications.isEmpty }, sort: \.date) var medicationLogs: [MedicationLog] = []
     @Environment(\.modelContext) var modelContext
-    @State var isShowingAddMedicationLogView: MedicationLog? = nil
-    @State var isShowingMedManager = false
+    @Binding var isShowingAddMedicationLogView: MedicationLog?
+    @Binding var isShowingMedManager: Bool
     
     var body: some View {
         List {
@@ -95,6 +98,7 @@ private struct MedicationLogsViewInternal: View {
         .sheet(item: $isShowingAddMedicationLogView) { item in
             NavigationStack {
                 AddMedicationLogView(medicationLog: item, in: modelContext)
+                    .environment(\.customDismiss, {})
             }
         }
     }
