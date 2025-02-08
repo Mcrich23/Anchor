@@ -12,34 +12,10 @@ struct ContentView: View {
     
     var semiCircleGradientColors: [Color] {
         guard selectedAnchor != nil else {
-            return [
-                .homeCircleGradientColor1,
-                .homeCircleGradientColor1,
-                .homeCircleGradientColor1,
-                
-                .homeCircleGradientColor3,
-                .homeCircleGradientColor2,
-                .homeCircleGradientColor3,
-                
-                .homeCircleGradientColor3,
-                .homeCircleGradientColor4,
-                .homeCircleGradientColor3,
-            ]
+            return .semiCircleGradientColorsInHome
         }
         
-        return [
-            .homeCircleGradientColor1,
-            .homeCircleGradientColor2,
-            .homeCircleGradientColor1,
-            
-            .homeCircleGradientColor4,
-            .homeCircleGradientColor3,
-            .homeCircleGradientColor4,
-            
-            .homeCircleGradientColor3,
-            .homeCircleGradientColor4,
-            .homeCircleGradientColor3,
-        ]
+        return .semiCircleGradientColorsInAnchor
     }
     
     let bottomAntiCircleGradientColors: [Color] = [

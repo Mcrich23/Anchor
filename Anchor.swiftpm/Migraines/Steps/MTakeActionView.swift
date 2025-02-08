@@ -17,19 +17,9 @@ struct MTakeActionView: View {
     @State var isShowingMedicationLog = false
     @Environment(\.modelContext) var modelContext
     
-    let gradientColors: [Color] = [
-        .homeCircleGradientColor1,
-        .homeCircleGradientColor2,
-        .homeCircleGradientColor1,
-        
-        .homeCircleGradientColor4,
-        .homeCircleGradientColor3,
-        .homeCircleGradientColor4,
-        
-        .homeCircleGradientColor3,
-        .homeCircleGradientColor4,
-        .homeCircleGradientColor3,
-    ]
+    var gradientColors: [Color] {
+        .semiCircleGradientColorsInAnchor
+    }
     
     @ViewBuilder
     var meshGradientBackground: some View {

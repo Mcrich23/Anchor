@@ -59,4 +59,45 @@ extension Color {
     static var medPillGreen: Self {
         dynamicColor(light: #colorLiteral(red: 0.5762488246, green: 0.9746149182, blue: 0.6760464311, alpha: 1), dark: #colorLiteral(red: 0.5762488246, green: 0.9746149182, blue: 0.6760464311, alpha: 1))
     }
+    
+    // MARK: Gradient Color Arrays
+    static var semiCircleGradientColorsInHome: [Self] {
+        [
+            .homeCircleGradientColor1,
+            .homeCircleGradientColor1,
+            .homeCircleGradientColor1,
+            
+            .homeCircleGradientColor3,
+            .homeCircleGradientColor2,
+            .homeCircleGradientColor3,
+            
+            .homeCircleGradientColor3,
+            .homeCircleGradientColor4,
+            .homeCircleGradientColor3,
+        ]
+    }
+    static var semiCircleGradientColorsInAnchor: [Self] {
+        [
+            .homeCircleGradientColor1,
+            .homeCircleGradientColor2,
+            .homeCircleGradientColor1,
+            
+            .homeCircleGradientColor4,
+            .homeCircleGradientColor3,
+            .homeCircleGradientColor4,
+            
+            .homeCircleGradientColor3,
+            .homeCircleGradientColor4,
+            .homeCircleGradientColor3,
+        ]
+    }
+}
+
+extension [Color] {
+    static var semiCircleGradientColorsInHome: Self {
+        Color.semiCircleGradientColorsInHome
+    }
+    static var semiCircleGradientColorsInAnchor: Self {
+        Color.semiCircleGradientColorsInAnchor
+    }
 }
