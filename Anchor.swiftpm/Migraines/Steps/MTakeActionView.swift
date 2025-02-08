@@ -13,7 +13,7 @@ struct MTakeActionView: View {
     @Environment(\.geometrySize) var geo
     @Environment(\.meshCircleSize) var meshCircleSize
     @EnvironmentObject var meshBackgroundCircleViewModel: AnimatedMeshViewModel
-    @State var isShowingAddMedicationLogEntry: MedicationLog? = nil//.blank
+    @State var isShowingAddMedicationLogEntry: MedicationLog? = .blank
     @State var isShowingMedicationLog = false
     @Environment(\.modelContext) var modelContext
     
@@ -45,25 +45,11 @@ struct MTakeActionView: View {
     
     var body: some View {
         VStack {
-//            Text("Let's Take Some Action")
-//                .font(.largeTitle)
-//                .fontWeight(.semibold)
-//                .multilineTextAlignment(.center)
             Text("Take Medication")
-                .font(.title2)
+                .font(.largeTitle)
                 .fontWeight(.semibold)
             Text("Taking medication can be integral to managing migraines. If you have specific medication, or general pain medication, make sure to take it as directed.")
                 .minimumScaleFactor(0.7)
-//            ViewThatFits {
-//                VStack(spacing: 15) {
-//                    boxes
-//                }
-//                
-//                HStack(spacing: 40) {
-//                    boxes
-//                }
-//            }
-//            box {
                 NavigationStack {
                     if let isShowingAddMedicationLogEntry {
                         AddMedicationLogView(medicationLog: isShowingAddMedicationLogEntry, in: modelContext)
@@ -75,7 +61,7 @@ struct MTakeActionView: View {
                             .scrollContentBackground(.hidden)
                     } else {
                         MedicationLogsView()
-                            .background(.regularMaterial)
+                            .background(.ultraThinMaterial)
                             .background {
                                 meshGradientBackground
                             }
@@ -83,17 +69,9 @@ struct MTakeActionView: View {
                     }
                 }
                 .clipShape(RoundedRectangle(cornerRadius: 6))
-//                .background(Color(uiColor: .secondarySystemBackground), in: RoundedRectangle(cornerRadius: 6))
                 .animation(.default, value: isShowingAddMedicationLogEntry)
-//                .clipped()
-//            }
         }
         .padding(.horizontal)
-//        .sheet(item: $isShowingAddMedicationLogEntry, content: { item in
-//            NavigationStack {
-//                AddMedicationLogView(medicationLog: item, in: modelContext)
-//            }
-//        })
     }
     
     @ViewBuilder
