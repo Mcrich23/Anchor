@@ -18,6 +18,8 @@ struct MedicationLogsView: View {
         MedicationLogsViewInternal(isShowingAddMedicationLogView: $isShowingAddMedicationLogView, isShowingMedManager: $isShowingMedManager)
             .id(contextDidSaveDate)
             .onReceive(NotificationCenter.default.managedObjectContextDidSavePublisher) { _ in
+                guard !isShowingMedManager && isShowingAddMedicationLogView == nil else { return }
+                
                 contextDidSaveDate = .now
             }
     }
