@@ -30,6 +30,7 @@ struct AddMedicationLogView: View {
     @Query(sort: \Medication.name) var queriedMedications: [Medication] = []
     @Query var medicationLogs: [MedicationLog] = []
     @Environment(\.dismiss) var dismiss
+    @Environment(\.customDismiss) var customDismiss
     @Environment(\.colorScheme) var colorScheme
     @State var creatingMedication: Medication?
     @State var scrollOffset: CGPoint = .zero
@@ -75,7 +76,7 @@ struct AddMedicationLogView: View {
     }
     
     var medications: [MedicationLogMed] {
-        medicationLog.medications.compactMap(\.medication)
+        medicationLog.medications.compactMap(\.medication).sorted(by: { $0.name < $1.name })
     }
     
     @ViewBuilder
@@ -199,6 +200,7 @@ struct AddMedicationLogView: View {
             for medication in newValue where !medicationLog.medications.contains(where: { $0.medication.underlyingMedication?.id == medication.id }) {
                 let med = MedicationLogMed(from: medication)
                 medicationLog.medications.append(MedicationLogMedArrayElement(isTaken: false, medication: med))
+                try? modelContext.save()
             }
         })
     }
@@ -210,10 +212,12 @@ struct AddMedicationLogView: View {
         try? modelContext.save()
         
         dismiss()
+        customDismiss()
     }
     
     func cancel() {
         dismiss()
+        customDismiss()
     }
 }
 
