@@ -303,7 +303,6 @@ private struct MedicationTakingCellView: View {
                 if !medication.notes.isEmpty {
                     Divider()
                     Text(medication.notes)
-                        .textSelection(.enabled)
                         .foregroundStyle(.secondary)
                 }
                 Divider()
