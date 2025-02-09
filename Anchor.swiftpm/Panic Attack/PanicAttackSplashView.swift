@@ -32,7 +32,7 @@ struct PanicAttackSplashView: View {
                         if isStartScreen {
                             Button("Start Relief") {
                                 withAnimation(.easeInOut(duration: 1.2)) {
-                                    isStartScreen.toggle()
+                                    isStartScreen= true()
                                 }
                             }
                             .buttonStyle(.borderedProminent)

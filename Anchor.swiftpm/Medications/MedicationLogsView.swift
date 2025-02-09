@@ -78,7 +78,7 @@ private struct MedicationLogsViewInternal: View {
             ToolbarItemGroup(placement: .topBarLeading) {
                 EditButton()
                 Button {
-                    isShowingMedManager.toggle()
+                    isShowingMedManager = true
                 } label: {
                     Label("Manage Medications", systemImage: "gear")
                         .labelStyle(.iconOnly)
@@ -122,9 +122,14 @@ private struct LogEntryView: View {
             }
             
             if let notes = entry.notes {
-                GroupBox {
+                if entry.takenMedications.isEmpty {
                     Text(notes)
                         .frame(maxWidth: .infinity, alignment: .leading)
+                } else {
+                    GroupBox {
+                        Text(notes)
+                            .frame(maxWidth: .infinity, alignment: .leading)
+                    }
                 }
             }
         }

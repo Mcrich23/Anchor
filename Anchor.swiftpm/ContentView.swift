@@ -94,7 +94,7 @@ struct ContentView: View {
             if selectedAnchor == nil {
                 HStack {
                     Button {
-                        isShowingMedLog.toggle()
+                        isShowingMedLog = true
                     } label: {
                         Label("Medication Log", systemImage: "calendar.day.timeline.left")
                             .labelStyle(.iconOnly)

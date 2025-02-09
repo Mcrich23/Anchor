@@ -189,8 +189,7 @@ struct AddMedicationLogView: View {
                         toolbarScrollToTop(scrollProxy: proxy)
                         if showManageMedicationButton {
                             Button {
-                                let medication = Medication.blank
-                                self.creatingMedication = medication
+                                self.isShowingMedManager = true
                             } label: {
                                 Label("Manage Medications", systemImage: "gear.circle")
                             }
@@ -323,7 +322,7 @@ private struct MedicationTakingCellView: View {
     @ViewBuilder
     var button: some View {
         Button {
-            isTakingMedication.toggle()
+            isTakingMedication = true
         } label: {
             Group {
                 if colorScheme == .dark && isTakingMedication {
