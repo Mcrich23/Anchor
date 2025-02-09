@@ -9,10 +9,15 @@ import SwiftUI
 import SwiftData
 
 struct AddMedicationLogView: View {
+    let showManageMedicationButton: Bool
+    let showAddMedicationButton: Bool
     @Bindable var medicationLog: MedicationLog
     var modelContext: ModelContext
     
-    init(medicationLog: MedicationLog, in context: ModelContext) {
+    init(showManageMedicationButton: Bool = false, showAddMedicationButton: Bool = true, medicationLog: MedicationLog, in context: ModelContext) {
+        self.showManageMedicationButton = showManageMedicationButton
+        self.showAddMedicationButton = showAddMedicationButton
+        
         let registeredModel: MedicationLog? = context.registeredModel(for: medicationLog.id)
         
         guard registeredModel != nil else {
@@ -33,6 +38,7 @@ struct AddMedicationLogView: View {
     @Environment(\.customDismiss) var customDismiss
     @Environment(\.colorScheme) var colorScheme
     @State var creatingMedication: Medication?
+    @State var isShowingMedManager = false
     @State var scrollOffset: CGPoint = .zero
     var toolbarOpacity: CGFloat {
         let threshold: CGFloat = 30
@@ -80,118 +86,159 @@ struct AddMedicationLogView: View {
     }
     
     @ViewBuilder
-    var toolbarTitle: some View {
+    func toolbarTitle(scrollProxy: ScrollViewProxy) -> some View {
         Text("Create Entry")
             .bold()
             .opacity(toolbarOpacity)
+            .background {
+                toolbarScrollToTop(scrollProxy: scrollProxy)
+            }
+    }
+    
+    @ViewBuilder
+    func toolbarScrollToTop(scrollProxy: ScrollViewProxy) -> some View {
+        Rectangle()
+            .fill(.clear)
+            .frame(maxWidth: .infinity, maxHeight: .infinity)
+            .contentShape(Rectangle())
+            .onTapGesture {
+                withAnimation(.bouncy) {
+                    scrollProxy.scrollTo("Main VStack", anchor: .top)
+                }
+            }
     }
     
     var body: some View {
         GeometryReader { geo in
-            OffsetObservingScrollView(offset: $scrollOffset) {
-                VStack {
-                    Text("Create Entry")
-                        .font(.largeTitle)
-                        .bold()
-                        .frame(maxWidth: .infinity, alignment: .leading)
-                    
-                    if medications.isEmpty {
-                        VStack {
-                            ContentUnavailableView {
-                                Text("No Medications")
-                            } description: {
-                                Text("You haven't added any medications yet.")
-                            } actions: {
-                                Button("Get Started") {
-                                    let medication = Medication.blank
-                                    self.creatingMedication = medication
-                                }
-                                .buttonBorderShape(.roundedRectangle)
-                                .buttonStyle(.borderedProminent)
-                            }
-                        }
-                    } else {
-                        if geo.size.width < 500 {
+            ScrollViewReader { proxy in
+                OffsetObservingScrollView(offset: $scrollOffset) {
+                    VStack {
+                        Text("Create Entry")
+                            .font(.largeTitle)
+                            .bold()
+                            .frame(maxWidth: .infinity, alignment: .leading)
+                        
+                        if medications.isEmpty {
                             VStack {
-                                ForEach(medications) { medication in
-                                    MedicationTakingCellView(medication: medication, medicationQuantity: medicationQuantityBinding(for: medication), isTakingMedication: isTakingMedicationBinding(for: medication))
+                                ContentUnavailableView {
+                                    Text("No Medications")
+                                } description: {
+                                    Text("You haven't added any medications yet.")
+                                } actions: {
+                                    Button("Get Started") {
+                                        let medication = Medication.blank
+                                        self.creatingMedication = medication
+                                    }
+                                    .buttonBorderShape(.roundedRectangle)
+                                    .buttonStyle(.borderedProminent)
                                 }
                             }
                         } else {
-                            VStack {
-                                ForEach(halfMedicationsCount, id: \.self) { i in
-                                    if i < medications.count-1 {
-                                        MedicationTakingDualCellLayout(medication1: medications[i], medication2: medications[i+1], medicationQuantityBinding: medicationQuantityBinding, isTakingMedicationBinding: isTakingMedicationBinding)
-                                    } else {
-                                        MedicationTakingDualCellLayout(medication1: medications[i], medication2: nil, medicationQuantityBinding: medicationQuantityBinding, isTakingMedicationBinding: isTakingMedicationBinding)
+                            if geo.size.width < 500 {
+                                VStack {
+                                    ForEach(medications) { medication in
+                                        MedicationTakingCellView(medication: medication, medicationQuantity: medicationQuantityBinding(for: medication), isTakingMedication: isTakingMedicationBinding(for: medication))
+                                    }
+                                }
+                            } else {
+                                VStack {
+                                    ForEach(halfMedicationsCount, id: \.self) { i in
+                                        if i < medications.count-1 {
+                                            MedicationTakingDualCellLayout(medication1: medications[i], medication2: medications[i+1], medicationQuantityBinding: medicationQuantityBinding, isTakingMedicationBinding: isTakingMedicationBinding)
+                                        } else {
+                                            MedicationTakingDualCellLayout(medication1: medications[i], medication2: nil, medicationQuantityBinding: medicationQuantityBinding, isTakingMedicationBinding: isTakingMedicationBinding)
+                                        }
                                     }
                                 }
                             }
                         }
                     }
+                    .padding()
+                    .id("Main VStack")
                 }
-                .padding()
-            }
-            .navigationBarTitleDisplayMode(.inline)
-            .toolbar {
-                ToolbarItemGroup(placement: .topBarLeading) {
-                    ZStack {
-                        DatePicker("", selection: $medicationLog.date)
-                            .accessibilityLabel(Text("Entry Date"))
-                            .offset(y: 20-min(scrollOffset.y, 20))
-                            .padding(.leading, -12)
-                            .opacity(1-toolbarOpacity)
-                        
-                        if geo.size.width < 500 {
-                            toolbarTitle
-                                .frame(maxWidth: .infinity, alignment: .leading)
-                        }
-                    }
-                }
-                
-                if geo.size.width > 500 {
-                    ToolbarItemGroup(placement: .principal) {
-                        toolbarTitle
-                    }
-                }
-                
-                ToolbarItemGroup(placement: .topBarTrailing) {
-                    Button {
-                        let medication = Medication.blank
-                        self.creatingMedication = medication
-                    } label: {
-                        Label("Create Medication", systemImage: "plus.circle")
-                    }
-                    Button {
-                        cancel()
-                    } label: {
-                        Label("Cancel", systemImage: "xmark.circle")
-                    }
-                }
-                
-                ToolbarItemGroup(placement: .bottomBar) {
-                    Button {
-                        done()
-                    } label: {
-                        Group {
-                            if colorScheme == .dark && !medicationLog.takenMedications.isEmpty {
-                                Text("Done")
-                                    .colorInvert()
-                            } else {
-                                Text("Done")
+                .navigationBarTitleDisplayMode(.inline)
+                .toolbar {
+                    ToolbarItemGroup(placement: .topBarLeading) {
+                        ZStack {
+                            DatePicker("", selection: $medicationLog.date)
+                                .accessibilityLabel(Text("Entry Date"))
+                                .offset(y: 20-min(scrollOffset.y, 20))
+                                .padding(.leading, -12)
+                                .opacity(1-toolbarOpacity)
+                            
+                            if geo.size.width < 500 {
+                                toolbarTitle(scrollProxy: proxy)
+                                    .frame(maxWidth: .infinity, alignment: .leading)
+                            } else if toolbarOpacity == 1 {
+                                toolbarScrollToTop(scrollProxy: proxy)
                             }
                         }
-                        .frame(maxWidth: .infinity)
                     }
-                    .buttonStyle(.borderedProminent)
-                    .background(Color(uiColor: .systemFill))
-                    .clipShape(RoundedRectangle(cornerRadius: 6))
-                    .disabled(medicationLog.takenMedications.isEmpty)
+                    
+                    ToolbarItemGroup(placement: .principal) {
+                        if geo.size.width > 500 {
+                            toolbarTitle(scrollProxy: proxy)
+                        } else {
+                            toolbarScrollToTop(scrollProxy: proxy)
+                        }
+                    }
+                    
+                    ToolbarItemGroup(placement: .topBarTrailing) {
+                        toolbarScrollToTop(scrollProxy: proxy)
+                        if showManageMedicationButton {
+                            Button {
+                                let medication = Medication.blank
+                                self.creatingMedication = medication
+                            } label: {
+                                Label("Manage Medications", systemImage: "gear.circle")
+                            }
+                        }
+                        
+                        if showAddMedicationButton {
+                            Button {
+                                let medication = Medication.blank
+                                self.creatingMedication = medication
+                            } label: {
+                                Label("Create Medication", systemImage: "plus.circle")
+                            }
+                        }
+                            
+                        Button {
+                            cancel()
+                        } label: {
+                            Label("Cancel", systemImage: "xmark.circle")
+                        }
+                    }
+                    
+                    ToolbarItemGroup(placement: .bottomBar) {
+                        Button {
+                            done()
+                        } label: {
+                            Group {
+                                if colorScheme == .dark && !medicationLog.takenMedications.isEmpty {
+                                    Text("Done")
+                                        .colorInvert()
+                                } else {
+                                    Text("Done")
+                                }
+                            }
+                            .frame(maxWidth: .infinity)
+                        }
+                        .buttonStyle(.borderedProminent)
+                        .background(Color(uiColor: .systemFill))
+                        .clipShape(RoundedRectangle(cornerRadius: 6))
+                        .disabled(medicationLog.takenMedications.isEmpty)
+                    }
                 }
-            }
-            .sheet(item: $creatingMedication) { item in
-                NavigationStack {
-                    CreateMedicationView(medication: item, in: modelContext)
+                .sheet(isPresented: $isShowingMedManager, content: {
+                    NavigationStack {
+                        MedicationManagementView()
+                    }
+                })
+                .sheet(item: $creatingMedication) { item in
+                    NavigationStack {
+                        CreateMedicationView(medication: item, in: modelContext)
+                    }
                 }
             }
         }

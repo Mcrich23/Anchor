@@ -43,7 +43,7 @@ struct MTakeActionView: View {
             NavigationStack {
                 Group {
                     if let isShowingAddMedicationLogEntry {
-                        AddMedicationLogView(medicationLog: isShowingAddMedicationLogEntry, in: modelContext)
+                        AddMedicationLogView(showManageMedicationButton: true, showAddMedicationButton: false, medicationLog: isShowingAddMedicationLogEntry, in: modelContext)
                             .environment(\.customDismiss, { self.isShowingAddMedicationLogEntry = nil })
                     } else {
                         MedicationLogsView()
