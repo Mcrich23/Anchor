@@ -47,10 +47,10 @@ struct MTakeActionView: View {
                             .environment(\.customDismiss, { self.isShowingAddMedicationLogEntry = nil })
                     } else {
                         MedicationLogsView()
-                            .scrollContentBackground(.hidden)
                     }
                 }
                 .frame(maxWidth: .infinity, maxHeight: .infinity)
+                .scrollContentBackground(.hidden)
                 .background(.ultraThinMaterial)
                 .background {
                     meshGradientBackground
@@ -59,6 +59,7 @@ struct MTakeActionView: View {
             }
                 .clipShape(RoundedRectangle(cornerRadius: 6))
                 .animation(.default, value: isShowingAddMedicationLogEntry)
+                .presentationBackground(.red)
         }
         .padding(.horizontal)
     }

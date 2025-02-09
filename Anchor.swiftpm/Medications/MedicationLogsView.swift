@@ -54,6 +54,8 @@ private struct MedicationLogsViewInternal: View {
             }
         }
         .navigationTitle("Medication Log")
+        .navigationBarTitleDisplayMode(.large)
+        .toolbarTitleDisplayMode(.large)
         .overlay(content: {
             if medicationLogs.isEmpty {
                 VStack {

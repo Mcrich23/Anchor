@@ -12,22 +12,30 @@ struct MigraineView: View {
     @State var isStartScreen = true
     @State var stepManager = MStepManager()
     @Namespace var navigationNamespace
+    @State var isStepsLoaded = false
     
     var body: some View {
         VStack {
             if !isStartScreen {
                 MigraineSplashView(isStartScreen: $isStartScreen)
                     .padding(.horizontal)
-            } else {
+            } else if isStepsLoaded {
                 MigraineSplashView(isStartScreen: .constant(false))
                     .padding(.horizontal)
                     .opacity(0)
                     .environment(\.navigationNamespace, nil)
             }
-            MigraineStepsView()
-                .opacity(isStartScreen ? 0 : 1)
+            if isStepsLoaded || !isStartScreen {
+                MigraineStepsView()
+                    .opacity(isStartScreen ? 0 : 1)
+            }
         }
         .padding()
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
+        .task {
+            try? await Task.sleep(for: .milliseconds(550))
+            isStepsLoaded = true
+        }
         .overlay {
             if isStartScreen {
                 MigraineSplashView(isStartScreen: $isStartScreen)
