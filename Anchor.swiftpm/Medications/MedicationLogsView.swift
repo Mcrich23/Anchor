@@ -149,10 +149,10 @@ private struct EntryLogMedicationView: View {
                 .foregroundStyle(.pink)
             Text(medication.underlyingMedication?.name ?? medication.name)
             
-            Text("\(medication.quantity)")
+            Text("\(medication.quantity) (\(medication.dosage))")
                 .padding(.vertical, 3)
                 .padding(.horizontal)
-                .background(Color.dynamicColor(light: .tertiarySystemBackground, dark: .tertiarySystemBackground), in: RoundedRectangle(cornerRadius: 6))
+                .background(Color.dynamicColor(light: .secondarySystemBackground, dark: .tertiarySystemBackground), in: RoundedRectangle(cornerRadius: 6))
         }
     }
 }

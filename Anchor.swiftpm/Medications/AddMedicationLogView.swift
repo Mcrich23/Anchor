@@ -41,13 +41,13 @@ struct AddMedicationLogView: View {
     @Environment(\.colorScheme) var colorScheme
     @State var creatingMedication: Medication?
     @State var isShowingMedManager = false
-    @State var scrollOffset: CGPoint = .zero
+    @State var scrollOffset: CGFloat = 0
     var toolbarOpacity: CGFloat {
-        let threshold: CGFloat = 30
+        let threshold: CGFloat = -16
         
-        guard scrollOffset.y > threshold else { return 0 }
+        guard scrollOffset > threshold else { return 0 }
         
-        return min(((scrollOffset.y-threshold)/30), 1)
+        return min(((scrollOffset-threshold)/30), 1)
     }
     
     func isTakingMedicationBinding(for medication: MedicationLogMed) -> Binding<Bool> {
@@ -113,7 +113,8 @@ struct AddMedicationLogView: View {
     var body: some View {
         GeometryReader { geo in
             ScrollViewReader { proxy in
-                OffsetObservingScrollView(offset: $scrollOffset) {
+//                OffsetObservingScrollView(offset: $scrollOffset) {
+        ScrollView {
                     VStack {
                         Text("Create Entry")
                             .font(.largeTitle)
@@ -158,13 +159,18 @@ struct AddMedicationLogView: View {
                     .padding()
                     .id("Main VStack")
                 }
+        .onScrollGeometryChange(for: CGFloat.self, of: { geo in
+            geo.contentOffset.y
+        }, action: { _, newValue in
+            self.scrollOffset = newValue
+        })
                 .navigationBarTitleDisplayMode(.inline)
                 .toolbar {
                     ToolbarItemGroup(placement: .topBarLeading) {
                         ZStack {
                             DatePicker("", selection: $medicationLog.date)
                                 .accessibilityLabel(Text("Entry Date"))
-                                .offset(y: 20-min(scrollOffset.y, 20))
+                                .offset(y: 20-min(56-scrollOffset, 20))
                                 .padding(.leading, -12)
                                 .opacity(1-toolbarOpacity)
                             
@@ -282,7 +288,7 @@ private struct MedicationTakingDualCellLayout: View {
     let isTakingMedicationBinding: (_ for: MedicationLogMed) -> Binding<Bool>
     
     var body: some View {
-        ViewThatFits(in: .horizontal) {
+//        ViewThatFits(in: .horizontal) {
 //            VStack {
 //                internalContent
 //            }
@@ -290,7 +296,7 @@ private struct MedicationTakingDualCellLayout: View {
             HStack(alignment: .top) {
                 internalContent
             }
-        }
+//        }
     }
     
     @ViewBuilder
@@ -341,6 +347,13 @@ private struct MedicationTakingCellView: View {
             VStack(alignment: .leading) {
                 HStack {
                     Text(medication.underlyingMedication?.name ?? medication.name)
+                    
+                    Text(medication.dosage)
+                        .padding(.vertical, 3)
+                        .padding(.horizontal)
+                        .background(Color.dynamicColor(light: .tertiarySystemBackground, dark: .tertiarySystemBackground), in: RoundedRectangle(cornerRadius: 6))
+                        .fixedSize(horizontal: true, vertical: false)
+                    
                     Spacer()
                     
                     Picker("Quantity", selection: $medication.quantity) {
@@ -353,22 +366,24 @@ private struct MedicationTakingCellView: View {
                         isTakingMedication = true
                     }
                 }
-                if !medication.notes.isEmpty {
-                    Divider()
-                    Text(medication.notes)
-                        .foregroundStyle(.secondary)
-                }
-                Divider()
-                switch isTakingMedication {
-                    case true:
-                    button
-                        .buttonStyle(.borderedProminent)
-                case false:
-                    button
-                        .buttonStyle(.bordered)
-                }
+//                if !medication.notes.isEmpty {
+//                    Divider()
+//                    Text(medication.notes)
+//                        .foregroundStyle(.secondary)
+//                        .fixedSize(horizontal: false, vertical: true)
+//                }
+//                Divider()
+//                switch isTakingMedication {
+//                    case true:
+//                    button
+//                        .buttonStyle(.borderedProminent)
+//                case false:
+//                    button
+//                        .buttonStyle(.bordered)
+//                }
             }
-            .frame(maxHeight: .infinity, alignment: .top)
+//            .frame(maxHeight: .infinity, alignment: .top)
+//            .fixedSize(horizontal: false, vertical: true)
         }
     }
 }
