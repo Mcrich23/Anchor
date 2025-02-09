@@ -120,6 +120,13 @@ private struct LogEntryView: View {
             ForEach(entry.takenMedications) { medication in
                 EntryLogMedicationView(medication: medication)
             }
+            
+            if let notes = entry.notes {
+                GroupBox {
+                    Text(notes)
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                }
+            }
         }
     }
 }

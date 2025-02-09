@@ -8,6 +8,7 @@
 import Foundation
 import SwiftData
 import Combine
+import SwiftUI
 
 extension NotificationCenter {
     var managedObjectContextDidSavePublisher: Publishers.ReceiveOn<NotificationCenter.Publisher, DispatchQueue> {
@@ -49,6 +50,7 @@ class MedicationLogMedArrayElement {
 class MedicationLog: Identifiable {
     var id: UUID = UUID()
     var date: Date
+    var notes: String?
     
     @Relationship(deleteRule: .cascade)
     var medications: [MedicationLogMedArrayElement]
@@ -57,12 +59,28 @@ class MedicationLog: Identifiable {
         medications.filter { $0.isTaken }.map({ $0.medication })
     }
     
-    init(date: Date, medications: [MedicationLogMedArrayElement]) {
-        self.date = date
-        self.medications = medications
+    @MainActor
+    var notesBinding: Binding<String> {
+        Binding {
+            self.notes ?? ""
+        } set: { newValue in
+            guard !newValue.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty else {
+                self.notes = nil
+                return
+            }
+            
+            self.notes = newValue
+        }
+
     }
     
-    @MainActor static var blank: MedicationLog { .init(date: .now, medications: []) }
+    init(date: Date, medications: [MedicationLogMedArrayElement], notes: String?) {
+        self.date = date
+        self.medications = medications
+        self.notes = notes
+    }
+    
+    @MainActor static var blank: MedicationLog { .init(date: .now, medications: [], notes: nil) }
 }
 
 @Model

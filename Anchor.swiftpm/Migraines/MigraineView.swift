@@ -13,18 +13,22 @@ struct MigraineView: View {
     @State var stepManager = MStepManager()
     @Namespace var navigationNamespace
     @State var isStepsLoaded = false
+    @State var isShowingNavigationBar = true
     
     var body: some View {
         VStack {
-            if !isStartScreen {
-                MigraineSplashView(isStartScreen: $isStartScreen)
-                    .padding(.horizontal)
-            } else if isStepsLoaded {
-                MigraineSplashView(isStartScreen: .constant(false))
-                    .padding(.horizontal)
-                    .opacity(0)
-                    .environment(\.navigationNamespace, nil)
+            if isShowingNavigationBar {
+                if !isStartScreen {
+                    MigraineSplashView(isStartScreen: $isStartScreen)
+                        .padding(.horizontal)
+                } else if isStepsLoaded {
+                    MigraineSplashView(isStartScreen: .constant(false))
+                        .padding(.horizontal)
+                        .opacity(0)
+                        .environment(\.navigationNamespace, nil)
+                }
             }
+            
             if isStepsLoaded || !isStartScreen {
                 MigraineStepsView()
                     .opacity(isStartScreen ? 0 : 1)
@@ -43,6 +47,7 @@ struct MigraineView: View {
             }
         }
         .environment(\.navigationNamespace, navigationNamespace)
+        .environment(\.isShowingNavigationBar, $isShowingNavigationBar)
         .environment(stepManager)
     }
 }

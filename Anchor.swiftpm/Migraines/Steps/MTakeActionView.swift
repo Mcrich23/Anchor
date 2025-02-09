@@ -15,7 +15,10 @@ struct MTakeActionView: View {
     @EnvironmentObject var meshBackgroundCircleViewModel: AnimatedMeshViewModel
     @State var isShowingAddMedicationLogEntry: MedicationLog? = .blank
     @State var isShowingMedicationLog = false
+    @FocusState var isEditingMedicationLog
     @Environment(\.modelContext) var modelContext
+    @Environment(\.isShowingNavigationButtons) var isShowingNavigationButtons
+    @Environment(\.isShowingNavigationBar) var isShowingNavigationBar
     
     var gradientColors: [Color] {
         .semiCircleGradientColorsInAnchor
@@ -35,15 +38,17 @@ struct MTakeActionView: View {
     
     var body: some View {
         VStack {
-            Text("Take Medication")
-                .font(.largeTitle)
-                .fontWeight(.semibold)
-            Text("Taking medication can be integral to managing migraines. If you have specific medication, or general pain medication, make sure to take it as directed.")
-                .minimumScaleFactor(0.7)
+            Group {
+                Text("Take Medication")
+                    .font(.largeTitle)
+                    .fontWeight(.semibold)
+                Text("Taking medication can be integral to managing migraines. If you have specific medication, or general pain medication, make sure to take it as directed.")
+                    .minimumScaleFactor(0.7)
+            }
             NavigationStack {
                 Group {
                     if let isShowingAddMedicationLogEntry {
-                        AddMedicationLogView(showManageMedicationButton: true, showAddMedicationButton: false, medicationLog: isShowingAddMedicationLogEntry, in: modelContext)
+                        AddMedicationLogView(showManageMedicationButton: true, showAddMedicationButton: false, isEditingMedicationLog: _isEditingMedicationLog, medicationLog: isShowingAddMedicationLogEntry, in: modelContext)
                             .environment(\.customDismiss, { self.isShowingAddMedicationLogEntry = nil })
                     } else {
                         MedicationLogsView()
@@ -61,6 +66,12 @@ struct MTakeActionView: View {
                 .animation(.default, value: isShowingAddMedicationLogEntry)
                 .presentationBackground(.red)
         }
+        .onChange(of: isEditingMedicationLog, initial: true, { _, newValue in
+            withAnimation {
+                self.isShowingNavigationButtons.wrappedValue = !newValue
+                self.isShowingNavigationBar.wrappedValue = !newValue
+            }
+        })
         .padding(.horizontal)
     }
     

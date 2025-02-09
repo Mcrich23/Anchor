@@ -11,12 +11,14 @@ import SwiftData
 struct AddMedicationLogView: View {
     let showManageMedicationButton: Bool
     let showAddMedicationButton: Bool
+    @FocusState var isEditingMedicationLog
     @Bindable var medicationLog: MedicationLog
     var modelContext: ModelContext
     
-    init(showManageMedicationButton: Bool = false, showAddMedicationButton: Bool = true, medicationLog: MedicationLog, in context: ModelContext) {
+    init(showManageMedicationButton: Bool = false, showAddMedicationButton: Bool = true, isEditingMedicationLog: FocusState<Bool> = FocusState(), medicationLog: MedicationLog, in context: ModelContext) {
         self.showManageMedicationButton = showManageMedicationButton
         self.showAddMedicationButton = showAddMedicationButton
+        self._isEditingMedicationLog = isEditingMedicationLog
         
         let registeredModel: MedicationLog? = context.registeredModel(for: medicationLog.id)
         
@@ -137,16 +139,16 @@ struct AddMedicationLogView: View {
                             if geo.size.width < 500 {
                                 VStack {
                                     ForEach(medications) { medication in
-                                        MedicationTakingCellView(medication: medication, medicationQuantity: medicationQuantityBinding(for: medication), isTakingMedication: isTakingMedicationBinding(for: medication))
+                                        MedicationTakingCellView(medication: medication, isTakingMedication: isTakingMedicationBinding(for: medication))
                                     }
                                 }
                             } else {
                                 VStack {
                                     ForEach(halfMedicationsCount, id: \.self) { i in
                                         if i < medications.count-1 {
-                                            MedicationTakingDualCellLayout(medication1: medications[i], medication2: medications[i+1], medicationQuantityBinding: medicationQuantityBinding, isTakingMedicationBinding: isTakingMedicationBinding)
+                                            MedicationTakingDualCellLayout(medication1: medications[i], medication2: medications[i+1], isTakingMedicationBinding: isTakingMedicationBinding)
                                         } else {
-                                            MedicationTakingDualCellLayout(medication1: medications[i], medication2: nil, medicationQuantityBinding: medicationQuantityBinding, isTakingMedicationBinding: isTakingMedicationBinding)
+                                            MedicationTakingDualCellLayout(medication1: medications[i], medication2: nil, isTakingMedicationBinding: isTakingMedicationBinding)
                                         }
                                     }
                                 }
@@ -209,26 +211,6 @@ struct AddMedicationLogView: View {
                             Label("Cancel", systemImage: "xmark.circle")
                         }
                     }
-                    
-                    ToolbarItemGroup(placement: .bottomBar) {
-                        Button {
-                            done()
-                        } label: {
-                            Group {
-                                if colorScheme == .dark && !medicationLog.takenMedications.isEmpty {
-                                    Text("Done")
-                                        .colorInvert()
-                                } else {
-                                    Text("Done")
-                                }
-                            }
-                            .frame(maxWidth: .infinity)
-                        }
-                        .buttonStyle(.borderedProminent)
-                        .background(Color(uiColor: .systemFill))
-                        .clipShape(RoundedRectangle(cornerRadius: 6))
-                        .disabled(medicationLog.takenMedications.isEmpty)
-                    }
                 }
                 .sheet(isPresented: $isShowingMedManager, content: {
                     NavigationStack {
@@ -242,6 +224,34 @@ struct AddMedicationLogView: View {
                 }
             }
         }
+        .safeAreaInset(edge: .bottom, content: {
+            VStack {
+                TextField("Write how you feel...", text: medicationLog.notesBinding, axis: .vertical)
+                    .textFieldStyle(.roundedBorder)
+                    .padding(.horizontal, 4)
+                    .focused($isEditingMedicationLog)
+                
+                Button {
+                    done()
+                } label: {
+                    Group {
+                        if colorScheme == .dark && !medicationLog.takenMedications.isEmpty {
+                            Text("Done")
+                                .colorInvert()
+                        } else {
+                            Text("Done")
+                        }
+                    }
+                    .frame(maxWidth: .infinity)
+                }
+                .buttonStyle(.borderedProminent)
+                .background(Color(uiColor: .secondarySystemFill))
+                .clipShape(RoundedRectangle(cornerRadius: 6))
+                .disabled(medicationLog.takenMedications.isEmpty && medicationLog.notes?.isEmpty != false)
+            }
+            .padding()
+            .background(.ultraThinMaterial)
+        })
         .onChange(of: queriedMedications, initial: true, { _, newValue in
             for medication in newValue where !medicationLog.medications.contains(where: { $0.medication.underlyingMedication?.id == medication.id }) {
                 let med = MedicationLogMed(from: medication)
@@ -270,7 +280,6 @@ struct AddMedicationLogView: View {
 private struct MedicationTakingDualCellLayout: View {
     let medication1: MedicationLogMed
     let medication2: MedicationLogMed?
-    let medicationQuantityBinding: (_ for: MedicationLogMed) -> Binding<Int>
     let isTakingMedicationBinding: (_ for: MedicationLogMed) -> Binding<Bool>
     
     var body: some View {
@@ -287,16 +296,15 @@ private struct MedicationTakingDualCellLayout: View {
     
     @ViewBuilder
     var internalContent: some View {
-        MedicationTakingCellView(medication: medication1, medicationQuantity: medicationQuantityBinding(medication1), isTakingMedication: isTakingMedicationBinding(medication1))
+        MedicationTakingCellView(medication: medication1, isTakingMedication: isTakingMedicationBinding(medication1))
         if let medication2 {
-            MedicationTakingCellView(medication: medication2, medicationQuantity: medicationQuantityBinding(medication2), isTakingMedication: isTakingMedicationBinding(medication2))
+            MedicationTakingCellView(medication: medication2, isTakingMedication: isTakingMedicationBinding(medication2))
         }
     }
 }
 
 private struct MedicationTakingCellView: View {
-    let medication: MedicationLogMed
-    @Binding var medicationQuantity: Int
+    @Bindable var medication: MedicationLogMed
     @Binding var isTakingMedication: Bool
     @Environment(\.colorScheme) var colorScheme
     
@@ -336,13 +344,13 @@ private struct MedicationTakingCellView: View {
                     Text(medication.underlyingMedication?.name ?? medication.name)
                     Spacer()
                     
-                    Picker("Quantity", selection: $medicationQuantity) {
+                    Picker("Quantity", selection: $medication.quantity) {
                         ForEach(1..<100) { i in
                             Text("\(i)")
                                 .tag(i)
                         }
                     }
-                    .onChange(of: medicationQuantity) { _, _ in
+                    .onChange(of: medication.quantity) { _, _ in
                         isTakingMedication = true
                     }
                 }

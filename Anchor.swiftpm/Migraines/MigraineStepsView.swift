@@ -31,10 +31,16 @@ final class MStepManager {
     }
 }
 
+extension EnvironmentValues {
+    @Entry var isShowingNavigationButtons: Binding<Bool> = .constant(false)
+    @Entry var isShowingNavigationBar: Binding<Bool> = .constant(false)
+}
+
 struct MigraineStepsView: View {
     @Environment(MStepManager.self) var stepManager
     @Environment(\.userInterfaceIdiom) var userInterfaceIdiom
     @Environment(\.navigationNamespace) var navigationNamespace
+    @State var isShowingNavigationButtons = false
     
     var body: some View {
         GeometryReader { geo in
@@ -55,7 +61,7 @@ struct MigraineStepsView: View {
                 }
             }
             .safeAreaInset(edge: .bottom) {
-                if stepManager.step != .drawing || userInterfaceIdiom != .phone {
+                if (stepManager.step != .drawing || userInterfaceIdiom != .phone) && isShowingNavigationButtons {
                     HStack {
                         if stepManager.step.rawValue != MigraineSteps.allCases.first?.rawValue {
                             Button("Back", systemImage: "chevron.left") {
@@ -82,6 +88,7 @@ struct MigraineStepsView: View {
             }
             .sensoryFeedback(.success, trigger: stepManager.step)
             .environment(\.geometrySize, geo.size)
+            .environment(\.isShowingNavigationButtons, $isShowingNavigationButtons)
         }
     }
 }
