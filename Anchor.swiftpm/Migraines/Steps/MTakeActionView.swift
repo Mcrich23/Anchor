@@ -90,7 +90,7 @@ struct MTakeActionView: View {
                     }
                     .buttonStyle(.borderedProminent)
                     Button {
-                        isShowingMedicationLog= true()
+                        isShowingMedicationLog = true
                     } label: {
                         Label("Medication Log", systemImage: "calendar.day.timeline.left")
                             .labelStyle(.iconOnly)
