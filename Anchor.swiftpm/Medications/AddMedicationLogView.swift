@@ -133,27 +133,6 @@ struct AddMedicationLogView: View {
                 .padding()
             }
             .navigationBarTitleDisplayMode(.inline)
-            .safeAreaInset(edge: .bottom, content: {
-                HStack {
-                    Button {
-                        done()
-                    } label: {
-                        Group {
-                            if colorScheme == .dark && !medicationLog.takenMedications.isEmpty {
-                                Text("Done")
-                                    .colorInvert()
-                            } else {
-                                Text("Done")
-                            }
-                        }
-                        .frame(maxWidth: .infinity)
-                    }
-                    .buttonStyle(.borderedProminent)
-                    .disabled(medicationLog.takenMedications.isEmpty)
-                }
-                .padding()
-                .background(.ultraThinMaterial)
-            })
             .toolbar {
                 ToolbarItemGroup(placement: .topBarLeading) {
                     ZStack {
@@ -188,6 +167,26 @@ struct AddMedicationLogView: View {
                     } label: {
                         Label("Cancel", systemImage: "xmark.circle")
                     }
+                }
+                
+                ToolbarItemGroup(placement: .bottomBar) {
+                    Button {
+                        done()
+                    } label: {
+                        Group {
+                            if colorScheme == .dark && !medicationLog.takenMedications.isEmpty {
+                                Text("Done")
+                                    .colorInvert()
+                            } else {
+                                Text("Done")
+                            }
+                        }
+                        .frame(maxWidth: .infinity)
+                    }
+                    .buttonStyle(.borderedProminent)
+                    .background(Color(uiColor: .systemFill))
+                    .clipShape(RoundedRectangle(cornerRadius: 6))
+                    .disabled(medicationLog.takenMedications.isEmpty)
                 }
             }
             .sheet(item: $creatingMedication) { item in

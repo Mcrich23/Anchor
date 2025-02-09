@@ -41,25 +41,22 @@ struct MTakeActionView: View {
             Text("Taking medication can be integral to managing migraines. If you have specific medication, or general pain medication, make sure to take it as directed.")
                 .minimumScaleFactor(0.7)
             NavigationStack {
+                Group {
                     if let isShowingAddMedicationLogEntry {
-//                        Text("Hi")
                         AddMedicationLogView(medicationLog: isShowingAddMedicationLogEntry, in: modelContext)
-                            .frame(maxWidth: .infinity, maxHeight: .infinity)
                             .environment(\.customDismiss, { self.isShowingAddMedicationLogEntry = nil })
-                            .background(.ultraThinMaterial)
-                            .background {
-                                meshGradientBackground
-                            }
-                            .scrollContentBackground(.hidden)
                     } else {
                         MedicationLogsView()
-                            .background(.ultraThinMaterial)
-                            .background {
-                                meshGradientBackground
-                            }
                             .scrollContentBackground(.hidden)
                     }
                 }
+                .frame(maxWidth: .infinity, maxHeight: .infinity)
+                .background(.ultraThinMaterial)
+                .background {
+                    meshGradientBackground
+                }
+                .toolbarBackground(.thinMaterial, for: .navigationBar)
+            }
                 .clipShape(RoundedRectangle(cornerRadius: 6))
                 .animation(.default, value: isShowingAddMedicationLogEntry)
         }
