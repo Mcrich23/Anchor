@@ -27,7 +27,7 @@ struct MedicationLogsView: View {
 
 // Actual View
 private struct MedicationLogsViewInternal: View {
-    @Query(filter: #Predicate<MedicationLog> { !$0.medications.isEmpty }, sort: \.date) var medicationLogs: [MedicationLog] = []
+    @Query(filter: #Predicate<MedicationLog> { !$0.medications.isEmpty || $0.notes != nil }, sort: \.date) var medicationLogs: [MedicationLog] = []
     @Environment(\.modelContext) var modelContext
     @Binding var isShowingAddMedicationLogView: MedicationLog?
     @Binding var isShowingMedManager: Bool
