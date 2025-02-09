@@ -31,7 +31,7 @@ struct MigraineSplashView: View {
                         if isStartScreen {
                             Button("Start Relief") {
                                 withAnimation(.easeInOut(duration: 1.2)) {
-                                    isStartScreen = true
+                                    isStartScreen = false
                                 }
                             }
                             .buttonStyle(.borderedProminent)
