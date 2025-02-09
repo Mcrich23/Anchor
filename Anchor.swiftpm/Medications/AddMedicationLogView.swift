@@ -42,8 +42,9 @@ struct AddMedicationLogView: View {
     @State var creatingMedication: Medication?
     @State var isShowingMedManager = false
     @State var scrollOffset: CGFloat = 0
+    @State var startingOffset: CGFloat = 0
     var toolbarOpacity: CGFloat {
-        let threshold: CGFloat = -16
+        let threshold: CGFloat = startingOffset+30
         
         guard scrollOffset > threshold else { return 0 }
         
@@ -162,6 +163,9 @@ struct AddMedicationLogView: View {
         .onScrollGeometryChange(for: CGFloat.self, of: { geo in
             geo.contentOffset.y
         }, action: { _, newValue in
+            if self.startingOffset == 0 {
+                self.startingOffset = newValue
+            }
             self.scrollOffset = newValue
         })
                 .navigationBarTitleDisplayMode(.inline)
@@ -170,7 +174,10 @@ struct AddMedicationLogView: View {
                         ZStack {
                             DatePicker("", selection: $medicationLog.date)
                                 .accessibilityLabel(Text("Entry Date"))
-                                .offset(y: 20-min(56-scrollOffset, 20))
+                                .offset(y: max(0, 20+(startingOffset-scrollOffset)))
+                                .onChange(of: scrollOffset, initial: false, { _, newValue in
+                                    print(startingOffset-newValue)
+                                })
                                 .padding(.leading, -12)
                                 .opacity(1-toolbarOpacity)
                             
@@ -366,24 +373,24 @@ private struct MedicationTakingCellView: View {
                         isTakingMedication = true
                     }
                 }
-//                if !medication.notes.isEmpty {
-//                    Divider()
-//                    Text(medication.notes)
-//                        .foregroundStyle(.secondary)
-//                        .fixedSize(horizontal: false, vertical: true)
-//                }
-//                Divider()
-//                switch isTakingMedication {
-//                    case true:
-//                    button
-//                        .buttonStyle(.borderedProminent)
-//                case false:
-//                    button
-//                        .buttonStyle(.bordered)
-//                }
+                if !medication.notes.isEmpty {
+                    Divider()
+                    Text(medication.notes)
+                        .foregroundStyle(.secondary)
+                        .fixedSize(horizontal: false, vertical: true)
+                }
+                Divider()
+                switch isTakingMedication {
+                    case true:
+                    button
+                        .buttonStyle(.borderedProminent)
+                case false:
+                    button
+                        .buttonStyle(.bordered)
+                }
             }
-//            .frame(maxHeight: .infinity, alignment: .top)
-//            .fixedSize(horizontal: false, vertical: true)
+            .frame(maxHeight: .infinity, alignment: .top)
+            .fixedSize(horizontal: false, vertical: true)
         }
     }
 }
