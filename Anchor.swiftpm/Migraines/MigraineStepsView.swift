@@ -37,6 +37,7 @@ extension EnvironmentValues {
 }
 
 struct MigraineStepsView: View {
+    let isStartScreen: Bool
     @Environment(MStepManager.self) var stepManager
     @Environment(\.userInterfaceIdiom) var userInterfaceIdiom
     @Environment(\.navigationNamespace) var navigationNamespace
@@ -61,9 +62,9 @@ struct MigraineStepsView: View {
                 }
             }
             .safeAreaInset(edge: .bottom) {
-                if (stepManager.step != .drawing || userInterfaceIdiom != .phone) && isShowingNavigationButtons {
+                if !isStartScreen && isShowingNavigationButtons {
                     HStack {
-                        if stepManager.step.rawValue != MigraineSteps.allCases.first?.rawValue {
+                        if (stepManager.step != .drawing || userInterfaceIdiom != .phone) && stepManager.step.rawValue != MigraineSteps.allCases.first?.rawValue {
                             Button("Back", systemImage: "chevron.left") {
                                 withAnimation {
                                     stepManager.previous()
@@ -73,7 +74,9 @@ struct MigraineStepsView: View {
                             .matchedGeometryEffect(id: "backButton", in: navigationNamespace)
                         }
                         Spacer()
-                        if stepManager.step.rawValue != MigraineSteps.allCases.last?.rawValue {
+                        AudioPlayerButtonView()
+                            .matchedGeometryEffect(id: "audioPlayerButton", in: navigationNamespace)
+                        if (stepManager.step != .drawing || userInterfaceIdiom != .phone) && stepManager.step.rawValue != MigraineSteps.allCases.last?.rawValue {
                             Button("Next", systemImage: "chevron.right") {
                                 withAnimation {
                                     stepManager.next()
@@ -83,7 +86,6 @@ struct MigraineStepsView: View {
                             .buttonStyle(.reliefNavigation)
                         }
                     }
-                    .padding()
                 }
             }
             .sensoryFeedback(.success, trigger: stepManager.step)

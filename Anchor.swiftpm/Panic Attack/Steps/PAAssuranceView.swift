@@ -89,7 +89,7 @@ struct PAAssuranceView: View {
                 .opacity(0.7)
                 .blur(radius: 15, opaque: true)
                 .clipShape(.circle)
-            .scaleEffect(1 + speechRecognizer.inputNoiseLevel)
+                .scaleEffect(1 + speechRecognizer.inputNoiseLevel)
         }
         .animation(.default, value: speechRecognizer.inputNoiseLevel)
         .padding()

@@ -32,4 +32,5 @@ extension View {
 extension EnvironmentValues {
     // Cannot set dynamic default because `UIDevice.current` is MainActor only
     @Entry var orientation: UIDeviceOrientation = .unknown
+    @Entry var nonFlatOrientation: UIDeviceOrientation = .unknown
 }

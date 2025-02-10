@@ -69,29 +69,29 @@ struct PanicAttackStepsView: View {
             }
         }
         .safeAreaInset(edge: .bottom) {
-            if stepManager.step != .drawing || userInterfaceIdiom != .phone {
-                HStack {
-                    if stepManager.step.rawValue != PanicAttackSteps.allCases.first?.rawValue {
-                        Button("Back", systemImage: "chevron.left") {
-                            withAnimation {
-                                stepManager.previous()
-                            }
+            HStack {
+                if (stepManager.step != .drawing || userInterfaceIdiom != .phone) && stepManager.step.rawValue != PanicAttackSteps.allCases.first?.rawValue {
+                    Button("Back", systemImage: "chevron.left") {
+                        withAnimation {
+                            stepManager.previous()
                         }
-                        .buttonStyle(.reliefNavigation)
-                        .matchedGeometryEffect(id: "backButton", in: navigationNamespace)
                     }
-                    Spacer()
-                    if stepManager.step.rawValue != PanicAttackSteps.allCases.last?.rawValue && stepManager.step.rawValue != PanicAttackSteps.allCases.first?.rawValue {
-                        Button("Next", systemImage: "chevron.right") {
-                            withAnimation {
-                                stepManager.next()
-                            }
-                        }
-                        .labelStyle(.oppositeOrderLabelStyle)
-                        .buttonStyle(.reliefNavigation)
-                    }
+                    .buttonStyle(.reliefNavigation)
+                    .matchedGeometryEffect(id: "backButton", in: navigationNamespace)
                 }
-                .padding()
+                
+                Spacer()
+                AudioPlayerButtonView()
+                    .matchedGeometryEffect(id: "audioPlayerButton", in: navigationNamespace)
+                if (stepManager.step != .drawing || userInterfaceIdiom != .phone) && stepManager.step.rawValue != PanicAttackSteps.allCases.last?.rawValue && stepManager.step.rawValue != PanicAttackSteps.allCases.first?.rawValue {
+                    Button("Next", systemImage: "chevron.right") {
+                        withAnimation {
+                            stepManager.next()
+                        }
+                    }
+                    .labelStyle(.oppositeOrderLabelStyle)
+                    .buttonStyle(.reliefNavigation)
+                }
             }
         }
         .sensoryFeedback(.success, trigger: stepManager.step)

@@ -30,12 +30,12 @@ struct MigraineView: View {
             }
             
             if isStepsLoaded || !isStartScreen {
-                MigraineStepsView()
+                MigraineStepsView(isStartScreen: isStartScreen)
                     .opacity(isStartScreen ? 0 : 1)
             }
         }
-        .padding()
         .frame(maxWidth: .infinity, maxHeight: .infinity)
+        .padding()
         .task {
             try? await Task.sleep(for: .milliseconds(600))
             isStepsLoaded = true
@@ -46,6 +46,14 @@ struct MigraineView: View {
                     .padding(.horizontal)
             }
         }
+        .overlay(alignment: .bottomTrailing, content: {
+            if isStartScreen {
+                AudioPlayerButtonView()
+                    .matchedGeometryEffect(id: "audioPlayerButton", in: navigationNamespace)
+                    .padding([.bottom, .trailing])
+                    .padding(.bottom, 4)
+            }
+        })
         .environment(\.navigationNamespace, navigationNamespace)
         .environment(\.isShowingNavigationBar, $isShowingNavigationBar)
         .environment(stepManager)

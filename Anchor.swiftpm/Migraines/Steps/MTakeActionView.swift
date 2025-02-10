@@ -17,6 +17,7 @@ struct MTakeActionView: View {
     @State var isShowingMedicationLog = false
     @FocusState var isEditingMedicationLog
     @Environment(\.modelContext) var modelContext
+    @Environment(\.orientation) var orientation
     @Environment(\.isShowingNavigationButtons) var isShowingNavigationButtons
     @Environment(\.isShowingNavigationBar) var isShowingNavigationBar
     
@@ -67,6 +68,8 @@ struct MTakeActionView: View {
                 .presentationBackground(.red)
         }
         .onChange(of: isEditingMedicationLog, initial: true, { _, newValue in
+            guard orientation.isLandscape else { return }
+            
             withAnimation {
                 self.isShowingNavigationButtons.wrappedValue = !newValue
                 self.isShowingNavigationBar.wrappedValue = !newValue

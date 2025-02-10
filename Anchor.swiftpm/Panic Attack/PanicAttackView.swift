@@ -22,6 +22,13 @@ struct PanicAttackView: View {
             }
         }
         .padding()
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
+        .overlay(alignment: .bottomTrailing, content: {
+            AudioPlayerButtonView()
+                .matchedGeometryEffect(id: "audioPlayerButton", in: navigationNamespace)
+                .padding([.bottom, .trailing])
+                .padding(.bottom, 4)
+        })
         .environment(\.navigationNamespace, navigationNamespace)
         .environment(stepManager)
     }
