@@ -84,8 +84,8 @@ struct AddMedicationLogView: View {
         return array
     }
     
-    var medications: [MedicationLogMed] {
-        medicationLog.medications.compactMap(\.medication).sorted(by: { $0.name < $1.name })
+    var medications: [MedicationLogMedArrayElement] {
+        medicationLog.medications.sorted(by: { $0.medication.name < $1.medication.name })
     }
     
     @ViewBuilder
@@ -114,7 +114,6 @@ struct AddMedicationLogView: View {
     var body: some View {
         GeometryReader { geo in
             ScrollViewReader { proxy in
-//                OffsetObservingScrollView(offset: $scrollOffset) {
         ScrollView {
                     VStack {
                         Text("Create Entry")
@@ -140,17 +139,18 @@ struct AddMedicationLogView: View {
                         } else {
                             if geo.size.width < 500 {
                                 VStack {
-                                    ForEach(medications) { medication in
-                                        MedicationTakingCellView(medication: medication, isTakingMedication: isTakingMedicationBinding(for: medication))
+                                    ForEach(medications) { medicationLogElement in
+                                        MedicationTakingCellView(medicationLogElement: medicationLogElement)
+                                            .id(medicationLogElement.id)
                                     }
                                 }
                             } else {
                                 VStack {
                                     ForEach(halfMedicationsCount, id: \.self) { i in
                                         if i < medications.count-1 {
-                                            MedicationTakingDualCellLayout(medication1: medications[i], medication2: medications[i+1], isTakingMedicationBinding: isTakingMedicationBinding)
+                                            MedicationTakingDualCellLayout(medication1: medications[i], medication2: medications[i+1])
                                         } else {
-                                            MedicationTakingDualCellLayout(medication1: medications[i], medication2: nil, isTakingMedicationBinding: isTakingMedicationBinding)
+                                            MedicationTakingDualCellLayout(medication1: medications[i], medication2: nil)
                                         }
                                     }
                                 }
@@ -175,9 +175,6 @@ struct AddMedicationLogView: View {
                             DatePicker("", selection: $medicationLog.date)
                                 .accessibilityLabel(Text("Entry Date"))
                                 .offset(y: max(0, 20+(startingOffset-scrollOffset)))
-                                .onChange(of: scrollOffset, initial: false, { _, newValue in
-                                    print(startingOffset-newValue)
-                                })
                                 .padding(.leading, -12)
                                 .opacity(1-toolbarOpacity)
                             
@@ -265,7 +262,7 @@ struct AddMedicationLogView: View {
             .background(.ultraThinMaterial)
         })
         .onChange(of: queriedMedications, initial: true, { _, newValue in
-            for medication in newValue where !medicationLog.medications.contains(where: { $0.medication.underlyingMedication?.id == medication.id }) {
+            for medication in newValue where !medicationLog.medications.contains(where: { $0.medication.underlyingMedication?.persistentModelID == medication.persistentModelID }) {
                 let med = MedicationLogMed(from: medication)
                 medicationLog.medications.append(MedicationLogMedArrayElement(isTaken: false, medication: med))
                 try? modelContext.save()
@@ -290,10 +287,9 @@ struct AddMedicationLogView: View {
 }
 
 private struct MedicationTakingDualCellLayout: View {
-    let medication1: MedicationLogMed
-    let medication2: MedicationLogMed?
-    let isTakingMedicationBinding: (_ for: MedicationLogMed) -> Binding<Bool>
-    
+    let medication1: MedicationLogMedArrayElement
+    let medication2: MedicationLogMedArrayElement?
+
     var body: some View {
 //        ViewThatFits(in: .horizontal) {
 //            VStack {
@@ -308,21 +304,20 @@ private struct MedicationTakingDualCellLayout: View {
     
     @ViewBuilder
     var internalContent: some View {
-        MedicationTakingCellView(medication: medication1, isTakingMedication: isTakingMedicationBinding(medication1))
+        MedicationTakingCellView(medicationLogElement: medication1)
         if let medication2 {
-            MedicationTakingCellView(medication: medication2, isTakingMedication: isTakingMedicationBinding(medication2))
+            MedicationTakingCellView(medicationLogElement: medication2)
         }
     }
 }
 
 private struct MedicationTakingCellView: View {
-    @Bindable var medication: MedicationLogMed
-    @Binding var isTakingMedication: Bool
+    @Bindable var medicationLogElement: MedicationLogMedArrayElement
     @Environment(\.colorScheme) var colorScheme
     
     @ViewBuilder
     var buttonLabel: some View {
-        switch isTakingMedication {
+        switch medicationLogElement.isTaken {
         case true:
             Label("Taken", systemImage: "checkmark.circle")
                 .labelStyle(.titleAndIcon)
@@ -335,10 +330,10 @@ private struct MedicationTakingCellView: View {
     @ViewBuilder
     var button: some View {
         Button {
-            isTakingMedication = true
+            medicationLogElement.isTaken.toggle()
         } label: {
             Group {
-                if colorScheme == .dark && isTakingMedication {
+                if colorScheme == .dark && medicationLogElement.isTaken {
                     buttonLabel
                         .colorInvert()
                 } else {
@@ -353,9 +348,9 @@ private struct MedicationTakingCellView: View {
         GroupBox {
             VStack(alignment: .leading) {
                 HStack {
-                    Text(medication.underlyingMedication?.name ?? medication.name)
+                    Text(medicationLogElement.medication.underlyingMedication?.name ?? medicationLogElement.medication.name)
                     
-                    Text(medication.dosage)
+                    Text(medicationLogElement.medication.dosage)
                         .padding(.vertical, 3)
                         .padding(.horizontal)
                         .background(Color.dynamicColor(light: .tertiarySystemBackground, dark: .tertiarySystemBackground), in: RoundedRectangle(cornerRadius: 6))
@@ -363,24 +358,24 @@ private struct MedicationTakingCellView: View {
                     
                     Spacer()
                     
-                    Picker("Quantity", selection: $medication.quantity) {
+                    Picker("Quantity", selection: $medicationLogElement.medication.quantity) {
                         ForEach(1..<100) { i in
                             Text("\(i)")
                                 .tag(i)
                         }
                     }
-                    .onChange(of: medication.quantity) { _, _ in
-                        isTakingMedication = true
+                    .onChange(of: medicationLogElement.medication.quantity) { _, _ in
+                        medicationLogElement.isTaken = true
                     }
                 }
-                if !medication.notes.isEmpty {
+                if !medicationLogElement.medication.notes.isEmpty {
                     Divider()
-                    Text(medication.notes)
+                    Text(medicationLogElement.medication.notes)
                         .foregroundStyle(.secondary)
                         .fixedSize(horizontal: false, vertical: true)
                 }
                 Divider()
-                switch isTakingMedication {
+                switch medicationLogElement.isTaken {
                     case true:
                     button
                         .buttonStyle(.borderedProminent)
