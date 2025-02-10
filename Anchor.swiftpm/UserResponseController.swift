@@ -13,7 +13,7 @@ actor UserResponseController: ObservableObject {
     private var avplayer: AVAudioPlayer?
     private let musicURL: URL? = Bundle.main.url(forResource: "Tranquility – www.fesliyanstudios.com", withExtension: "mp3")
     @AppStorage("shouldPlayMusic") @MainActor private(set) var shouldPlayMusic = true
-    private let audioVolume: Float = 0.75
+    private let audioVolume: Float = 1
     private let audioFadeDuration: TimeInterval = 1.5
     
     init() {
