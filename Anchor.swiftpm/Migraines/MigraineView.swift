@@ -37,7 +37,7 @@ struct MigraineView: View {
         .padding()
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .task {
-            try? await Task.sleep(for: .milliseconds(550))
+            try? await Task.sleep(for: .milliseconds(600))
             isStepsLoaded = true
         }
         .overlay {
