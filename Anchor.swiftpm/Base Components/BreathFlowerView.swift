@@ -30,15 +30,12 @@ struct BreathFlowerView: View {
     
     @Environment(\.geometrySize) private var geo
     @Environment(\.colorScheme) private var colorScheme
-    @Environment(\.orientation) private var orientation
-    @State private var previousOrientation: UIDeviceOrientation = UIDevice.current.orientation
+    @Environment(\.nonFlatOrientation) private var nonFlatOrientation
     @State private var hapticEngine: CHHapticEngine?
     let stepDuration = 4.0 // Keep at whole seconds
     
     var scaleModifier: CGFloat {
-        let orientation = self.orientation.isFlat ? self.previousOrientation : self.orientation
-        
-        switch orientation.isPortrait {
+        switch nonFlatOrientation.isPortrait {
         case true:
             return geo.height*1.3
         case false:
@@ -110,9 +107,6 @@ struct BreathFlowerView: View {
                     .multilineTextAlignment(.center)
             }
         }
-        .onChange(of: orientation, initial: true, { oldValue, newValue in
-            self.previousOrientation = oldValue
-        })
         .onAppear {
             prepareHaptics()
         }
