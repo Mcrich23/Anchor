@@ -51,7 +51,7 @@ struct MigraineView: View {
                 AudioPlayerButtonView()
                     .matchedGeometryEffect(id: "audioPlayerButton", in: navigationNamespace)
                     .padding([.bottom, .trailing])
-                    .padding(.bottom, 4)
+                    .padding(.bottom, 6)
             }
         })
         .environment(\.navigationNamespace, navigationNamespace)
