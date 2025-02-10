@@ -44,7 +44,7 @@ struct AddMedicationLogView: View {
     @State var scrollOffset: CGFloat = 0
     @State var startingOffset: CGFloat = 0
     var toolbarOpacity: CGFloat {
-        let threshold: CGFloat = startingOffset+30
+        let threshold: CGFloat = startingOffset+45
         
         guard scrollOffset > threshold else { return 0 }
         
