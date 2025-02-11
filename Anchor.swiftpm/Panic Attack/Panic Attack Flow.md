@@ -22,6 +22,6 @@
 
 # Sources
 https://www.medicalnewstoday.com/articles/321510#methods
-Conversation with Dr. Matthew Hopperstad
+Conversation with Dr. Matthew Hopperstad MD
 https://www.actmindfully.com.au/upimages/Dropping_anchor_script.pdf
 https://www.flourishmindfully.com.au/blog/dropping-anchor
