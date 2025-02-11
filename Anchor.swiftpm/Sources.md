@@ -6,7 +6,7 @@
 - https://developer.apple.com/tutorials/app-dev-training/transcribing-speech-to-text
 
 ## Icon
-- https://vectorportal.com/vector/anchor-vector-drawing/13185
+- https://www.flaticon.com/free-icon/anchor_4287284
 - Generated with the [Bakery App](https://apps.apple.com/us/app/bakery-simple-icon-creator/id1575220747?mt=12)
 
 ## Color Science
