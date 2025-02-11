@@ -86,6 +86,7 @@ struct MigraineStepsView: View {
                             .buttonStyle(.reliefNavigation)
                         }
                     }
+                    .padding(.horizontal)
                 }
             }
             .sensoryFeedback(.success, trigger: stepManager.step)

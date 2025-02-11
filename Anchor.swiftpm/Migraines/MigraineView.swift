@@ -35,7 +35,6 @@ struct MigraineView: View {
             }
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
-        .padding()
         .task {
             try? await Task.sleep(for: .milliseconds(600))
             isStepsLoaded = true
@@ -50,8 +49,7 @@ struct MigraineView: View {
             if isStartScreen {
                 AudioPlayerButtonView()
                     .matchedGeometryEffect(id: "audioPlayerButton", in: navigationNamespace)
-                    .padding([.bottom, .trailing])
-                    .padding(.bottom, 6)
+                    .padding(.trailing)
             }
         })
         .environment(\.navigationNamespace, navigationNamespace)

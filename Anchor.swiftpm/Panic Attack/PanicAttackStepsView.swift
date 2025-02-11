@@ -93,6 +93,7 @@ struct PanicAttackStepsView: View {
                     .buttonStyle(.reliefNavigation)
                 }
             }
+            .padding(.horizontal)
         }
         .sensoryFeedback(.success, trigger: stepManager.step)
         .onGeometryChange(for: CGSize.self, of: { proxy in

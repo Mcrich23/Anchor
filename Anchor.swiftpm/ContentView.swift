@@ -106,7 +106,7 @@ struct ContentView: View {
         .overlay(alignment: .bottomTrailing, content: {
             if selectedAnchor == nil {
                 AudioPlayerButtonView()
-                    .padding([.bottom, .trailing])
+                    .padding(.trailing)
             }
         })
         .sheet(isPresented: $isShowingMedLog, content: {
