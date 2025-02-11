@@ -17,8 +17,8 @@ enum UserResponseControllerSoundEffect {
     var fileName: String {
         switch self {
         case .complete: "navigation-level-passed-pixabay"
-        case .primaryClick: "primary-button-click-pixabay"
-        case .secondaryClick: "secondary-click-button-pixabay"
+        case .primaryClick: "modern-button-click-pixabay"
+        case .secondaryClick: "click-button-app-pixabay"
         }
     }
 }
@@ -34,6 +34,8 @@ actor UserResponseController: ObservableObject {
     }
     
     func playSoundEffect(_ effect: UserResponseControllerSoundEffect) async {
+//        guard effect != .primaryClick else { return }
+        
         guard let url = Bundle.main.url(forResource: effect.fileName, withExtension: "mp3") else {
             return
         }
@@ -119,6 +121,13 @@ struct AudioPlayerButtonView: View {
     var body: some View {
         Button {
             Task {
+                switch !userResponseController.shouldPlayMusic {
+                case true:
+                    await userResponseController.playSoundEffect(.primaryClick)
+                case false:
+                    await userResponseController.playSoundEffect(.secondaryClick)
+                }
+                
                 await userResponseController.toggleMusic()
             }
         } label: {
@@ -131,6 +140,5 @@ struct AudioPlayerButtonView: View {
         }
         .foregroundStyle(.white)
         .animation(.default, value: userResponseController.shouldPlayMusic)
-        .buttonStyle(.reactive)
     }
 }

@@ -334,6 +334,12 @@ private struct MedicationTakingCellView: View {
     @ViewBuilder
     var button: some View {
         Button {
+            switch !medicationLogElement.isTaken {
+            case true:
+                userResponseController.playSoundEffect(.primaryClick)
+            case false:
+                userResponseController.playSoundEffect(.secondaryClick)
+            }
             medicationLogElement.isTaken.toggle()
         } label: {
             Group {
@@ -346,7 +352,6 @@ private struct MedicationTakingCellView: View {
             }
             .frame(maxWidth: .infinity)
         }
-        .buttonStyle(.reactive)
     }
     
     var body: some View {
@@ -383,10 +388,10 @@ private struct MedicationTakingCellView: View {
                 switch medicationLogElement.isTaken {
                     case true:
                     button
-                        .buttonStyle(.secondaryReactiveBorderedProminent)
+                        .buttonStyle(.borderedProminent)
                 case false:
                     button
-                        .buttonStyle(.secondaryReactiveBordered)
+                        .buttonStyle(.bordered)
                 }
             }
             .frame(maxHeight: .infinity, alignment: .top)

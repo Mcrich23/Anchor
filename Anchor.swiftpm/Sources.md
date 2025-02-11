@@ -20,3 +20,12 @@
 - https://www.actmindfully.com.au/upimages/Dropping_anchor_script.pdf
 - https://www.flourishmindfully.com.au/blog/dropping-anchor
 
+## Audio
+
+### Fesliyan Studios, [Usage Policy](https://www.fesliyanstudios.com/policy)
+- [Tranquility by David Renda](https://www.fesliyanstudios.com/royalty-free-music/download/tranquility/331)
+
+### Pixabay, [License](https://pixabay.com/service/license-summary/)
+- [Level Passed by Universfield](https://pixabay.com/sound-effects/level-passed-142971/)
+- [Click Button App by Universfield](https://pixabay.com/sound-effects/click-button-app-147358/)
+- [Modern Button Click by freesoundeffects](https://pixabay.com/sound-effects/modern-button-click-291234/)
