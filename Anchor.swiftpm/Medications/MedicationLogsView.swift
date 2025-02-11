@@ -10,12 +10,17 @@ import SwiftData
 
 // Exists to Refresh Data when SwiftData is updated by subviews
 struct MedicationLogsView: View {
+    let isShowingCloseButton: Bool
     @State private var contextDidSaveDate = Date()
     @State var isShowingAddMedicationLogView: MedicationLog? = nil
     @State var isShowingMedManager = false
     
+    init(isShowingCloseButton: Bool = true) {
+        self.isShowingCloseButton = isShowingCloseButton
+    }
+    
     var body: some View {
-        MedicationLogsViewInternal(isShowingAddMedicationLogView: $isShowingAddMedicationLogView, isShowingMedManager: $isShowingMedManager)
+        MedicationLogsViewInternal(isShowingAddMedicationLogView: $isShowingAddMedicationLogView, isShowingMedManager: $isShowingMedManager, isShowingCloseButton: isShowingCloseButton)
             .id(contextDidSaveDate)
             .onReceive(NotificationCenter.default.managedObjectContextDidSavePublisher) { _ in
                 guard !isShowingMedManager && isShowingAddMedicationLogView == nil else { return }
@@ -29,8 +34,10 @@ struct MedicationLogsView: View {
 private struct MedicationLogsViewInternal: View {
     @Query(filter: #Predicate<MedicationLog> { !$0.medications.isEmpty || $0.notes != nil }, sort: \.date, order: .reverse) var medicationLogs: [MedicationLog] = []
     @Environment(\.modelContext) var modelContext
+    @Environment(\.dismiss) var dismiss
     @Binding var isShowingAddMedicationLogView: MedicationLog?
     @Binding var isShowingMedManager: Bool
+    let isShowingCloseButton: Bool
     @EnvironmentObject var userResponseController: UserResponseController
     
     var body: some View {
@@ -99,6 +106,15 @@ private struct MedicationLogsViewInternal: View {
                     Label("Create Entry", systemImage: "plus.circle")
                 }
                 .buttonStyle(.reactive)
+                
+                if isShowingCloseButton {
+                    Button {
+                        dismiss()
+                    } label: {
+                        Label("Close", systemImage: "xmark.circle")
+                    }
+                    .buttonStyle(.reactive)
+                }
             }
         }
         .sheet(isPresented: $isShowingMedManager, content: {

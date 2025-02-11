@@ -5,6 +5,10 @@
 - https://github.com/Enryun/Flowers
 - https://developer.apple.com/tutorials/app-dev-training/transcribing-speech-to-text
 
+## Icon
+- https://vectorportal.com/vector/anchor-vector-drawing/13185
+- Generated with the [Bakery App](https://apps.apple.com/us/app/bakery-simple-icon-creator/id1575220747?mt=12)
+
 ## Color Science
 - https://www.verywellhealth.com/migraine-light-therapy-4114138
 - https://www.moffitt.org/endeavor/archive/color-your-world-to-relieve-stress

@@ -53,7 +53,7 @@ struct MTakeActionView: View {
                         AddMedicationLogView(showManageMedicationButton: true, showAddMedicationButton: false, isEditingMedicationLog: _isEditingMedicationLog, medicationLog: isShowingAddMedicationLogEntry, in: modelContext)
                             .environment(\.customDismiss, { self.isShowingAddMedicationLogEntry = nil })
                     } else {
-                        MedicationLogsView()
+                        MedicationLogsView(isShowingCloseButton: false)
                     }
                 }
                 .frame(maxWidth: .infinity, maxHeight: .infinity)
