@@ -41,9 +41,11 @@ struct AddMedicationLogView: View {
     @Environment(\.colorScheme) var colorScheme
     @State var creatingMedication: Medication?
     @State var isShowingMedManager = false
-    @State var scrollOffset: CGFloat = 0
-    @State var startingOffset: CGFloat = 0
+    @State var scrollOffset: CGFloat?
+    @State var startingOffset: CGFloat?
     var toolbarOpacity: CGFloat {
+        guard let startingOffset, let scrollOffset else { return 0 }
+        
         let threshold: CGFloat = startingOffset+45
         
         guard scrollOffset > threshold else { return 0 }
@@ -163,10 +165,12 @@ struct AddMedicationLogView: View {
         .onScrollGeometryChange(for: CGFloat.self, of: { geo in
             geo.contentOffset.y
         }, action: { _, newValue in
-            if self.startingOffset == 0 {
-                self.startingOffset = newValue
-            }
             self.scrollOffset = newValue
+        })
+        .onScrollPhaseChange({ oldPhase, newPhase in
+            if startingOffset == nil {
+                self.startingOffset = scrollOffset
+            }
         })
                 .navigationBarTitleDisplayMode(.inline)
                 .toolbar {
@@ -174,7 +178,7 @@ struct AddMedicationLogView: View {
                         ZStack {
                             DatePicker("", selection: $medicationLog.date)
                                 .accessibilityLabel(Text("Entry Date"))
-                                .offset(y: max(0, 20+(startingOffset-scrollOffset)))
+                                .offset(y: max(0, 20+((startingOffset ?? scrollOffset ?? 0)-(scrollOffset ?? 0))))
                                 .padding(.leading, -12)
                                 .opacity(1-toolbarOpacity)
                             
