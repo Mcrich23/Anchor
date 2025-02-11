@@ -336,9 +336,9 @@ private struct MedicationTakingCellView: View {
         Button {
             switch !medicationLogElement.isTaken {
             case true:
-                userResponseController.playSoundEffect(.primaryClick)
+                userResponseController.playSoundEffect(.select)
             case false:
-                userResponseController.playSoundEffect(.secondaryClick)
+                userResponseController.playSoundEffect(.deselect)
             }
             medicationLogElement.isTaken.toggle()
         } label: {

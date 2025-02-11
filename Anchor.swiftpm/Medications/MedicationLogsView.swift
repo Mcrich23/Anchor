@@ -31,6 +31,7 @@ private struct MedicationLogsViewInternal: View {
     @Environment(\.modelContext) var modelContext
     @Binding var isShowingAddMedicationLogView: MedicationLog?
     @Binding var isShowingMedManager: Bool
+    @EnvironmentObject var userResponseController: UserResponseController
     
     var body: some View {
         List {
@@ -46,6 +47,7 @@ private struct MedicationLogsViewInternal: View {
                 }
             }
             .onDelete { indexSet in
+                userResponseController.playSoundEffect(.delete)
                 for index in indexSet {
                     let log = medicationLogs[index]
                     modelContext.delete(log)
@@ -54,6 +56,7 @@ private struct MedicationLogsViewInternal: View {
                 try? modelContext.save()
             }
         }
+        .animation(.default, value: medicationLogs)
         .navigationTitle("Medication Log")
         .navigationBarTitleDisplayMode(.large)
         .toolbarTitleDisplayMode(.large)

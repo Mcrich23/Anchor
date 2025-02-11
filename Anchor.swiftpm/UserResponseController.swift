@@ -11,14 +11,20 @@ import SwiftUI
 
 enum UserResponseControllerSoundEffect {
     case complete
+    
     case primaryClick
     case secondaryClick
+    
+    case select
+    case deselect
+    
+    case delete
     
     var fileName: String {
         switch self {
         case .complete: "navigation-level-passed-pixabay"
-        case .primaryClick: "modern-button-click-pixabay"
-        case .secondaryClick: "click-button-app-pixabay"
+        case .primaryClick, .delete, .select: "modern-button-click-pixabay"
+        case .secondaryClick, .deselect: "click-button-app-pixabay"
         }
     }
 }
@@ -123,9 +129,9 @@ struct AudioPlayerButtonView: View {
             Task {
                 switch !userResponseController.shouldPlayMusic {
                 case true:
-                    await userResponseController.playSoundEffect(.primaryClick)
+                    await userResponseController.playSoundEffect(.select)
                 case false:
-                    await userResponseController.playSoundEffect(.secondaryClick)
+                    await userResponseController.playSoundEffect(.deselect)
                 }
                 
                 await userResponseController.toggleMusic()

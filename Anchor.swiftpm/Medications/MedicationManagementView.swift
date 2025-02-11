@@ -13,6 +13,7 @@ struct MedicationManagementView: View {
     @Environment(\.dismiss) var dismiss
     @Environment(\.modelContext) var modelContext
     @State var creatingMedication: Medication?
+    @EnvironmentObject var userResponseController: UserResponseController
     
     var body: some View {
         List {
@@ -28,6 +29,7 @@ struct MedicationManagementView: View {
                 }
             }
             .onDelete { indexSet in
+                userResponseController.playSoundEffect(.delete)
                 for index in indexSet {
                     let medication = medications[index]
                     modelContext.delete(medication)
@@ -57,6 +59,7 @@ struct MedicationManagementView: View {
         .toolbar {
             ToolbarItemGroup(placement: .topBarLeading) {
                 EditButton()
+                    .buttonStyle(.reactive)
             }
             
             ToolbarItemGroup(placement: .topBarTrailing) {
