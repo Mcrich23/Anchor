@@ -35,7 +35,7 @@ struct PanicAttackSplashView: View {
                                     isStartScreen = false
                                 }
                             }
-                            .buttonStyle(.borderedProminent)
+                            .buttonStyle(.reactiveBorderedProminent)
                         }
                     }
                 }

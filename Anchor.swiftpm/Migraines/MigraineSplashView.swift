@@ -34,7 +34,7 @@ struct MigraineSplashView: View {
                                     isStartScreen = false
                                 }
                             }
-                            .buttonStyle(.borderedProminent)
+                            .buttonStyle(.reactiveBorderedProminent)
                         }
                     }
                 }

@@ -17,20 +17,24 @@ enum BreathState: String, CaseIterable {
 struct BreathFlowerView: View {
     let pistilColor: Color
     let petalColor: Color
+    let isVisible: Bool
     
-    init(pistilColor: Color = .purple, petalColor: Color = .indigo) {
+    init(pistilColor: Color = .purple, petalColor: Color = .indigo, isVisible: Bool) {
         self.pistilColor = pistilColor
         self.petalColor = petalColor
+        self.isVisible = isVisible
     }
     
     @State private var isFlowerExpanded: Bool = false
     @State private var breathState: BreathState?
     @State private var isBreathing: Bool = false
     @State private var countdown: Int = 4
+    @State private var breathTask: Task<Void, Error>?
     
     @Environment(\.geometrySize) private var geo
     @Environment(\.colorScheme) private var colorScheme
     @Environment(\.nonFlatOrientation) private var nonFlatOrientation
+    @EnvironmentObject var userResponseController: UserResponseController
     @State private var hapticEngine: CHHapticEngine?
     let stepDuration = 4.0 // Keep at whole seconds
     
@@ -94,6 +98,7 @@ struct BreathFlowerView: View {
                 .font(.title)
                 .foregroundStyle(.white)
                 .fontWeight(.semibold)
+                .buttonStyle(.secondaryReactive)
             } else if let breathState {
                 VStack {
                     Text(breathState.rawValue)
@@ -110,6 +115,10 @@ struct BreathFlowerView: View {
         .onAppear {
             prepareHaptics()
         }
+        .onChange(of: isVisible) { _, newValue in
+            guard !newValue else { return }
+            breathTask?.cancel()
+        }
     }
     
     @ViewBuilder
@@ -122,13 +131,15 @@ struct BreathFlowerView: View {
     }
     
     func runBreath() {
-        Task {
+        self.breathTask?.cancel()
+        self.breathTask = Task {
             withAnimation {
                 isBreathing = true
             }
             for i in 0..<4 {
                 await breath(holdAtEnd: i < 3)
             }
+            await userResponseController.playSoundEffect(.complete)
             withAnimation {
                 isBreathing = false
             }
@@ -174,6 +185,7 @@ struct BreathFlowerView: View {
             self.countdown = Int(stepDuration.rounded(.up))
             breathState = .breathIn
         }
+        await userResponseController.playSoundEffect(.secondaryClick)
         countdown(from: Int(stepDuration.rounded(.up)))
         await withCheckedContinuation { continuation in
             withAnimation(.easeInOut(duration: stepDuration)) {
@@ -186,12 +198,14 @@ struct BreathFlowerView: View {
             self.countdown = Int(stepDuration.rounded(.up))
             breathState = .hold
         }
+        await userResponseController.playSoundEffect(.secondaryClick)
         countdown(from: Int(stepDuration.rounded(.up)))
         try? await Task.sleep(for: .seconds(stepDuration))
         withAnimation {
             self.countdown = Int(stepDuration.rounded(.up))
             breathState = .breathOut
         }
+        await userResponseController.playSoundEffect(.primaryClick)
         countdown(from: Int(stepDuration.rounded(.up)))
         await withCheckedContinuation { continuation in
             withAnimation(.easeInOut(duration: stepDuration)) {
@@ -205,6 +219,7 @@ struct BreathFlowerView: View {
                 self.countdown = Int(stepDuration.rounded(.up))
                 breathState = .hold
             }
+            await userResponseController.playSoundEffect(.primaryClick)
             countdown(from: Int(stepDuration.rounded(.up)))
             try? await Task.sleep(for: .seconds(stepDuration))
         }

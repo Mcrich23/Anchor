@@ -23,6 +23,7 @@ struct MedicationManagementView: View {
                     } label: {
                         MedicationCellView(medication: medication)
                     }
+                    .buttonStyle(.reactive)
                     .foregroundStyle(.primary, .secondary, .tertiary)
                 }
             }
@@ -48,7 +49,7 @@ struct MedicationManagementView: View {
                             self.creatingMedication = medication
                         }
                         .buttonBorderShape(.roundedRectangle)
-                        .buttonStyle(.borderedProminent)
+                        .buttonStyle(.reactiveBorderedProminent)
                     }
                 }
             }
@@ -65,11 +66,13 @@ struct MedicationManagementView: View {
                 } label: {
                     Label("Create Medication", systemImage: "plus.circle")
                 }
+                .buttonStyle(.reactive)
                 Button {
                     dismiss()
                 } label: {
                     Label("Close", systemImage: "xmark.circle")
                 }
+                .buttonStyle(.reactive)
             }
         }
         .sheet(item: $creatingMedication) { item in

@@ -28,6 +28,7 @@ struct PAAssuranceView: View {
     @Environment(PAStepManager.self) var stepManager
     @State private var step: PAAssuranceStep = .intro
     @Environment(\.geometrySize) var geo
+    @EnvironmentObject var userResponseController: UserResponseController
     @StateObject var speechRecognizer = SpeechRecognizer()
     @State private var isRecording = false
     let mantra = "I am experiencing a panic attack. It is okay to feel this way. I don't need to escape it, just work with it."
@@ -118,7 +119,7 @@ struct PAAssuranceView: View {
                     .labelStyle(.titleOnly)
                     .frame(maxWidth: 200, alignment: .center)
             }
-            .buttonStyle(.borderedProminent)
+            .buttonStyle(.reactiveBorderedProminent)
         }
     }
     
@@ -166,6 +167,7 @@ struct PAAssuranceView: View {
             guard numberOfTimesMantraSaid >= 3 else { return }
             Task {
                 try? await Task.sleep(for: .seconds(1))
+                await self.userResponseController.playSoundEffect(.complete)
                 withAnimation {
                     step.next()
                 } completion: {
@@ -214,6 +216,7 @@ struct PAAssuranceView: View {
                         .fill(.ultraThinMaterial)
                 }
         }
+        .buttonStyle(.reactive)
     }
     
     @ViewBuilder
@@ -228,12 +231,14 @@ struct PAAssuranceView: View {
                 .font(.title)
                 .fontWeight(.semibold)
                 .foregroundStyle(colorScheme == .light ? .white: .black)
-            Button(action: stepManager.next) {
+            Button {
+                stepManager.next()
+            } label: {
                 Label("Continue", systemImage: "chevron.right")
                     .labelStyle(.titleOnly)
                     .frame(maxWidth: 200, alignment: .center)
             }
-            .buttonStyle(.borderedProminent)
+            .buttonStyle(.reactiveBorderedProminent)
         }
     }
     

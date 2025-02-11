@@ -9,8 +9,47 @@ import Foundation
 import AVFoundation
 import SwiftUI
 
+enum UserResponseControllerSoundEffect {
+    case complete
+    case primaryClick
+    case secondaryClick
+    
+    var fileName: String {
+        switch self {
+        case .complete: "navigation-level-passed-pixabay"
+        case .primaryClick: "primary-button-click-pixabay"
+        case .secondaryClick: "secondary-click-button-pixabay"
+        }
+    }
+}
+
 actor UserResponseController: ObservableObject {
-    private var avplayer: AVAudioPlayer?
+    // MARK: Sound Effects
+    private var soundEffectAVPlayer: AVAudioPlayer?
+    
+    nonisolated func playSoundEffect(_ effect: UserResponseControllerSoundEffect) {
+        Task {
+            await self.playSoundEffect(effect)
+        }
+    }
+    
+    func playSoundEffect(_ effect: UserResponseControllerSoundEffect) async {
+        guard let url = Bundle.main.url(forResource: effect.fileName, withExtension: "mp3") else {
+            return
+        }
+        
+        do {
+            soundEffectAVPlayer = try AVAudioPlayer(contentsOf: url)
+            soundEffectAVPlayer?.setVolume(1, fadeDuration: 0)
+            soundEffectAVPlayer?.numberOfLoops = 0
+            soundEffectAVPlayer?.play()
+        } catch {
+            print("Failed to play music. \(error)")
+        }
+    }
+    
+    // MARK: Music Stuff
+    private var musicAVPlayer: AVAudioPlayer?
     private let musicURL: URL? = Bundle.main.url(forResource: "Tranquility – www.fesliyanstudios.com", withExtension: "mp3")
     @AppStorage("shouldPlayMusic") @MainActor private(set) var shouldPlayMusic = true
     private let audioVolume: Float = 1
@@ -25,11 +64,11 @@ actor UserResponseController: ObservableObject {
     }
     
     func appEnteredBackground() {
-        avplayer?.setVolume(0, fadeDuration: 0.2)
+        musicAVPlayer?.setVolume(0, fadeDuration: 0.2)
     }
     
     func appEnteredForeground() {
-        avplayer?.setVolume(audioVolume, fadeDuration: 0.2)
+        musicAVPlayer?.setVolume(audioVolume, fadeDuration: 0.2)
     }
     
     func playMusic() {
@@ -37,16 +76,16 @@ actor UserResponseController: ObservableObject {
             shouldPlayMusic = true
         }
         guard let musicURL = musicURL else { return }
-        guard avplayer == nil else {
-            avplayer?.setVolume(audioVolume, fadeDuration: audioFadeDuration)
+        guard musicAVPlayer == nil else {
+            musicAVPlayer?.setVolume(audioVolume, fadeDuration: audioFadeDuration)
             return
         }
         do {
-            avplayer = try AVAudioPlayer(contentsOf: musicURL)
+            musicAVPlayer = try AVAudioPlayer(contentsOf: musicURL)
             try AVAudioSession.sharedInstance().setCategory(.ambient)
-            avplayer?.setVolume(audioVolume, fadeDuration: 0)
-            avplayer?.play()
-            avplayer?.numberOfLoops = -1
+            musicAVPlayer?.setVolume(audioVolume, fadeDuration: 0)
+            musicAVPlayer?.numberOfLoops = -1
+            musicAVPlayer?.play()
         } catch {
             print("Failed to play music. \(error)")
         }
@@ -56,7 +95,7 @@ actor UserResponseController: ObservableObject {
         Task { @MainActor in
             shouldPlayMusic = false
         }
-        avplayer?.setVolume(0, fadeDuration: audioFadeDuration)
+        musicAVPlayer?.setVolume(0, fadeDuration: audioFadeDuration)
     }
     
     func toggleMusic() {
@@ -92,5 +131,6 @@ struct AudioPlayerButtonView: View {
         }
         .foregroundStyle(.white)
         .animation(.default, value: userResponseController.shouldPlayMusic)
+        .buttonStyle(.reactive)
     }
 }

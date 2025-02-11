@@ -36,6 +36,7 @@ struct CreateMedicationView: View {
     @State private var stepManager = CreateMedStepManager()
     @Bindable var medication: Medication
     @Environment(\.dismiss) private var dismiss
+    @EnvironmentObject var userResponseController: UserResponseController
     var modelContext: ModelContext
     
     init(medication: Medication, in context: ModelContext) {
@@ -98,7 +99,7 @@ struct CreateMedicationView: View {
                 }
                     .frame(maxWidth: .infinity)
             }
-            .buttonStyle(.borderedProminent)
+            .buttonStyle(.reactiveBorderedProminent)
             .disabled(medication.name.isEmpty)
         }
         .environment(\.modelContext, modelContext)
@@ -107,6 +108,7 @@ struct CreateMedicationView: View {
             Button("Cancel") {
                 dismiss()
             }
+            .buttonStyle(.reactive)
         })
     }
 }
@@ -188,6 +190,7 @@ private struct CreateMedicationDosageView: View {
                                     }
                                     .foregroundStyle(Color.primary)
                                 }
+                                .buttonStyle(.reactive)
                                 if unit != CreateMedicationDosageUnit.allCases.last {
                                     Divider()
                                 }
@@ -215,7 +218,7 @@ private struct CreateMedicationDosageView: View {
                     }
                         .frame(maxWidth: .infinity)
                 }
-                .buttonStyle(.borderedProminent)
+                .buttonStyle(.reactiveBorderedProminent)
                 .disabled(dosage.isEmpty)
             }
         }
@@ -223,6 +226,7 @@ private struct CreateMedicationDosageView: View {
             Button("Cancel") {
                 dismissSheet()
             }
+            .buttonStyle(.reactive)
         })
         .navigationTitle(medication.name)
         .onChange(of: dosage) { _, newValue in

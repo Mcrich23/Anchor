@@ -8,6 +8,8 @@
 import SwiftUI
 
 struct PABreathingView: View {
+    @Environment(PAStepManager.self) var stepManager
+    
     var body: some View {
         VStack(spacing: 50) {
             VStack {
@@ -20,7 +22,7 @@ struct PABreathingView: View {
             .minimumScaleFactor(0.8)
             .multilineTextAlignment(.center)
             .padding(.horizontal)
-            BreathFlowerView()
+            BreathFlowerView(isVisible: stepManager.step == .breath)
 //            .padding(scaleModifier/8.96)
 //            .scaleEffect(scaleEffect)
         }

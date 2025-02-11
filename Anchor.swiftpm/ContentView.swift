@@ -26,6 +26,7 @@ struct ContentView: View {
     @State var selectedAnchor: AnchorType?
     @State var isShowingMedLog = false
     @StateObject var meshBackgroundCircleViewModel = AnimatedMeshViewModel()
+    @EnvironmentObject var userResponseController: UserResponseController
     
     var body: some View {
         GeometryReader { geo in
@@ -47,6 +48,7 @@ struct ContentView: View {
                         VStack {
                             ForEach(AnchorType.allCases, id: \.self) { anchor in
                                 Button(anchor.rawValue.capitalized) {
+                                    userResponseController.playSoundEffect(.primaryClick)
                                     if selectedAnchor == anchor {
                                         selectedAnchor = nil
                                     } else {
@@ -99,6 +101,7 @@ struct ContentView: View {
                         Label("Medication Log", systemImage: "calendar.day.timeline.left")
                             .labelStyle(.iconOnly)
                     }
+                    .buttonStyle(.reactive)
                 }
                 .padding(.leading)
             }
@@ -129,28 +132,4 @@ extension EnvironmentValues {
     @Entry var customDismiss: () -> Void = {}
     
     @Entry var meshCircleSize: CGSize = .zero
-}
-
-private struct AnchorSelectionButtonStyle: ButtonStyle {
-    @Environment(\.colorScheme) var colorScheme
-    
-    var material: Material {
-        switch colorScheme {
-        case .dark: .ultraThinMaterial
-        default: .regularMaterial
-        }
-    }
-    
-    func makeBody(configuration: Configuration) -> some View {
-        configuration.label
-            .padding()
-            .frame(maxWidth: 150)
-            .background {
-                RoundedRectangle(cornerRadius: 6)
-                    .fill(Color.clear)
-                    .shadow(color: .primary, radius: 3, y: 1)
-            }
-            .background(material)
-            .clipShape(RoundedRectangle(cornerRadius: 6))
-    }
 }

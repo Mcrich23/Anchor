@@ -41,6 +41,7 @@ private struct MedicationLogsViewInternal: View {
                     } label: {
                         LogEntryView(entry: log)
                     }
+                    .buttonStyle(.reactive)
                     .foregroundStyle(.primary, .secondary, .tertiary)
                 }
             }
@@ -69,7 +70,7 @@ private struct MedicationLogsViewInternal: View {
                             self.isShowingAddMedicationLogView = medicationLog
                         }
                         .buttonBorderShape(.roundedRectangle)
-                        .buttonStyle(.borderedProminent)
+                        .buttonStyle(.reactiveBorderedProminent)
                     }
                 }
             }
@@ -77,12 +78,14 @@ private struct MedicationLogsViewInternal: View {
         .toolbar {
             ToolbarItemGroup(placement: .topBarLeading) {
                 EditButton()
+                    .buttonStyle(.reactive)
                 Button {
                     isShowingMedManager = true
                 } label: {
                     Label("Manage Medications", systemImage: "gear")
                         .labelStyle(.iconOnly)
                 }
+                .buttonStyle(.reactive)
             }
             
             ToolbarItemGroup(placement: .topBarTrailing) {
@@ -92,6 +95,7 @@ private struct MedicationLogsViewInternal: View {
                 } label: {
                     Label("Create Entry", systemImage: "plus.circle")
                 }
+                .buttonStyle(.reactive)
             }
         }
         .sheet(isPresented: $isShowingMedManager, content: {

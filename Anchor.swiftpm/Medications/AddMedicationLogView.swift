@@ -133,7 +133,7 @@ struct AddMedicationLogView: View {
                                         self.creatingMedication = medication
                                     }
                                     .buttonBorderShape(.roundedRectangle)
-                                    .buttonStyle(.borderedProminent)
+                                    .buttonStyle(.reactiveBorderedProminent)
                                 }
                             }
                         } else {
@@ -203,6 +203,7 @@ struct AddMedicationLogView: View {
                             } label: {
                                 Label("Manage Medications", systemImage: "gear.circle")
                             }
+                            .buttonStyle(.reactive)
                         }
                         
                         if showAddMedicationButton {
@@ -212,6 +213,7 @@ struct AddMedicationLogView: View {
                             } label: {
                                 Label("Create Medication", systemImage: "plus.circle")
                             }
+                            .buttonStyle(.reactive)
                         }
                             
                         Button {
@@ -219,6 +221,7 @@ struct AddMedicationLogView: View {
                         } label: {
                             Label("Cancel", systemImage: "xmark.circle")
                         }
+                        .buttonStyle(.reactive)
                     }
                 }
                 .sheet(isPresented: $isShowingMedManager, content: {
@@ -253,7 +256,7 @@ struct AddMedicationLogView: View {
                     }
                     .frame(maxWidth: .infinity)
                 }
-                .buttonStyle(.borderedProminent)
+                .buttonStyle(.reactiveBorderedProminent)
                 .background(Color(uiColor: .secondarySystemFill))
                 .clipShape(RoundedRectangle(cornerRadius: 6))
                 .disabled(medicationLog.takenMedications.isEmpty && medicationLog.notes?.isEmpty != false)
@@ -314,6 +317,7 @@ private struct MedicationTakingDualCellLayout: View {
 private struct MedicationTakingCellView: View {
     @Bindable var medicationLogElement: MedicationLogMedArrayElement
     @Environment(\.colorScheme) var colorScheme
+    @EnvironmentObject var userResponseController: UserResponseController
     
     @ViewBuilder
     var buttonLabel: some View {
@@ -342,6 +346,7 @@ private struct MedicationTakingCellView: View {
             }
             .frame(maxWidth: .infinity)
         }
+        .buttonStyle(.reactive)
     }
     
     var body: some View {
@@ -378,10 +383,10 @@ private struct MedicationTakingCellView: View {
                 switch medicationLogElement.isTaken {
                     case true:
                     button
-                        .buttonStyle(.borderedProminent)
+                        .buttonStyle(.secondaryReactiveBorderedProminent)
                 case false:
                     button
-                        .buttonStyle(.bordered)
+                        .buttonStyle(.secondaryReactiveBordered)
                 }
             }
             .frame(maxHeight: .infinity, alignment: .top)

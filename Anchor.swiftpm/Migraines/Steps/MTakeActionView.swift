@@ -96,7 +96,7 @@ struct MTakeActionView: View {
                     Button("Take Medication") {
                         isShowingAddMedicationLogEntry = .blank
                     }
-                    .buttonStyle(.borderedProminent)
+                    .buttonStyle(.reactiveBorderedProminent)
                     Button {
                         isShowingMedicationLog = true
                     } label: {
