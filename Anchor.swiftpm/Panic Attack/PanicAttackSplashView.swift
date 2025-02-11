@@ -23,7 +23,7 @@ struct PanicAttackSplashView: View {
                         .font(.title)
                         .matchedGeometryEffect(id: "title", in: namespace)
                         .bold()
-                    Text("A panic attack can be very scary. Anchor is hear to help you through it.")
+                    Text("A panic attack can be very scary. Anchor is here to help you through it.")
                         .multilineTextAlignment(.center)
                     HStack {
                         Button("Back", action: dismiss)
