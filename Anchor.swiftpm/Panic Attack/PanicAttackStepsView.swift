@@ -76,7 +76,7 @@ struct PanicAttackStepsView: View {
                             stepManager.previous()
                         }
                     }
-                    .buttonStyle(.reliefNavigation)
+                    .buttonStyle(.reliefBackNavigation)
                     .matchedGeometryEffect(id: "backButton", in: navigationNamespace)
                 }
                 

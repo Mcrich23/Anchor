@@ -70,7 +70,7 @@ struct MigraineStepsView: View {
                                     stepManager.previous()
                                 }
                             }
-                            .buttonStyle(.reliefNavigation)
+                            .buttonStyle(.reliefBackNavigation)
                             .matchedGeometryEffect(id: "backButton", in: navigationNamespace)
                         }
                         Spacer()

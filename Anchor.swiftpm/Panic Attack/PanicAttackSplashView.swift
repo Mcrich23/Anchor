@@ -27,7 +27,7 @@ struct PanicAttackSplashView: View {
                         .multilineTextAlignment(.center)
                     HStack {
                         Button("Back", action: dismiss)
-                            .buttonStyle(.reliefNavigation)
+                            .buttonStyle(.reliefBackNavigation)
                             .matchedGeometryEffect(id: "close", in: namespace)
                         if isStartScreen {
                             Button("Start Relief") {
@@ -51,7 +51,7 @@ struct PanicAttackSplashView: View {
                         if !(navigationNamespace != nil && userInterfaceIdiom == .phone && stepManager.step == .drawing) {
                             Spacer()
                             Button("Close", action: dismiss)
-                                .buttonStyle(.reliefNavigation)
+                                .buttonStyle(.reliefBackNavigation)
                                 .matchedGeometryEffect(id: "close", in: namespace)
                         }
                     }
@@ -62,11 +62,11 @@ struct PanicAttackSplashView: View {
                                     stepManager.previous()
                                 }
                             }
-                            .buttonStyle(.reliefNavigation)
+                            .buttonStyle(.reliefBackNavigation)
                             .matchedGeometryEffect(id: "backButton", in: navigationNamespace)
                             Spacer()
                             Button("Close", action: dismiss)
-                                .buttonStyle(.reliefNavigation)
+                                .buttonStyle(.reliefBackNavigation)
                                 .matchedGeometryEffect(id: "close", in: namespace)
                         }
                     }

@@ -113,7 +113,7 @@ private struct MedicationLogsViewInternal: View {
                     } label: {
                         Label("Close", systemImage: "xmark.circle")
                     }
-                    .buttonStyle(.reactive)
+                    .buttonStyle(.secondaryReactive)
                 }
             }
         }

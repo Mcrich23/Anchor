@@ -75,7 +75,7 @@ struct MedicationManagementView: View {
                 } label: {
                     Label("Close", systemImage: "xmark.circle")
                 }
-                .buttonStyle(.reactive)
+                .buttonStyle(.secondaryReactive)
             }
         }
         .sheet(item: $creatingMedication) { item in

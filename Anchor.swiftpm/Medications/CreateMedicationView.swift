@@ -108,7 +108,7 @@ struct CreateMedicationView: View {
             Button("Cancel") {
                 dismiss()
             }
-            .buttonStyle(.reactive)
+            .buttonStyle(.secondaryReactive)
         })
     }
 }
@@ -226,7 +226,7 @@ private struct CreateMedicationDosageView: View {
             Button("Cancel") {
                 dismissSheet()
             }
-            .buttonStyle(.reactive)
+            .buttonStyle(.secondaryReactive)
         })
         .navigationTitle(medication.name)
         .onChange(of: dosage) { _, newValue in

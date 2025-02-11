@@ -225,7 +225,7 @@ struct AddMedicationLogView: View {
                         } label: {
                             Label("Cancel", systemImage: "xmark.circle")
                         }
-                        .buttonStyle(.reactive)
+                        .buttonStyle(.secondaryReactive)
                     }
                 }
                 .sheet(isPresented: $isShowingMedManager, content: {
