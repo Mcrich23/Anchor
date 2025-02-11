@@ -25,7 +25,7 @@ extension Color {
     // Because Swift Playgrounds doesn't support ColorSets
     
     static var migraineTint: Self {
-        dynamicColor(light: #colorLiteral(red: 0, green: 0.6205425858, blue: 0.3912295103, alpha: 1), dark: #colorLiteral(red: 0.178935051, green: 0.8115785718, blue: 0, alpha: 1))
+        dynamicColor(light: #colorLiteral(red: 0, green: 0.6205425858, blue: 0.3912295103, alpha: 1), dark: #colorLiteral(red: 0.3411764801, green: 0.6235294342, blue: 0.1686274558, alpha: 1))
     }
     
     static var homeCircleGradientColor1: Self {
