@@ -83,15 +83,12 @@ struct AudioPlayerButtonView: View {
                 await userResponseController.toggleMusic()
             }
         } label: {
-            Group {
-                if userResponseController.shouldPlayMusic {
-                    Label("Play Music", systemImage: "music.note")
-                } else {
-                    Label("Play Music", image: "custom.music.note.slash")
-                }
-            }
-            .contentTransition(.symbolEffect(.replace.magic(fallback: .replace)))
+            Label(userResponseController.shouldPlayMusic ? "Play Music" : "Stop Music", systemImage: userResponseController.shouldPlayMusic ? "speaker.fill" : "speaker.slash.fill")
+                .contentTransition(.symbolEffect(.replace.magic(fallback: .replace)))
             .labelStyle(.iconOnly)
+            .font(.largeTitle)
+            .aspectRatio(contentMode: .fit)
+            .frame(width: 50, height: 50)
         }
         .foregroundStyle(.white)
         .animation(.default, value: userResponseController.shouldPlayMusic)
