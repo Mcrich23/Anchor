@@ -251,7 +251,7 @@ struct AddMedicationLogView: View {
                     done()
                 } label: {
                     Group {
-                        if colorScheme == .dark && !medicationLog.takenMedications.isEmpty {
+                        if colorScheme == .dark && !medicationLog.takenMedications.isEmpty && medicationLog.notes?.isEmpty != false {
                             Text("Done")
                                 .colorInvert()
                         } else {
