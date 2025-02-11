@@ -190,6 +190,7 @@ struct PAAssuranceView: View {
             }
         
         Button {
+            self.userResponseController.playSoundEffect(.complete)
             withAnimation {
                 step.next()
             } completion: {

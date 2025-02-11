@@ -22,7 +22,7 @@ enum UserResponseControllerSoundEffect {
     
     var fileName: String {
         switch self {
-        case .complete: "navigation-level-passed-pixabay"
+        case .complete: "level-passed-pixabay"
         case .primaryClick, .delete, .select: "modern-button-click-pixabay"
         case .secondaryClick, .deselect: "click-button-app-pixabay"
         }
@@ -59,7 +59,7 @@ actor UserResponseController: ObservableObject {
     private var musicAVPlayer: AVAudioPlayer?
     private let musicURL: URL? = Bundle.main.url(forResource: "Tranquility – www.fesliyanstudios.com", withExtension: "mp3")
     @AppStorage("shouldPlayMusic") @MainActor private(set) var shouldPlayMusic = true
-    private let audioVolume: Float = 1
+    private let audioVolume: Float = 0.6
     private let audioFadeDuration: TimeInterval = 1.5
     
     init() {
