@@ -20,10 +20,9 @@ struct MigraineView: View {
             if isShowingNavigationBar {
                 if !isStartScreen {
                     MigraineSplashView(isStartScreen: $isStartScreen)
-                        .padding(.horizontal)
+                        .padding(.horizontal, 10)
                 } else if isStepsLoaded {
                     MigraineSplashView(isStartScreen: .constant(false))
-                        .padding(.horizontal)
                         .opacity(0)
                         .environment(\.navigationNamespace, nil)
                 }
@@ -42,7 +41,6 @@ struct MigraineView: View {
         .overlay {
             if isStartScreen {
                 MigraineSplashView(isStartScreen: $isStartScreen)
-                    .padding(.horizontal)
             }
         }
         .overlay(alignment: .bottomTrailing, content: {

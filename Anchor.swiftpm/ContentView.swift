@@ -102,6 +102,7 @@ struct ContentView: View {
                             .labelStyle(.iconOnly)
                     }
                     .buttonStyle(.reactive)
+                    .font(.title2)
                 }
                 .padding(.leading)
             }
