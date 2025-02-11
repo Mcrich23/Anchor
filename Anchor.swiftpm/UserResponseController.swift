@@ -31,6 +31,7 @@ enum UserResponseControllerSoundEffect {
 
 actor UserResponseController: ObservableObject {
     // MARK: Sound Effects
+    @AppStorage("shouldPlaySFX") @MainActor var shouldPlaySFX = true
     private var soundEffectAVPlayer: AVAudioPlayer?
     
     nonisolated func playSoundEffect(_ effect: UserResponseControllerSoundEffect) {
@@ -40,9 +41,7 @@ actor UserResponseController: ObservableObject {
     }
     
     func playSoundEffect(_ effect: UserResponseControllerSoundEffect) async {
-//        guard effect != .primaryClick else { return }
-        
-        guard let url = Bundle.main.url(forResource: effect.fileName, withExtension: "mp3") else {
+        guard await shouldPlaySFX, let url = Bundle.main.url(forResource: effect.fileName, withExtension: "mp3") else {
             return
         }
         
@@ -125,25 +124,41 @@ actor UserResponseController: ObservableObject {
 struct AudioPlayerButtonView: View {
     @EnvironmentObject var userResponseController: UserResponseController
     var body: some View {
-        Button {
-            Task {
-                switch !userResponseController.shouldPlayMusic {
+        HStack {
+            Button {
+                switch !userResponseController.shouldPlaySFX {
                 case true:
-                    await userResponseController.playSoundEffect(.select)
+                    userResponseController.playSoundEffect(.select)
                 case false:
-                    await userResponseController.playSoundEffect(.deselect)
+                    userResponseController.playSoundEffect(.deselect)
                 }
                 
-                await userResponseController.toggleMusic()
+                userResponseController.shouldPlaySFX.toggle()
+            } label: {
+                Label(userResponseController.shouldPlaySFX ? "Play Sound Effects" : "Mute Sound Effects", systemImage: userResponseController.shouldPlaySFX ? "speaker.fill" : "speaker.slash.fill")
+                    .aspectRatio(contentMode: .fit)
+                    .frame(width: 50, height: 50)
             }
-        } label: {
-            Label(userResponseController.shouldPlayMusic ? "Play Music" : "Stop Music", systemImage: userResponseController.shouldPlayMusic ? "speaker.fill" : "speaker.slash.fill")
-                .contentTransition(.symbolEffect(.replace.magic(fallback: .replace)))
-            .labelStyle(.iconOnly)
-            .font(.largeTitle)
-            .aspectRatio(contentMode: .fit)
-            .frame(width: 50, height: 50)
+            Button {
+                Task {
+                    switch !userResponseController.shouldPlayMusic {
+                    case true:
+                        await userResponseController.playSoundEffect(.select)
+                    case false:
+                        await userResponseController.playSoundEffect(.deselect)
+                    }
+                    
+                    await userResponseController.toggleMusic()
+                }
+            } label: {
+                Label(userResponseController.shouldPlayMusic ? "Play Music" : "Stop Music", image: userResponseController.shouldPlayMusic ? "music.note" : "custom.music.note.slash")
+                    .aspectRatio(contentMode: .fit)
+                    .frame(width: 50, height: 50)
+            }
         }
+        .contentTransition(.symbolEffect(.replace.magic(fallback: .replace)))
+        .labelStyle(.iconOnly)
+        .font(.largeTitle)
         .foregroundStyle(.white)
         .animation(.default, value: userResponseController.shouldPlayMusic)
     }
