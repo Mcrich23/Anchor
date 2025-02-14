@@ -8,6 +8,18 @@
 import Foundation
 import AVFoundation
 import SwiftUI
+import MediaPlayer
+
+extension MPVolumeView {
+    static func setVolume(_ volume: Float) {
+        let volumeView = MPVolumeView()
+        let slider = volumeView.subviews.first(where: { $0 is UISlider }) as? UISlider
+
+        DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 0.01) {
+            slider?.value = volume
+        }
+    }
+}
 
 enum UserResponseControllerSoundEffect {
     case complete
@@ -64,6 +76,7 @@ actor UserResponseController: ObservableObject {
     
     init() {
         Task {
+            await MPVolumeView.setVolume(1)
             if await shouldPlayMusic {
                 await playMusic()
             }
@@ -71,11 +84,11 @@ actor UserResponseController: ObservableObject {
     }
     
     func appEnteredBackground() {
-        musicAVPlayer?.setVolume(0, fadeDuration: 0.2)
+//        musicAVPlayer?.setVolume(0, fadeDuration: 0.2)
     }
     
     func appEnteredForeground() {
-        musicAVPlayer?.setVolume(audioVolume, fadeDuration: 0.2)
+//        musicAVPlayer?.setVolume(audioVolume, fadeDuration: 0.2)
     }
     
     func playMusic() {
@@ -92,7 +105,10 @@ actor UserResponseController: ObservableObject {
             try AVAudioSession.sharedInstance().setCategory(.ambient)
             musicAVPlayer?.setVolume(audioVolume, fadeDuration: 0)
             musicAVPlayer?.numberOfLoops = -1
-            musicAVPlayer?.play()
+            Task {
+                await MPVolumeView.setVolume(1)
+                musicAVPlayer?.play()
+            }
         } catch {
             print("Failed to play music. \(error)")
         }
