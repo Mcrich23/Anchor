@@ -11,7 +11,7 @@
 - Focus on Object
 - 5-4-3-2-1 Method (maybe not possible)
     1. Look at 5 different object
-    2. Listen to 4 distinc sounds
+    2. Listen to 4 distinct sounds
     3. Touch 3 objects
     4. Identify 2 smells
     5. Name 1 thing you can taste
