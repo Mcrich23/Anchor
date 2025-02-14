@@ -4,7 +4,7 @@
 
 ## Calming Activities
 
-- Breathing Excersise
+- Breathing Exercise
 - Drawing
 
 # Sources
