@@ -4,7 +4,7 @@
 
 - Repeat mantra (live microphone feedback)
 
-## Grounding
+## Possible Grounding Activities
     
 - Find a calm location
 - Take Deep Breaths ✅
