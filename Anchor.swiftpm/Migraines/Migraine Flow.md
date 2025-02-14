@@ -1,11 +1,11 @@
 #  Migraine Flow
 
-## Take Medication
+## Take Medication ✅
 
-## Calming Activities
+## Calming Activities ✅
 
-- Breathing Exercise
-- Drawing
+- Breathing Exercise ✅
+- Drawing ✅
 
 # Sources
 https://www.mayoclinic.org/diseases-conditions/migraine-headache/in-depth/migraines/art-20047242
