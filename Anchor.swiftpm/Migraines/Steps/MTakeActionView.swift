@@ -7,6 +7,7 @@
 
 import Foundation
 import SwiftUI
+import SwiftData
 
 struct MTakeActionView: View {
     let shareText: String = "Hello, I am experiencing a migraine. I am using the app Anchor to help me manage my symptoms. If you don't hear back from me in the next 30 minutes, please call me."
@@ -21,6 +22,7 @@ struct MTakeActionView: View {
     @Environment(\.nonFlatOrientation) var nonFlatOrientation
     @Environment(\.isShowingNavigationButtons) var isShowingNavigationButtons
     @Environment(\.isShowingNavigationBar) var isShowingNavigationBar
+    @Query(filter: #Predicate<MedicationLog> { !$0.medications.isEmpty || $0.notes != nil }, sort: \.date, order: .reverse) var medicationLogs: [MedicationLog] = []
     
     var gradientColors: [Color] {
         .semiCircleGradientColorsInAnchor
@@ -68,6 +70,13 @@ struct MTakeActionView: View {
                 .animation(.default, value: isShowingAddMedicationLogEntry)
                 .presentationBackground(.red)
         }
+        .onAppear(perform: {
+            // Show medication log if one for this minute exists
+            if let medicationLog = medicationLogs.first(where: { $0.date.startOfMinute() == Date().startOfMinute() }),
+               medicationLog.date.startOfMinute() != nil {
+                self.isShowingAddMedicationLogEntry = medicationLog
+            }
+        })
         .onChange(of: isEditingMedicationLog, initial: true, { _, newValue in
             guard nonFlatOrientation.isLandscape else {
                 self.isShowingNavigationButtons.wrappedValue = true

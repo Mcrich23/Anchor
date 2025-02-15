@@ -100,6 +100,14 @@ private struct MedicationLogsViewInternal: View {
             
             ToolbarItemGroup(placement: .topBarTrailing) {
                 Button {
+                    // Show medication log if one for this minute exists
+                    if let medicationLog = medicationLogs.first(where: { $0.date.startOfMinute() == Date().startOfMinute() }),
+                       medicationLog.date.startOfMinute() != nil {
+                        self.isShowingAddMedicationLogView = medicationLog
+                        return
+                    }
+                    
+                    // Show blank log if one does not
                     let medicationLog = MedicationLog.blank
                     self.isShowingAddMedicationLogView = medicationLog
                 } label: {
@@ -136,7 +144,7 @@ private struct LogEntryView: View {
     
     var body: some View {
         VStack(alignment: .leading) {
-            Text(entry.date.formatted(date: .abbreviated, time: .standard))
+            Text(entry.date.formatted(date: .abbreviated, time: .shortened))
                 .font(.headline)
                 .fontDesign(.default)
             Divider()
@@ -177,6 +185,12 @@ private struct EntryLogMedicationView: View {
                 .padding(.horizontal)
                 .background(Color.dynamicColor(light: .secondarySystemBackground, dark: .tertiarySystemBackground), in: RoundedRectangle(cornerRadius: 6))
         }
+    }
+}
+
+extension Date {
+    func startOfMinute(from calendar: Calendar = .current) -> Self? {
+        calendar.date(bySetting: .second, value: 0, of: self)
     }
 }
 
