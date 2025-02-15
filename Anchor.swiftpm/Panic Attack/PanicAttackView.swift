@@ -23,9 +23,11 @@ struct PanicAttackView: View {
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .overlay(alignment: .bottomTrailing, content: {
-            AudioPlayerButtonView()
-                .matchedGeometryEffect(id: "audioPlayerButton", in: navigationNamespace)
-                .padding(.trailing)
+            if isStartScreen {
+                AudioPlayerButtonView()
+                    .matchedGeometryEffect(id: "audioPlayerButton", in: navigationNamespace)
+                    .padding(.trailing)
+            }
         })
         .environment(\.navigationNamespace, navigationNamespace)
         .environment(stepManager)
