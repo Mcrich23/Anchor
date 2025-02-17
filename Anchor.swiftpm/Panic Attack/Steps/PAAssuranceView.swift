@@ -80,6 +80,7 @@ struct PAAssuranceView: View {
             .sensoryFeedback(.success, trigger: step)
             .foregroundStyle(colorScheme == .light ? .white: .black)
             .frame(maxWidth: height*0.55, maxHeight: height*0.65)
+            .padding(.bottom, -20)
             .minimumScaleFactor(0.7)
         }
         .frame(maxWidth: height*0.8, maxHeight: height*0.8)
@@ -126,6 +127,7 @@ struct PAAssuranceView: View {
     @ViewBuilder
     var mantraView: some View {
         VStack(spacing: 30) {
+            VStack(spacing: 30) {
                 Text("Say The Following Mantra:")
                     .multilineTextAlignment(.center)
                     .font(.largeTitle)
@@ -136,10 +138,12 @@ struct PAAssuranceView: View {
                 Text(mantra)
                     .multilineTextAlignment(.center)
                     .font(.title)
-                    .fontWeight(.semibold)
+                    .fontWeight(.medium)
                     .foregroundStyle(colorScheme == .light ? .white: .black)
                     .lineSpacing(10)
                     .minimumScaleFactor(0.6)
+            }
+                .layoutPriority(1)
             
             HStack(spacing: 20) {
                 ForEach(1..<4, id: \.self) { i in
@@ -161,8 +165,10 @@ struct PAAssuranceView: View {
                     }
                     .padding(.bottom)
                 }
+                .minimumScaleFactor(0.5)
             }
         }
+//        .dynamicTypeSize(.medium)
         .onChange(of: numberOfTimesMantraSaid) {
             guard numberOfTimesMantraSaid >= 3 else { return }
             Task {
@@ -179,15 +185,25 @@ struct PAAssuranceView: View {
     
     @ViewBuilder
     func mantraViewButtons(collapsed: Bool) -> some View {
-        Label("Listening...", systemImage: "microphone.fill")
-            .padding()
-            .frame(maxWidth: collapsed ? 175 : 200, maxHeight: 50, alignment: .center)
-            .background {
-                RoundedRectangle(cornerRadius: 12)
-                    .fill(.tint)
-                //                            .fill(Color(uiColor: .secondarySystemFill))
-                //                            .opacity(0.9)
-            }
+        ViewThatFits {
+            Label("Listening...", systemImage: "microphone.fill")
+                .labelStyle(.titleOnly)
+                .padding()
+                .frame(maxWidth: collapsed ? 175 : 200, maxHeight: 50, alignment: .center)
+                .background {
+                    RoundedRectangle(cornerRadius: 12)
+                        .fill(.tint)
+                }
+            
+            Label("Listening...", systemImage: "microphone.fill")
+                .labelStyle(.titleAndIcon)
+                .padding()
+                .frame(maxWidth: collapsed ? 175 : 200, maxHeight: 50, alignment: .center)
+                .background {
+                    RoundedRectangle(cornerRadius: 12)
+                        .fill(.tint)
+                }
+        }
         
         Button {
             self.userResponseController.playSoundEffect(.complete)
