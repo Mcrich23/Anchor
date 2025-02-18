@@ -37,6 +37,12 @@ struct CreateMedicationView: View {
     @Bindable var medication: Medication
     @Environment(\.dismiss) private var dismiss
     @EnvironmentObject var userResponseController: UserResponseController
+    @FocusState private var textfield: TextFields?
+    
+    enum TextFields: CaseIterable {
+        case name, notes
+    }
+    
     var modelContext: ModelContext
     
     init(medication: Medication, in context: ModelContext) {
@@ -67,7 +73,10 @@ struct CreateMedicationView: View {
                 .font(.largeTitle)
                 .bold()
             GroupBox {
-                TextField("Name", text: $medication.name)
+                TextField("Name", text: $medication.name) {
+                    textfield = .notes
+                }
+                    .focused($textfield, equals: .name)
             }
             GroupBox {
                 TextEditor(text: $medication.notes)
@@ -81,6 +90,7 @@ struct CreateMedicationView: View {
                         }
                     }
                     .padding(-5)
+                    .focused($textfield, equals: .notes)
             }
             
             Spacer()
@@ -101,6 +111,7 @@ struct CreateMedicationView: View {
             }
             .buttonStyle(.reactiveBorderedProminent)
             .disabled(medication.name.isEmpty)
+            .keyboardShortcut(.return, modifiers: .command)
         }
         .environment(\.modelContext, modelContext)
         .padding()
@@ -109,6 +120,7 @@ struct CreateMedicationView: View {
                 dismiss()
             }
             .buttonStyle(.secondaryReactive)
+            .keyboardShortcut(.escape, modifiers: .command)
         })
     }
 }
@@ -220,6 +232,7 @@ private struct CreateMedicationDosageView: View {
                 }
                 .buttonStyle(.reactiveBorderedProminent)
                 .disabled(dosage.isEmpty)
+                .keyboardShortcut(.return, modifiers: .command)
             }
         }
         .toolbar(content: {
@@ -227,6 +240,7 @@ private struct CreateMedicationDosageView: View {
                 dismissSheet()
             }
             .buttonStyle(.secondaryReactive)
+            .keyboardShortcut(.escape, modifiers: .command)
         })
         .navigationTitle(medication.name)
         .onChange(of: dosage) { _, newValue in

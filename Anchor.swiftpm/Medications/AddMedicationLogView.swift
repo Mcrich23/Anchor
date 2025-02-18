@@ -208,6 +208,7 @@ struct AddMedicationLogView: View {
                                 Label("Manage Medications", systemImage: "gear.circle")
                             }
                             .buttonStyle(.reactive)
+                            .keyboardShortcut(.init(","), modifiers: .command)
                         }
                         
                         if showAddMedicationButton {
@@ -218,6 +219,7 @@ struct AddMedicationLogView: View {
                                 Label("Create Medication", systemImage: "plus.circle")
                             }
                             .buttonStyle(.reactive)
+                            .keyboardShortcut(.init("n"), modifiers: .command)
                         }
                             
                         Button {
@@ -226,6 +228,7 @@ struct AddMedicationLogView: View {
                             Label("Cancel", systemImage: "xmark.circle")
                         }
                         .buttonStyle(.secondaryReactive)
+                        .keyboardShortcut(.escape, modifiers: .command)
                     }
                 }
                 .sheet(isPresented: $isShowingMedManager, content: {

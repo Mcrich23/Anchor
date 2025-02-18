@@ -70,14 +70,17 @@ struct MedicationManagementView: View {
                     Label("Create Medication", systemImage: "plus.circle")
                 }
                 .buttonStyle(.reactive)
+                .keyboardShortcut(.init("n"), modifiers: .command)
                 Button {
                     dismiss()
                 } label: {
                     Label("Close", systemImage: "xmark.circle")
                 }
                 .buttonStyle(.secondaryReactive)
+                .keyboardShortcut(.escape, modifiers: .command)
             }
         }
+        .navigationTitle("Medications")
         .sheet(item: $creatingMedication) { item in
             NavigationStack {
                 CreateMedicationView(medication: item, in: modelContext)

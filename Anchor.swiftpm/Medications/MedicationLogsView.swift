@@ -96,6 +96,7 @@ private struct MedicationLogsViewInternal: View {
                         .labelStyle(.iconOnly)
                 }
                 .buttonStyle(.reactive)
+                .keyboardShortcut(.init(","), modifiers: .command)
             }
             
             ToolbarItemGroup(placement: .topBarTrailing) {
@@ -114,6 +115,7 @@ private struct MedicationLogsViewInternal: View {
                     Label("Create Entry", systemImage: "plus.circle")
                 }
                 .buttonStyle(.reactive)
+                .keyboardShortcut(.init("n"), modifiers: .command)
                 
                 if isShowingCloseButton {
                     Button {
@@ -122,6 +124,7 @@ private struct MedicationLogsViewInternal: View {
                         Label("Close", systemImage: "xmark.circle")
                     }
                     .buttonStyle(.secondaryReactive)
+                    .keyboardShortcut(.escape, modifiers: .command)
                 }
             }
         }
