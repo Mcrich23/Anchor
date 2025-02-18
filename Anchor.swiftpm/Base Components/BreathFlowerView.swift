@@ -99,6 +99,7 @@ struct BreathFlowerView: View {
                 .foregroundStyle(.white)
                 .fontWeight(.semibold)
                 .buttonStyle(.secondaryReactive)
+                .keyboardShortcut(.return)
             } else if let breathState {
                 VStack {
                     Text(breathState.rawValue)

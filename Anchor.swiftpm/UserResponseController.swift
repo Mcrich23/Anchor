@@ -155,6 +155,7 @@ struct AudioPlayerButtonView: View {
                     .aspectRatio(contentMode: .fit)
                     .frame(width: 50, height: 50)
             }
+            .keyboardShortcut(.init("s"), modifiers: [.command, .shift])
             Button {
                 Task {
                     switch !userResponseController.shouldPlayMusic {
@@ -171,6 +172,7 @@ struct AudioPlayerButtonView: View {
                     .aspectRatio(contentMode: .fit)
                     .frame(width: 50, height: 50)
             }
+            .keyboardShortcut(.init("m"), modifiers: [.command, .shift])
         }
         .contentTransition(.symbolEffect(.replace.magic(fallback: .replace)))
         .labelStyle(.iconOnly)

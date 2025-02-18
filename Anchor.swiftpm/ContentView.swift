@@ -108,6 +108,7 @@ struct ContentView: View {
                     .font(.title2)
                 }
                 .padding(.leading)
+                .keyboardShortcut(.init("l"), modifiers: .command)
             }
         })
         .overlay(alignment: .bottomTrailing, content: {
