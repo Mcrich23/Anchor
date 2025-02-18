@@ -329,9 +329,11 @@ private struct MedicationTakingCellView: View {
         case true:
             Label("Taken", systemImage: "checkmark.circle")
                 .labelStyle(.titleAndIcon)
+                .accessibilityLabel(Text("Mark as not Taken"))
         case false:
             Label("Taken", systemImage: "checkmark.circle")
                 .labelStyle(.titleOnly)
+                .accessibilityLabel(Text("Mark as Taken"))
         }
     }
     

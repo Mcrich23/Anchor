@@ -142,6 +142,14 @@ struct PAAssuranceView: View {
         }
     }
     
+    func checkmarkAccessibilityLabel(for i: Int) -> String {
+        guard numberOfTimesMantraSaid >= i else {
+            return "Checkmark \(i) incomplete, repeat the mantra to complete"
+        }
+        
+        return "Checkmark \(i) complete"
+    }
+    
     @ViewBuilder
     var mantraView: some View {
         VStack(spacing: 30) {
@@ -171,6 +179,7 @@ struct PAAssuranceView: View {
                         .aspectRatio(contentMode: .fit)
                         .foregroundColor(numberOfTimesMantraSaid >= i ? Color.green : Color.secondary)
                         .frame(minHeight: 15, maxHeight: 40)
+                        .accessibilityLabel(Text("Checkmark \(i) incomplete, repeat the mantra to complete"))
                 }
             }
             
