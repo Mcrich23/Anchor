@@ -28,6 +28,7 @@ struct PAAssuranceView: View {
     @Environment(PAStepManager.self) var stepManager
     @State private var step: PAAssuranceStep = .intro
     @Environment(\.geometrySize) var geo
+    @Environment(\.userInterfaceIdiom) var userInterfaceIdiom
     @EnvironmentObject var userResponseController: UserResponseController
     @StateObject var speechRecognizer = SpeechRecognizer()
     @State private var isRecording = false
@@ -95,6 +96,21 @@ struct PAAssuranceView: View {
         }
         .animation(.default, value: speechRecognizer.inputNoiseLevel)
         .padding()
+        .padding(.bottom, userInterfaceIdiom == .phone ? 70 : 0)
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
+        .overlay(alignment: .bottom) {
+            if isRecording && userInterfaceIdiom == .phone {
+                ViewThatFits {
+                    VStack(spacing: 15) {
+                        mantraViewButtons(collapsed: false)
+                    }
+                    HStack(alignment: .center, spacing: 15) {
+                        mantraViewButtons(collapsed: true)
+                    }
+                }
+                .padding(.bottom, userInterfaceIdiom == .phone ? 20 : 0)
+            }
+        }
     }
     
     @ViewBuilder
@@ -158,7 +174,7 @@ struct PAAssuranceView: View {
                 }
             }
             
-            if isRecording {
+            if isRecording && userInterfaceIdiom != .phone {
                 ViewThatFits {
                     VStack(spacing: 15) {
                         mantraViewButtons(collapsed: false)
@@ -166,7 +182,6 @@ struct PAAssuranceView: View {
                     HStack(alignment: .center, spacing: 15) {
                         mantraViewButtons(collapsed: true)
                     }
-                    .padding(.bottom)
                 }
             }
         }
@@ -190,6 +205,8 @@ struct PAAssuranceView: View {
     func mantraViewButtons(collapsed: Bool) -> some View {
         Label("Listening...", systemImage: "microphone.fill")
             .labelStyle(.titleAndIcon)
+            .foregroundStyle(Color.primary)
+            .colorInvert()
             .padding()
             .frame(maxWidth: collapsed ? 175 : 200, maxHeight: 50, alignment: .center)
             .background {
