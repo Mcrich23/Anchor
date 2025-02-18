@@ -28,6 +28,7 @@ struct PanicAttackSplashView: View {
                     HStack {
                         Button("Back", action: dismiss)
                             .buttonStyle(.reliefBackNavigation)
+                            .keyboardShortcut(.escape)
                             .matchedGeometryEffect(id: "close", in: namespace)
                         if isStartScreen {
                             Button("Start Relief") {
@@ -36,6 +37,7 @@ struct PanicAttackSplashView: View {
                                 }
                             }
                             .buttonStyle(.reactiveBorderedProminent)
+                            .keyboardShortcut(.return, modifiers: .command)
                         }
                     }
                 }
@@ -52,6 +54,7 @@ struct PanicAttackSplashView: View {
                             Spacer()
                             Button("Close", action: dismiss)
                                 .buttonStyle(.reliefBackNavigation)
+                                .keyboardShortcut(.escape, modifiers: .command)
                                 .matchedGeometryEffect(id: "close", in: namespace)
                         }
                     }
@@ -63,10 +66,12 @@ struct PanicAttackSplashView: View {
                                 }
                             }
                             .buttonStyle(.reliefBackNavigation)
+                            .keyboardShortcut(.leftArrow, modifiers: .command)
                             .matchedGeometryEffect(id: "backButton", in: navigationNamespace)
                             Spacer()
                             Button("Close", action: dismiss)
                                 .buttonStyle(.reliefBackNavigation)
+                                .keyboardShortcut(.escape, modifiers: .command)
                                 .matchedGeometryEffect(id: "close", in: namespace)
                         }
                     }

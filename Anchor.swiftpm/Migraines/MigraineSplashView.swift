@@ -27,6 +27,7 @@ struct MigraineSplashView: View {
                     HStack {
                         Button("Back", action: dismiss)
                             .buttonStyle(.reliefBackNavigation)
+                            .keyboardShortcut(.escape, modifiers: .command)
                             .matchedGeometryEffect(id: "close", in: navigationNamespace)
                         if isStartScreen {
                             Button("Start Relief") {
@@ -35,6 +36,7 @@ struct MigraineSplashView: View {
                                 }
                             }
                             .buttonStyle(.reactiveBorderedProminent)
+                            .keyboardShortcut(.return, modifiers: .command)
                         }
                     }
                 }
@@ -51,6 +53,7 @@ struct MigraineSplashView: View {
                             Spacer()
                             Button("Close", action: dismiss)
                                 .buttonStyle(.reliefBackNavigation)
+                                .keyboardShortcut(.escape, modifiers: .command)
                                 .matchedGeometryEffect(id: "close", in: navigationNamespace)
                         }
                     }
@@ -62,10 +65,12 @@ struct MigraineSplashView: View {
                                 }
                             }
                             .buttonStyle(.reliefBackNavigation)
+                            .keyboardShortcut(.leftArrow, modifiers: .command)
                             .matchedGeometryEffect(id: "backButton", in: navigationNamespace)
                             Spacer()
                             Button("Close", action: dismiss)
                                 .buttonStyle(.reliefBackNavigation)
+                                .keyboardShortcut(.escape, modifiers: .command)
                                 .matchedGeometryEffect(id: "close", in: navigationNamespace)
                         }
                     }

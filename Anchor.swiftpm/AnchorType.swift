@@ -20,4 +20,13 @@ enum AnchorType: String, CaseIterable {
             return .indigo
         }
     }
+    
+    var shortcutKey: KeyEquivalent {
+        switch self {
+        case .migraine:
+                .init("m")
+        case .panicAttack:
+                .init("p")
+        }
+    }
 }

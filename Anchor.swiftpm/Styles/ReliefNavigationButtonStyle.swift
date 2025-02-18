@@ -19,6 +19,7 @@ struct ReliefNavigationButtonStyle: PrimitiveButtonStyle {
         .buttonBorderShape(.roundedRectangle(radius: 6))
         .background(Color(uiColor: .systemBackground).opacity(0.7))
         .clipShape(RoundedRectangle(cornerRadius: 6))
+        .keyboardShortcut(.return, modifiers: .command)
     }
 }
 

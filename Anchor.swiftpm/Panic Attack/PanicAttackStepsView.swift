@@ -77,6 +77,7 @@ struct PanicAttackStepsView: View {
                         }
                     }
                     .buttonStyle(.reliefBackNavigation)
+                    .keyboardShortcut(.leftArrow, modifiers: .command)
                     .matchedGeometryEffect(id: "backButton", in: navigationNamespace)
                 }
                 
@@ -90,6 +91,7 @@ struct PanicAttackStepsView: View {
                         }
                     }
                     .labelStyle(.oppositeOrderLabelStyle)
+                    .keyboardShortcut(.rightArrow, modifiers: .command)
                     .buttonStyle(.reliefNavigation)
                 }
             }

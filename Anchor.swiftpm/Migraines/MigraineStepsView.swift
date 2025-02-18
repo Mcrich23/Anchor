@@ -71,6 +71,7 @@ struct MigraineStepsView: View {
                                 }
                             }
                             .buttonStyle(.reliefBackNavigation)
+                            .keyboardShortcut(.leftArrow, modifiers: .command)
                             .matchedGeometryEffect(id: "backButton", in: navigationNamespace)
                         }
                         Spacer()
@@ -83,6 +84,7 @@ struct MigraineStepsView: View {
                                 }
                             }
                             .labelStyle(.oppositeOrderLabelStyle)
+                            .keyboardShortcut(.rightArrow, modifiers: .command)
                             .buttonStyle(.reliefNavigation)
                         }
                     }

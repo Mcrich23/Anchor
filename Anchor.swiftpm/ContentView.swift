@@ -57,6 +57,7 @@ struct ContentView: View {
                                     }
                                 }
                                 .multilineTextAlignment(.center)
+                                .keyboardShortcut(anchor.shortcutKey, modifiers: .command)
 //                                .foregroundStyle(anchor.color)
                             }
                         }
