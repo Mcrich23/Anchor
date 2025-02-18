@@ -105,11 +105,13 @@ struct PAAssuranceView: View {
                 .font(.largeTitle)
                 .fontWeight(.semibold)
                 .foregroundStyle(colorScheme == .light ? .white: .black)
+                .lineLimit(1)
             Text("Before we continue, we need to acknowledge your anxiety.")
                 .multilineTextAlignment(.center)
                 .font(.title)
-                .fontWeight(.semibold)
+                .fontWeight(.medium)
                 .foregroundStyle(colorScheme == .light ? .white: .black)
+                .minimumScaleFactor(0.6)
             Button {
                 startTranscription()
                 withAnimation {
@@ -127,13 +129,14 @@ struct PAAssuranceView: View {
     @ViewBuilder
     var mantraView: some View {
         VStack(spacing: 30) {
-            VStack(spacing: 30) {
+            VStack(spacing: 15) {
                 Text("Say The Following Mantra:")
                     .multilineTextAlignment(.center)
                     .font(.largeTitle)
                     .fontWeight(.semibold)
                     .foregroundStyle(colorScheme == .light ? .white: .black)
                     .minimumScaleFactor(0.8)
+                    .lineLimit(2)
                 
                 Text(mantra)
                     .multilineTextAlignment(.center)
@@ -165,9 +168,9 @@ struct PAAssuranceView: View {
                     }
                     .padding(.bottom)
                 }
-                .minimumScaleFactor(0.5)
             }
         }
+        .padding(.vertical, geo.height == height ? -10 : 0)
 //        .dynamicTypeSize(.medium)
         .onChange(of: numberOfTimesMantraSaid) {
             guard numberOfTimesMantraSaid >= 3 else { return }
@@ -185,25 +188,14 @@ struct PAAssuranceView: View {
     
     @ViewBuilder
     func mantraViewButtons(collapsed: Bool) -> some View {
-        ViewThatFits {
-            Label("Listening...", systemImage: "microphone.fill")
-                .labelStyle(.titleOnly)
-                .padding()
-                .frame(maxWidth: collapsed ? 175 : 200, maxHeight: 50, alignment: .center)
-                .background {
-                    RoundedRectangle(cornerRadius: 12)
-                        .fill(.tint)
-                }
-            
-            Label("Listening...", systemImage: "microphone.fill")
-                .labelStyle(.titleAndIcon)
-                .padding()
-                .frame(maxWidth: collapsed ? 175 : 200, maxHeight: 50, alignment: .center)
-                .background {
-                    RoundedRectangle(cornerRadius: 12)
-                        .fill(.tint)
-                }
-        }
+        Label("Listening...", systemImage: "microphone.fill")
+            .labelStyle(.titleAndIcon)
+            .padding()
+            .frame(maxWidth: collapsed ? 175 : 200, maxHeight: 50, alignment: .center)
+            .background {
+                RoundedRectangle(cornerRadius: 12)
+                    .fill(.tint)
+            }
         
         Button {
             self.userResponseController.playSoundEffect(.complete)
@@ -232,6 +224,7 @@ struct PAAssuranceView: View {
                     RoundedRectangle(cornerRadius: 12)
                         .fill(.ultraThinMaterial)
                 }
+                .minimumScaleFactor(0.5)
         }
         .buttonStyle(.reactive)
     }
@@ -246,7 +239,7 @@ struct PAAssuranceView: View {
             Text("Lets move on to grounding techniques.")
                 .multilineTextAlignment(.center)
                 .font(.title)
-                .fontWeight(.semibold)
+                .fontWeight(.medium)
                 .foregroundStyle(colorScheme == .light ? .white: .black)
             Button {
                 stepManager.next()
