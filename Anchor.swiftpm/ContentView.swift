@@ -42,6 +42,7 @@ struct ContentView: View {
                     Text("Choose an option to find relief techniques.")
                 }
                 .frame(maxWidth: .infinity, alignment: .center)
+                .accessibilityHidden(selectedAnchor != nil)
                 
                 VStack(spacing: 10) {
                     if selectedAnchor == nil {
@@ -55,6 +56,7 @@ struct ContentView: View {
                                         selectedAnchor = anchor
                                     }
                                 }
+                                .multilineTextAlignment(.center)
 //                                .foregroundStyle(anchor.color)
                             }
                         }
