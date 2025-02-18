@@ -185,7 +185,7 @@ struct BreathFlowerView: View {
             self.countdown = Int(stepDuration.rounded(.up))
             breathState = .breathIn
         }
-        await userResponseController.playSoundEffect(.secondaryClick)
+        await userResponseController.playSoundEffect(.primaryClick)
         countdown(from: Int(stepDuration.rounded(.up)))
         await withCheckedContinuation { continuation in
             withAnimation(.easeInOut(duration: stepDuration)) {
@@ -219,7 +219,7 @@ struct BreathFlowerView: View {
                 self.countdown = Int(stepDuration.rounded(.up))
                 breathState = .hold
             }
-            await userResponseController.playSoundEffect(.primaryClick)
+            await userResponseController.playSoundEffect(.secondaryClick)
             countdown(from: Int(stepDuration.rounded(.up)))
             try? await Task.sleep(for: .seconds(stepDuration))
         }
