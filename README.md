@@ -10,7 +10,7 @@ I used a lot of technologies to make Anchor possible. **SwiftUI** was the primar
 For information on the medical research and assets used, visit [Sources.md](Anchor.swiftpm/Sources.md).
 
 ## Demo
-Here is my super rushed demo. 
+Here is my super rushed demo 😅.
 
 > I am sorry there isn't any SFX, the audio didn't capture and I added the music in post.
 
