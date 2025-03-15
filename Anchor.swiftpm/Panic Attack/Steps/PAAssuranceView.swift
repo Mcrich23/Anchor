@@ -129,8 +129,8 @@ struct PAAssuranceView: View {
                 .foregroundStyle(colorScheme == .light ? .white: .black)
                 .minimumScaleFactor(0.6)
             Button {
-                startTranscription()
                 withAnimation {
+                    startTranscription()
                     step.next()
                 }
             } label: {
@@ -203,7 +203,6 @@ struct PAAssuranceView: View {
                 await self.userResponseController.playSoundEffect(.complete)
                 withAnimation {
                     step.next()
-                } completion: {
                     endTranscription()
                 }
             }
