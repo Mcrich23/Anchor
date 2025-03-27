@@ -16,8 +16,8 @@ let package = Package(
         .iOSApplication(
             name: "Anchor",
             targets: ["AppModule"],
-            bundleIdentifier: "com.Mcrich.Anchor",
-            teamIdentifier: "R5Y5Q6XM6Z",
+            bundleIdentifier: "com.mcrich23.anchor",
+            teamIdentifier: "L7JQRVXU2V",
             displayVersion: "1.0",
             bundleVersion: "1",
             appIcon: .asset("AppIcon"),
@@ -46,7 +46,7 @@ let package = Package(
             name: "AppModule",
             path: ".",
             resources: [
-                .process("Resources"),
+                .process("Resources")
             ]
         )
     ],
