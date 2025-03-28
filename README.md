@@ -1,7 +1,7 @@
 # Anchor
 Anchor is my 2025 Swift Student Challenge submission. It helps people through a panic attack or migraine using the psychiatric principle of dropping anchor and incorporating information from trusted sources such as the Mayo Clinic.
  
- [Download TestFlight](https://testflight.apple.com/join/FFdHYfSa)
+ [Download TestFlight](https://testflight.apple.com/join/xVhfqCP9)
  
  <img src="https://github.com/user-attachments/assets/67042af5-f8b8-4a79-a57b-40ef25f5748c" height="500px">
 
