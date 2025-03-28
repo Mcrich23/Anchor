@@ -3,6 +3,8 @@ Anchor is my 2025 Swift Student Challenge submission. It helps people through a 
  
  <img src="https://github.com/user-attachments/assets/67042af5-f8b8-4a79-a57b-40ef25f5748c" height="500px">
 
+ [Download TestFlight](https://testflight.apple.com/join/FFdHYfSa)
+
 ## Technologies
 I used a lot of technologies to make Anchor possible. **SwiftUI** was the primary framework as the building block for the UI. But with that, I also used **AVFoundation**, **CoreHaptics**, and **MediaPlayer** for the direct UX. This was presented in the music, sfx, and haptic feedback to button clicking. For the mantra repetition in Panic Attack Relief, I used **Speech** to translate the audio to text for code interpretation with Regex. Similarly, **PencilKit** was used for the sketching canvas feature in both relief sectors. **Combine** was used in the background for the moving mesh gradients to animate them moving in random positioning, making my life programming significantly easier. Finally, **SwiftData** was responsible for the persistance of Medication Logging.
 
