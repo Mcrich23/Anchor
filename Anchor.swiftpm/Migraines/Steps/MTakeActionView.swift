@@ -43,14 +43,12 @@ struct MTakeActionView: View {
     
     var body: some View {
         VStack {
-            if !(isEditingMedicationLog && userInterfaceIdiom == .phone) {
-                Group {
-                    Text("Take Medication")
-                        .font(.largeTitle)
-                        .fontWeight(.semibold)
-                    Text("Taking medication can be integral to managing migraines. If you have specific medication, or general pain medication, make sure to take it as directed.")
-                        .minimumScaleFactor(0.7)
-                }
+            Group {
+                Text("Take Medication")
+                    .font(.largeTitle)
+                    .fontWeight(.semibold)
+                Text("Taking medication can be integral to managing migraines. If you have specific medication, or general pain medication, make sure to take it as directed.")
+                    .minimumScaleFactor(0.7)
             }
             NavigationStack {
                 Group {
@@ -81,7 +79,7 @@ struct MTakeActionView: View {
             }
         })
         .onChange(of: isEditingMedicationLog, initial: true, { _, newValue in
-            guard nonFlatOrientation.isLandscape else {
+            guard nonFlatOrientation.isLandscape || userInterfaceIdiom == .phone else {
                 self.isShowingNavigationButtons.wrappedValue = true
                 self.isShowingNavigationBar.wrappedValue = true
                 return
