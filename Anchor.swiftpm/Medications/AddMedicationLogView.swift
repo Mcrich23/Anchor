@@ -249,6 +249,16 @@ struct AddMedicationLogView: View {
                     .textFieldStyle(.roundedBorder)
                     .padding(.horizontal, 4)
                     .focused($isEditingMedicationLog)
+                    .toolbar {
+                        ToolbarItem(placement: .keyboard) {
+                            HStack {
+                                Spacer()
+                                Button("Done") {
+                                    isEditingMedicationLog = false
+                                }
+                            }
+                        }
+                    }
                 
                 Button {
                     done()
