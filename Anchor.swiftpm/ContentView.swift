@@ -25,6 +25,7 @@ struct ContentView: View {
     
     @State var selectedAnchor: AnchorType?
     @State var isShowingMedLog = false
+    @State var isShowingSourcesView = false
     @StateObject var meshBackgroundCircleViewModel = AnimatedMeshViewModel()
     @EnvironmentObject var userResponseController: UserResponseController
     
@@ -99,16 +100,23 @@ struct ContentView: View {
             if selectedAnchor == nil {
                 HStack {
                     Button {
+                        isShowingSourcesView = true
+                    } label: {
+                        Label("See Sources", systemImage: "text.document")
+                            .labelStyle(.iconOnly)
+                    }
+                    .keyboardShortcut(.init("i"), modifiers: .command)
+                    Button {
                         isShowingMedLog = true
                     } label: {
                         Label("Medication Log", systemImage: "calendar.day.timeline.left")
                             .labelStyle(.iconOnly)
                     }
-                    .buttonStyle(.reactive)
-                    .font(.title2)
+                    .keyboardShortcut(.init("l"), modifiers: .command)
                 }
+                .buttonStyle(.reactive)
+                .font(.title2)
                 .padding(.leading)
-                .keyboardShortcut(.init("l"), modifiers: .command)
             }
         })
         .overlay(alignment: .bottomTrailing, content: {
@@ -121,6 +129,9 @@ struct ContentView: View {
             NavigationStack {
                 MedicationLogsView()
             }
+        })
+        .sheet(isPresented: $isShowingSourcesView, content: {
+            SourcesView()
         })
         .environment(\.customDismiss, dismissAction)
         .animation(.default.speed(0.8), value: self.selectedAnchor)
