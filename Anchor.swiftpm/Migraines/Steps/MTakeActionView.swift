@@ -20,6 +20,7 @@ struct MTakeActionView: View {
     @Environment(\.modelContext) var modelContext
     @Environment(\.orientation) var orientation
     @Environment(\.nonFlatOrientation) var nonFlatOrientation
+    @Environment(\.userInterfaceIdiom) var userInterfaceIdiom
     @Environment(\.isShowingNavigationButtons) var isShowingNavigationButtons
     @Environment(\.isShowingNavigationBar) var isShowingNavigationBar
     @Query(filter: #Predicate<MedicationLog> { !$0.medications.isEmpty || $0.notes != nil }, sort: \.date, order: .reverse) var medicationLogs: [MedicationLog] = []
@@ -42,12 +43,14 @@ struct MTakeActionView: View {
     
     var body: some View {
         VStack {
-            Group {
-                Text("Take Medication")
-                    .font(.largeTitle)
-                    .fontWeight(.semibold)
-                Text("Taking medication can be integral to managing migraines. If you have specific medication, or general pain medication, make sure to take it as directed.")
-                    .minimumScaleFactor(0.7)
+            if !(isEditingMedicationLog && userInterfaceIdiom == .phone) {
+                Group {
+                    Text("Take Medication")
+                        .font(.largeTitle)
+                        .fontWeight(.semibold)
+                    Text("Taking medication can be integral to managing migraines. If you have specific medication, or general pain medication, make sure to take it as directed.")
+                        .minimumScaleFactor(0.7)
+                }
             }
             NavigationStack {
                 Group {
